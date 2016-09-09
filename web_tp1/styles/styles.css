@@ -1,3 +1,9 @@
+#logo {
+    width:50px; /* you can use % */
+    height: auto;
+    padding: 0px;
+}
+
 nav ul {
     list-style-type: none;
     margin: 0;
