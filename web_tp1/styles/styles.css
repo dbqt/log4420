@@ -15,6 +15,18 @@ nav li {
     text-decoration: none;
 }
 
-nav li a:hover:not(.active) {
+nav li a {
+	text-decoration: none;
+}
+
+nav li:hover:not(.active) {
     background-color: #111;
+}
+
+nav li.active {
+	background-color: #E3CC24;
+}
+
+nav li a:visited { 
+    color: white;
 }
