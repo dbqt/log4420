@@ -1,3 +1,8 @@
+body {
+    background-color: #444;
+    color: white;
+}
+
 #logo {
     width:50px; /* you can use % */
     height: auto;
@@ -22,6 +27,7 @@ nav li {
 }
 
 nav li a {
+    color: white;
 	text-decoration: none;
 }
 
@@ -30,7 +36,7 @@ nav li:hover:not(.active) {
 }
 
 nav li.active {
-	background-color: #E3CC24;
+	background-color: #C8B21C;
 }
 
 nav li a:visited { 
