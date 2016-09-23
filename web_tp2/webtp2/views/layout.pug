@@ -1,7 +1,23 @@
 doctype html
 html
-  head
-    title= title
-    link(rel='stylesheet', href='/stylesheets/style.css')
-  body
-    block content
+    head
+        title= title
+        link(rel='stylesheet', href='/stylesheets/style.css')
+    body
+        // navbar
+        nav
+            ul
+                a(href="./")
+                    li Accueil
+                a(href="./dashboard")
+                    li Tableau de bord
+                a(href="./instruction")
+                    li Instruction
+
+        // contenu des pages
+        block content
+
+        footer
+            section
+                p
+                    small David Tran (1688466) & Charles Tremblay (1687989)
