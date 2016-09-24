@@ -30,6 +30,12 @@ a {
     padding: 8px;
 }
 
+#ourfloatingimage {
+    width:50px; /* you can use % */
+    height: auto;
+    float: right;
+}
+
 nav ul {
     list-style-type: none;
     margin: 0;
