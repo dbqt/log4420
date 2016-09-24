@@ -3,16 +3,22 @@ html
     head
         title= title
         link(rel='stylesheet', href='/stylesheets/style.css')
+
     body
+        block link
+            -var selected = 'Accueil';
+
+        -var menu = { 'Accueil': '/', 'Tableau de bord': '/dashboard', 'Instructions': '/instructions' };
+
         // navbar
         nav
             ul
-                a(href="./")
-                    li Accueil
-                a(href="./dashboard")
-                    li Tableau de bord
-                a(href="./instruction")
-                    li Instruction
+                each val, key in menu
+                    li
+                        if selected === key
+                            a.active(href=val, title=key)=key
+                        else
+                            a(href=val, title=key)=key
 
         // contenu des pages
         block content

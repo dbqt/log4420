@@ -1,8 +1,74 @@
+@font-face {
+    font-family: beleren;
+    src: url(../fonts/beleren-bold-webfont.ttf);
+}
+
+@font-face {
+	font-family: belerenSmallCaps;
+	src: url(../fonts/belerensmallcaps-bold-webfont.ttf);
+}
+
 body {
-  padding: 50px;
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+  background-color: #444;
+  color: white;
+  padding: 12PX;
+  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;  
+}
+
+body div {
+	padding: 12px;
 }
 
 a {
-  color: #00B7FF;
+	font-family: beleren;
+	color:yellow;
+}
+
+#logo {
+    width:50px; /* you can use % */
+    height: auto;
+    padding: 8px;
+}
+
+nav ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: #333;
+}
+
+nav li {
+    color: white;
+    display: inline-block;
+    float: left;
+    text-align: center;
+    text-decoration: none;
+}
+
+nav li a {
+    color: white;
+    display: block;
+    padding: 14px 16px;
+	text-decoration: none;
+}
+
+nav li:hover:not(.active) {
+    background-color: #111;
+}
+
+nav li .active {
+	background-color: #C8B21C;
+}
+
+nav li a:visited { 
+    color: white;
+}
+
+h1 {
+	font-family: belerenSmallCaps;
+}
+
+h2, h3 {
+	font-family: beleren;
 }
