@@ -3,34 +3,37 @@
 <head>
     <meta charset="utf8">
     <link rel="stylesheet" type="text/css" href="./styles/styles.css">
-    <title>TP1 - Resultat</title>
+    <title>TP1 - Résultats</title>
 </head>
 
 <body>
+	<header>
+		<nav>
+			<ul>
+				<li>Accueil</li>
+				<a href="./tableau.html"><li>Tableau de bord</li></a>
+				<li>Instructions</li>
+			</ul>
+		</nav>
 
-    <nav>
-        <ul>
-            <li>Accueil</li>
-            <li><a href="./tableau.html">Tableau de bord</a></li>
-            <li>Instructions</li>
-        </ul>
-    </nav>
+		<img id="logo" src="./logo.png" alt="Logo du site">
+		<h1>TP1 - Résultats</h1>
+	</header>
 
-    <img id="logo" src="./logo.png" alt="Logo du site">
-    <h1>TP1 - Résultats</h1>
+	<section>
+		<h2>Examen complété</h2>
+		<p>Vous avez eu la note de 1/2.</p>
 
-    <p>L'examen est terminé.</p>
-    <p>Vous avez eu la note de 1/2.</p>
+		<form action="./tableau.html">
+		  <input type="submit" value="Retour au tableau de bord">
+		</form>
+	</section>
 
-    <form action="./tableau.html">
-      <input type="submit" value="Tableau de bord">
-    </form>
-
+	<footer>
+		<p>
+			David Tran (1688466)
+			Charles Tremblay (1687989)
+		</p>
+	</footer>
 </body>
-
-<footer>
-David Tran (1688466)
-Charles Tremblay (1687989)
-</footer>
-
 </html>
