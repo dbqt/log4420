@@ -22,10 +22,15 @@ block content
         h3 Domaine: HTML
         h3 Que signifie HTML ?
         
-        form(action)
-            input(type="radio")
-            input(type="radio")
-            input(type="radio")
+        form.question()
+            span
+                input(type="radio" name="answer")
+                label Hello Tout Monde Le
+            span
+                input(type="radio" name="answer")
+                label Hyper Text Markup Language
+            span
+                input(type="radio" name="answer")
+                label Ham Tarte Mûre Lait
                 
-   
-    a#flatButton(href=test) Suivant
+        a#flatButton(href=test) Suivant
