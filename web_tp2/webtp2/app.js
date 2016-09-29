@@ -8,7 +8,7 @@ var bodyParser = require('body-parser');
 var routes = require('./routes/index');
 var question = require('./routes/question');
 var instructions = require('./routes/instructions');
-var dashboard = require('./routes/dashboard')
+var dashboard = require('./routes/dashboard');
 
 var app = express();
 

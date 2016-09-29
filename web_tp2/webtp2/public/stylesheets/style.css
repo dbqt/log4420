@@ -53,8 +53,7 @@ aside {
     }
 }
 
-aside ~ section {
-    overflow: hidden;
+section {
     flex: 1 auto;
 }
 

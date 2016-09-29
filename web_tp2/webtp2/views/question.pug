@@ -4,5 +4,28 @@ block link
     -var selected = "Question"; // Not in menu
 
 block content
-    h1= title
-    p Welcome to #{title}
+    -var nbTotal = 2;
+    -var nbProchain = parseInt(nb) + 1;
+    -var test = "/question/" + mode + "/" + nbProchain;
+    
+    if(mode == "testrapide")
+        h1 Test Rapide
+        if(nbProchain > nbTotal)
+            -test = "/dashboard";
+    else
+        h1 Examen 
+        h2 Question #{nb}/#{nbTotal}
+        if(nbProchain > nbTotal)
+            -test = "/result";
+            
+    section
+        h3 Domaine: HTML
+        h3 Que signifie HTML ?
+        
+        form(action)
+            input(type="radio")
+            input(type="radio")
+            input(type="radio")
+                
+   
+    a#flatButton(href=test) Suivant
