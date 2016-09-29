@@ -6,9 +6,8 @@ block link
 block content
     h1= title  
 
-    div(class="flexBox")
+    div#flexBox
         
-
         // Configurations de l'examen
         section
             h2 Configurations de l'examen
@@ -24,8 +23,8 @@ block content
                 label Nombre de questions: 
                 input(type="number" name="nombredequestions" value=1)
 
-            a#flatButton(href="/question/testrapide/1") Débuter le test rapide
-            a#flatButton(href="/question/examen/1") Débuter l'examen
+            a.flatButton(href="/question/testrapide/1") Débuter le test rapide
+            a.flatButton(href="/question/examen/1") Débuter l'examen
             
         //Statistiques
         include statistics 

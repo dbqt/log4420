@@ -6,17 +6,17 @@ block link
 block content
     -var nbTotal = 2;
     -var nbProchain = parseInt(nb) + 1;
-    -var test = "/question/" + mode + "/" + nbProchain;
+    -var lienBoutonSuivant = "/question/" + mode + "/" + nbProchain;
     
     if(mode == "testrapide")
         h1 Test Rapide
         if(nbProchain > nbTotal)
-            -test = "/dashboard";
+            -lienBoutonSuivant = "/dashboard";
     else
         h1 Examen 
         h2 Question #{nb}/#{nbTotal}
         if(nbProchain > nbTotal)
-            -test = "/result";
+            -lienBoutonSuivant = "/result";
             
     section
         if (nb == 1)
@@ -49,4 +49,6 @@ block content
                     input(type="radio" name="answer" value=3)
                     label Coding Solo Style
                 
-        a#flatButton(href=test) Suivant
+        a.flatButton(href="/dashboard") Retour au tableau de bord
+        
+        a.flatButton(href=lienBoutonSuivant) Suivant

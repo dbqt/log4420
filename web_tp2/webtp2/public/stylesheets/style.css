@@ -138,7 +138,7 @@ nav li a:visited {
     float: right;
 }
 
-#flatButton {
+.flatButton {
     display: inline-block;
     text-decoration: none;
     color: white;
@@ -147,7 +147,7 @@ nav li a:visited {
     margin: 8px 12px 8px 0px;
 }
 
-#flatButton:hover {
+.flatButton:hover {
     background-color: #111;
 }
 
@@ -174,7 +174,7 @@ nav li a:visited {
 	pointer-events: auto;
 }
 
-.modelBoxMessage {
+.modalBoxMessage {
 	width: 400px;
     position: absolute;
     left: 0; 

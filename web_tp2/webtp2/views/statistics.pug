@@ -5,15 +5,15 @@ aside
     h1 Statistiques
     p Nombre de questions réussies: 15/23
     p Moyenne des examens : 13/20
-    a#flatButton(href="#openModalBox") Détails...
+    a.flatButton(href="#openModalBox") Détails...
     
 
-    div(id="openModalBox" class="modalBox")
-        div(class="modelBoxMessage")
+    div.modalBox#openModalBox
+        div.modalBoxMessage()
             h2 Statistiques détaillées
             each val, key in examScores
                 p= key + " : " + val
-            a#flatButton(href="") Fermer
-        a(class="closeModal" href="")
+            a.flatButton(href="") Fermer
+        a.closeModal(href="")
 
 
