@@ -19,18 +19,34 @@ block content
             -test = "/result";
             
     section
-        h3 Domaine: HTML
-        h3 Que signifie HTML ?
-        
-        form.question()
-            span
-                input(type="radio" name="answer" value=1)
-                label Hello Tout Monde Le
-            span
-                input(type="radio" name="answer" value=2)
-                label Hyper Text Markup Language
-            span
-                input(type="radio" name="answer" value=3)
-                label Ham Tarte Mûre Lait
+        if (nb == 1)
+            h3 Domaine: HTML
+            h3 Que signifie HTML ?
+            
+            form.question()
+                span
+                    input(type="radio" name="answer" value=1)
+                    label Hello Tout Monde Le
+                span
+                    input(type="radio" name="answer" value=2)
+                    label Hyper Text Markup Language
+                span
+                    input(type="radio" name="answer" value=3)
+                    label Ham Tarte Mûre Lait
+                    
+        else if (nb == 2)
+            h3 Domaine: CSS
+            h3 Que veut dire CSS? ?
+            
+            form.question()
+                span
+                    input(type="radio" name="answer" value=1)
+                    label C'mon Sarcasm Sometimes
+                span
+                    input(type="radio" name="answer" value=2)
+                    label Cascade Style Sheet
+                span
+                    input(type="radio" name="answer" value=3)
+                    label Coding Solo Style
                 
         a#flatButton(href=test) Suivant
