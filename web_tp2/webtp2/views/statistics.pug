@@ -1,0 +1,9 @@
+// - A remplacer par des vrais entrees d'examen
+- var examScores = { 'Exam 1': '10/20', 'Exam 2': '12/20', 'Exam 3': '17/20' };
+
+aside
+    h1 Statistiques
+    p Nombre de questions réussies: 15/23
+    p Moyenne des examens : 13/20
+    each val, key in examScores
+        p= key + " : " + val

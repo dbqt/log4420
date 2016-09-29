@@ -4,41 +4,25 @@ block link
     -var selected = "Tableau de bord";
 
 block content
-    h1= title
-    
-    // Test rapide
-    h2 Test rapide
-    a(href="/question") Débuter le test rapide
-
-    // Configurations de l'examen
-    h2 Configurations de l'examen
-
-    p Domaine:
-    select
-        option(value="html") HTML
-        option(value="js") JavaScript
-        option(value="css") CSS
-
-    p Nombre de questions:
-    input(type="number" name="nombredequestions")
-
-    br
-    a(href="/question") Débuter l'examen
+    h1= title  
 
     //Statistiques
-    h2 Statistiques
-    div
-        table
-            tr
-                th Note de réussite de tests rapides
-                th Moyenne aux examens
-            tr
-                td 1/5
-                td 100%
-        table
-            tr
-                th ID de l'examen
-                th Note obtenue
-            tr
-                td 201609091
-                td 100%
+    include statistics 
+
+    // Configurations de l'examen
+    section
+        h2 Configurations de l'examen
+       
+        form
+            label Domaine:
+            select
+                option(value="html") HTML
+                option(value="js") JavaScript
+                option(value="css") CSS
+
+        form
+            label Nombre de questions: 
+            input(type="number" name="nombredequestions" value=1)
+
+        a#flatButton(href="/question") Débuter le test rapide
+        a#flatButton(href="/question") Débuter l'examen

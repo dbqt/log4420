@@ -11,12 +11,32 @@
 body {
   background-color: #444;
   color: white;
-  padding: 12PX;
+  padding: 12px;
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;  
 }
 
-body div {
+body section {
 	padding: 12px;
+    background-color: #333;
+    margin: 6px;
+}
+
+body footer {
+    /*Le footer va ignorer les floats*/
+    clear: both;
+}
+
+aside {
+    float: left;
+    overflow: auto;
+    padding: 12px;
+    background-color: #555;
+    border: 2px solid #FFF
+}
+
+aside ~ section {
+    /*Pour ne pas aller en dessous du float*/
+    overflow: hidden;
 }
 
 a {
@@ -24,17 +44,17 @@ a {
 	color:yellow;
 }
 
-#logo {
-    width:50px; /* you can use % */
-    height: auto;
-    padding: 8px;
+h1 {
+	font-family: belerenSmallCaps;
 }
 
-#ourfloatingimage {
-    width:50px; /* you can use % */
-    height: auto;
-    float: right;
+h2, h3 {
+	font-family: beleren;
 }
+
+/***********************
+ Navbar
+ ***********************/
 
 nav ul {
     list-style-type: none;
@@ -45,11 +65,7 @@ nav ul {
 }
 
 nav li {
-    color: white;
     display: inline-block;
-    float: left;
-    text-align: center;
-    text-decoration: none;
 }
 
 nav li a {
@@ -71,10 +87,35 @@ nav li a:visited {
     color: white;
 }
 
-h1 {
-	font-family: belerenSmallCaps;
+/***********************
+ Classes customs
+ ***********************/
+
+#logo {
+    width:100px; /* you can use % */
+    height: auto;
+    padding: 8px;
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
 }
 
-h2, h3 {
-	font-family: beleren;
+#ourfloatingimage {
+    padding-top: 50px;
+    width:100px; /* you can use % */
+    height: auto;
+    float: right;
+}
+
+#flatButton {
+    display: inline-block;
+    text-decoration: none;
+    color: white;
+    background-color: #C8B21C;
+    padding: 8px 16px;
+    margin: 8px 12px 8px 0px;
+}
+
+#flatButton:hover {
+    background-color: #111;
 }
