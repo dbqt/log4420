@@ -6,23 +6,24 @@ block link
 block content
     h1= title  
 
-    //Statistiques
-    include statistics 
+    div(class="flexBox")
+        //Statistiques
+        include statistics 
 
-    // Configurations de l'examen
-    section
-        h2 Configurations de l'examen
-       
-        form
-            label Domaine:
-            select
-                option(value="html") HTML
-                option(value="js") JavaScript
-                option(value="css") CSS
+        // Configurations de l'examen
+        section
+            h2 Configurations de l'examen
+        
+            form
+                label Domaine: 
+                select
+                    option(value="html") HTML
+                    option(value="js") JavaScript
+                    option(value="css") CSS
 
-        form
-            label Nombre de questions: 
-            input(type="number" name="nombredequestions" value=1)
+            form
+                label Nombre de questions: 
+                input(type="number" name="nombredequestions" value=1)
 
-        a#flatButton(href="/question") Débuter le test rapide
-        a#flatButton(href="/question") Débuter l'examen
+            a#flatButton(href="/question") Débuter le test rapide
+            a#flatButton(href="/question") Débuter l'examen

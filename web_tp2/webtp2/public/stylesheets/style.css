@@ -9,10 +9,22 @@
 }
 
 body {
-  background-color: #444;
-  color: white;
-  padding: 12px;
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;  
+    background-color: #444;
+    color: white;
+    padding: 12px;
+    font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;  
+}
+
+@media screen and (max-width: 1024px) {
+    body {
+        font: 18px "Lucida Grande", Helvetica, Arial, sans-serif;  
+    }
+}
+
+@media screen and (max-width: 768px) {
+    body {
+        font: 22px "Lucida Grande", Helvetica, Arial, sans-serif;  
+    }
 }
 
 body section {
@@ -27,16 +39,23 @@ body footer {
 }
 
 aside {
-    float: left;
     overflow: auto;
+    width: auto;
     padding: 12px;
     background-color: #555;
     border: 2px solid #FFF
 }
 
+@media screen and (max-width: 768px) {
+    aside {
+        display: block;
+        width:100%;
+    }
+}
+
 aside ~ section {
-    /*Pour ne pas aller en dessous du float*/
     overflow: hidden;
+    flex: 1 auto;
 }
 
 a {
@@ -64,8 +83,21 @@ nav ul {
     background-color: #333;
 }
 
+@media screen and (max-width: 768px) {
+    nav ul {
+        display: flex;
+    }
+}
+
 nav li {
     display: inline-block;
+}
+
+@media screen and (max-width: 768px) {
+    nav li {
+        flex-grow: 1;
+        text-align: center;
+    }
 }
 
 nav li a {
@@ -88,7 +120,7 @@ nav li a:visited {
 }
 
 /***********************
- Classes customs
+ Ids
  ***********************/
 
 #logo {
@@ -119,3 +151,56 @@ nav li a:visited {
 #flatButton:hover {
     background-color: #111;
 }
+
+/***********************
+ Boite modale
+ ***********************/
+
+/* Dark background*/
+.modalBox {
+    display: inline-block;
+	position: absolute;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
+	background: rgba(0,0,0,0.8);
+	z-index: 99998;
+	opacity:0;
+	pointer-events: none;
+}
+
+.modalBox:target {
+	opacity:1;
+	pointer-events: auto;
+}
+
+.modelBoxMessage {
+	width: 400px;
+    position: absolute;
+    left: 0; 
+    right: 0;
+    margin: 50px;
+    margin-left: auto; 
+    margin-right: auto; 
+	padding: 5px 20px 13px 20px;
+	background: #666;
+    z-index: 99999;
+}
+
+/* Lien geant dans le background pour fermer la boite*/
+.closeModal {
+    width: 100%;
+    height: 100%;
+    top: 0px;
+    position: absolute;
+    z-index: 1;
+}
+
+.flexBox {
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: space-between;
+}
+
+
