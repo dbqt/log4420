@@ -7,7 +7,8 @@ block content
     -var nbTotal = 2;
     -var nbProchain = parseInt(nb) + 1;
     -var lienBoutonSuivant = "/question/" + mode + "/" + nbProchain;
-    
+
+    // - Question
     if(mode == "testrapide")
         h1 Test Rapide
         if(nbProchain > nbTotal)
@@ -19,35 +20,19 @@ block content
             -lienBoutonSuivant = "/result";
             
     section
-        if (nb == 1)
-            h3 Domaine: HTML
-            h3 Que signifie HTML ?
-            
-            form.question()
-                span
-                    input(type="radio" name="answer" value=1)
-                    label Hello Tout Monde Le
-                span
-                    input(type="radio" name="answer" value=2)
-                    label Hyper Text Markup Language
-                span
-                    input(type="radio" name="answer" value=3)
-                    label Ham Tarte Mûre Lait
-                    
-        else if (nb == 2)
-            h3 Domaine: CSS
-            h3 Que veut dire CSS? ?
-            
-            form.question()
-                span
-                    input(type="radio" name="answer" value=1)
-                    label C'mon Sarcasm Sometimes
-                span
-                    input(type="radio" name="answer" value=2)
-                    label Cascade Style Sheet
-                span
-                    input(type="radio" name="answer" value=3)
-                    label Coding Solo Style
+        h3 Domaine: #{domaine}
+        h3=question
+        
+        form.question()
+            span
+                input(type="radio" name="answer" value=1)
+                label=reponse1
+            span
+                input(type="radio" name="answer" value=2)
+                label=reponse2
+            span
+                input(type="radio" name="answer" value=3)
+                label=reponse3
                 
         a.flatButton(href="/dashboard") Retour au tableau de bord
         
