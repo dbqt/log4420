@@ -3,7 +3,9 @@ var router = express.Router();
 
 
 /* GET users listing. */
-router.get('/:mode/:nb', function(req, res, next) {
+router.get('/'/*:mode/:nb'*/, function(req, res, next) {
+    
+    /*
     if(req.params.nb == 1){
         var domaine = "HTML"
         var question = "Que signifie HTML?"
@@ -17,16 +19,23 @@ router.get('/:mode/:nb', function(req, res, next) {
         var reponse1 = "C'mon Sarcasm Sometimes"
         var reponse2 = "Cascade Style Sheet"
         var reponse3 = "Coding Solo Style"
-    }
+    }*/
   res.render('question', { 
       title: 'Question',
-      mode: req.params.mode,
+      mode: "mode",
+      nb: 1,
+      domaine: "domaine",
+      question: "question",
+      reponse1: "reponse1",
+      reponse2: "reponse2",
+      reponse3: "reponse3"
+      /*mode: req.params.mode,
       nb: req.params.nb,
       domaine: domaine,
       question: question,
       reponse1: reponse1,
       reponse2: reponse2,
-      reponse3: reponse3
+      reponse3: reponse3*/
   });
 });
 

@@ -10,7 +10,9 @@ router.get('/', function(req, res, next) {
 });
 
 /* GET questions api. */
-router.get('/questions', function(req, res, next) {
+router.post('/questions', function(req, res, next) {
+    console.log(req.body.domaine);
+    console.log(req.body.nombredequestions);
   var random = Math.floor(Math.random() * pseudoBD.length);
   res.json(pseudoBD[random]);
 });
