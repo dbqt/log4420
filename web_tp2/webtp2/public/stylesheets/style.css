@@ -8,6 +8,10 @@
 	src: url(../fonts/belerensmallcaps-bold-webfont.ttf);
 }
 
+/***********************
+ Body
+ ***********************/
+
 body {
     height: 100%;
     background-color: #444;
@@ -18,13 +22,13 @@ body {
 
 @media screen and (max-width: 1024px) {
     body {
-        font: 18px "Lucida Grande", Helvetica, Arial, sans-serif;  
+        font-size: 18px;  
     }
 }
 
 @media screen and (max-width: 768px) {
     body {
-        font: 22px "Lucida Grande", Helvetica, Arial, sans-serif;  
+        font-size: 22px;
     }
 }
 
@@ -39,6 +43,10 @@ body footer {
     clear: both;
 }
 
+/***********************
+ Aside
+ ***********************/
+
 aside {
     overflow: auto;
     width: auto;
@@ -47,29 +55,16 @@ aside {
     border: 2px solid #FFF
 }
 
-@media screen and (max-width: 768px) {
+@media screen and (max-width: 1024px) {
     aside {
         display: block;
         width:100%;
     }
 }
 
-section {
-    flex: 1 auto;
-}
-
-a {
-	font-family: beleren;
-	color:yellow;
-}
-
-h1 {
-	font-family: belerenSmallCaps;
-}
-
-h2, h3 {
-	font-family: beleren;
-}
+/***********************
+ Table
+ ***********************/
 
 th, td {
     padding: 6px;
@@ -133,6 +128,27 @@ nav li a:visited {
 }
 
 /***********************
+ Styles Généraux
+ ***********************/
+
+section {
+    flex: 1 auto;
+}
+
+a {
+	font-family: beleren;
+	color:yellow;
+}
+
+h1 {
+	font-family: belerenSmallCaps;
+}
+
+h2, h3 {
+	font-family: beleren;
+}
+
+/***********************
  Ids
  ***********************/
 
@@ -151,6 +167,10 @@ nav li a:visited {
     height: auto;
     float: right;
 }
+
+/***********************
+ Button Jaune
+ ***********************/
 
 .flatButton {
     display: inline-block;
