@@ -1,0 +1,45 @@
+extends layout
+
+block link
+    -var selected = "Question"; // Not in menu
+
+block content
+    -var nbTotal = 2;
+    -var nbProchain = parseInt(nb) + 1;
+    -var lienBoutonSuivant = "/question/" + mode + "/" + nbProchain;
+
+    // - Mode
+    if(mode == "testrapide")
+        h1 Test Rapide
+        if(nbProchain > nbTotal)
+            -lienBoutonSuivant = "/question/" + mode + "/1";
+    else
+        h1 Examen 
+        h2 Question #{nb}/#{nbTotal}
+        if(nbProchain > nbTotal)
+            -lienBoutonSuivant = "/result";
+    
+    div.flexBox
+        section
+            h3 Domaine: #{domaine}
+            h3=question
+            
+            form.question()
+                span
+                    input(type="radio" name="answer" value=1)
+                    label=reponse1
+                span
+                    input(type="radio" name="answer" value=2)
+                    label=reponse2
+                span
+                    input(type="radio" name="answer" value=3)
+                    label=reponse3
+                    
+            a.flatButton(href="/dashboard") Retour au tableau de bord
+            
+            a.flatButton(href=lienBoutonSuivant) Suivant
+
+        // Statistiques
+        aside
+            h3 Statistiques
+            p Note courante : 0/#{nb-1} 

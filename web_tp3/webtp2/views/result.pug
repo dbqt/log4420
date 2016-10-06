@@ -1,0 +1,13 @@
+extends layout
+
+block link
+    -var selected = "Résultat"; // Not in menu
+
+block content
+    h1 Résultat
+    
+    section
+        h2 Examen complété
+        p Vous avez eu 1/2.
+        
+        a.flatButton(href='/dashboard') Retour au tableau de bord

@@ -1,0 +1,56 @@
+extends layout
+
+block link
+    -var selected = "Tableau de bord";
+
+block content
+    h1= title  
+
+    div.flexBox
+        
+        // Configurations de l'examen
+        section
+            h2 Configurations de l'examen
+        
+            form
+                label Domaine: 
+                select
+                    option(value="html") HTML
+                    option(value="js") JavaScript
+                    option(value="css") CSS
+
+            form
+                label Nombre de questions: 
+                input(type="number" name="nombredequestions" value=1)
+
+            a.flatButton(href="/question/testrapide/1") Débuter le test rapide
+            a.flatButton(href="/question/examen/1") Débuter l'examen
+
+           
+            
+        //Statistiques
+        aside
+            h2 Statistiques
+            p Nombre de questions réussies: 15/23
+            p Moyenne des examens : 13/20
+            a.flatButton(href="#openModalBox") Statistiques Détaillées
+
+    // - A remplacer par des vrais entrees d'examen
+    - var examScores = { 'Exam 1': '10/20', 'Exam 2': '12/20', 'Exam 3': '17/20', 'Exam 4': '15/20', 'Exam 5': '19/20', 'Exam 6': '11/20', 'Exam 7': '17/20' };
+    div.modalBox#openModalBox
+        div.modalBoxMessage()
+            h2 Statistiques détaillées
+            table
+                thead
+                    tr
+                        th ID de l'examen
+                        th Note obtenue
+                tbody
+                    each val, key in examScores
+                        tr
+                            td=key
+                            td=val
+               
+            
+            a.flatButton(href="") Fermer
+        a.closeModal(href="")
