@@ -1,4 +1,7 @@
 var express = require('express');
+var pseudoBD = require('./../data/pseudoBD');
+var $ = require('jQuery');
+
 var router = express.Router();
 
 /* GET base api. */
@@ -8,7 +11,8 @@ router.get('/', function(req, res, next) {
 
 /* GET questions api. */
 router.get('/questions', function(req, res, next) {
-  res.json({res : 0})
+  var random = Math.floor(Math.random() * pseudoBD.length);
+  res.json(pseudoBD[random]);
 });
 
 module.exports = router;
