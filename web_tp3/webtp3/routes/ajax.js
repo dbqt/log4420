@@ -1,6 +1,5 @@
 var express = require('express');
 var pseudoBD = require('./../data/pseudoBD');
-var $ = require('jQuery');
 
 var router = express.Router();
 
@@ -10,11 +9,23 @@ router.get('/', function(req, res, next) {
 });
 
 /* GET questions api. */
-router.post('/questions', function(req, res, next) {
+router.get('/questions', function(req, res, next) {
     console.log(req.body.domaine);
     console.log(req.body.nombredequestions);
   var random = Math.floor(Math.random() * pseudoBD.length);
   res.json(pseudoBD[random]);
+});
+
+router.post('/questions', function(req, res, next) {
+  var domaine = req.body.domaine;
+  var nombredequestions = req.body.nombredequestions;
+  var curr = req.body.currentNb;
+
+  var filteredQuestions = pseudoBD.filter(function(element) {
+    return element.domaine == domaine;
+  });
+
+  res.json(filteredQuestions[curr%filteredQuestions.length])
 });
 
 module.exports = router;
