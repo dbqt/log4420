@@ -16,6 +16,7 @@ router.get('/questions', function(req, res, next) {
   res.json(pseudoBD[random]);
 });
 
+/* Returns the next question with the correct subject */
 router.post('/questions', function(req, res, next) {
   var domaine = req.body.domaine;
   var nombredequestions = req.body.nombredequestions;

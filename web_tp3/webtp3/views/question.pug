@@ -18,24 +18,25 @@ block content
             
             form.question()
                 span
-                    input(type="radio" name="answer" value=1)
+                    input(type="radio" name="answer" value="reponse1")
                     label#reponse1
                 span
-                    input(type="radio" name="answer" value=2)
+                    input(type="radio" name="answer" value="reponse2")
                     label#reponse2
                 span
-                    input(type="radio" name="answer" value=3)
+                    input(type="radio" name="answer" value="reponse3")
                     label#reponse3
-                    
+
             a.flatButton(href="/dashboard") Retour au tableau de bord
+            button#abandonner.flatButton Abandonner
             
-            button#suivant.flatButton() Suivant
+            button#suivant.flatButton Suivant
 
         // Statistiques
         aside
             h3 Statistiques
-            p Note courante : 0/#{nb-1} 
+            p#noteCourante 
 
-    script(src='/javascripts/jquery.min.js')
-    script(src='/javascripts/question_logic.js')
+    script(src='/scripts/jquery.min.js')
+    script(src='/scripts/question_logic.js')
 

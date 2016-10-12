@@ -17,10 +17,10 @@ router.get('/testrapide'/*:mode/:nb'*/, function(req, res, next) {
   });
 });
 
-router.post('/exam'/*:mode/:nb'*/, function(req, res, next) {
+router.post('/examen'/*:mode/:nb'*/, function(req, res, next) {
   res.render('question', { 
       title: 'Question',
-      mode: "exam",
+      mode: "examen",
       nb: 1,
       domaine: "domaine",
       question: "question",

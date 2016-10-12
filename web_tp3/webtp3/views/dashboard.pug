@@ -14,12 +14,12 @@ block content
         section
             h2 Test rapide
             p Questions illimitées aléatoires
-            a#submitRapide.flatButton(href="/question/testrapide") Débuter le test rapide
+            a#submitTestRapide.flatButton(href="/question/testrapide") Débuter le test rapide
         // Configurations de l'examen
         section
             h2 Configurations de l'examen
         
-            form#formConfigs(action="/question/exam" method="post")
+            form#formConfigs(action="/question/examen" method="post")
                 label Domaine: 
                 select(name="choix_domaine" required)
                     option(value="HTML") HTML
@@ -28,9 +28,9 @@ block content
 
             
                 label Nombre de questions: 
-                input(name="choix_nombre" type="number"  value=1 required)
+                input(name="choix_nombre" type="number"  value=5 required)
 
-                input#submitExam.flatButton(type="submit" value="Débuter l'exam")
+                input#submitExamen.flatButton(type="submit" value="Débuter l'examen")
            
             
         //Statistiques
@@ -40,7 +40,6 @@ block content
             p Moyenne des examens : 13/20
             a.flatButton(href="#openModalBox") Statistiques Détaillées
 
-    // - A remplacer par des vrais entrees d'examen
     - var examScores = { 'Exam 1': '10/20', 'Exam 2': '12/20', 'Exam 3': '17/20', 'Exam 4': '15/20', 'Exam 5': '19/20', 'Exam 6': '11/20', 'Exam 7': '17/20' };
     div.modalBox#openModalBox
         div.modalBoxMessage()
@@ -56,8 +55,8 @@ block content
                             td=key
                             td=val
                
-            
-            a.flatButton(href="") Fermer
+            a#reinitialiserStatistiques.flatButton(href="") Réinitialiser les statistiques
+            a#fermer.flatButton(href="") Fermer
         a.closeModal(href="")
 
-    script(src='/javascripts/question_configs.js')
+    script(src='/scripts/dashboard_logic.js')
