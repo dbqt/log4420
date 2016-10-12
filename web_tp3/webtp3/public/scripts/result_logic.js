@@ -18,8 +18,26 @@ var completedExam = {
 var statsArray = [];
 if (localStorage.getItem("examScores") != null)
 {
-    statsArray = $.parseJSON(localStorage.getItem("statistics"));
+    statsArray = $.parseJSON(localStorage.getItem("examScores"));
 }
 // On ajoute l'examen complété dans les statistiques
 statsArray.push(completedExam);
-localStorage.setItem("statistics", JSON.stringify(statsArray));
+localStorage.setItem("examScores", JSON.stringify(statsArray));
+
+// On met à jour le nombre de questions réussies au total
+var nbQuestionsReussiesTotal = score;
+if (localStorage.getItem("nbQuestionsReussiesTotal") != null)
+{
+    nbQuestionsReussiesTotal += Number(localStorage.getItem("nbQuestionsReussiesTotal"));
+}
+localStorage.setItem("nbQuestionsReussiesTotal", nbQuestionsReussiesTotal);
+
+// On met à jour le nombre de questions au total
+var nbQuestionsTotal = nb;
+if (localStorage.getItem("nbQuestionsTotal") != null)
+{
+    nbQuestionsTotal += Number(localStorage.getItem("nbQuestionsTotal"));
+}
+localStorage.setItem("nbQuestionsTotal", nbQuestionsTotal);
+
+console.log(localStorage);

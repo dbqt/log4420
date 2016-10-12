@@ -36,8 +36,8 @@ block content
         //Statistiques
         aside
             h2 Statistiques
-            p Nombre de questions réussies: 15/23
-            p Moyenne des examens : 13/20
+            p#nombreQuestionsReussies
+            p#moyenneExamens
             a.flatButton(href="#openModalBox") Statistiques Détaillées
 
     - var examScores = { 'Exam 1': '10/20', 'Exam 2': '12/20', 'Exam 3': '17/20', 'Exam 4': '15/20', 'Exam 5': '19/20', 'Exam 6': '11/20', 'Exam 7': '17/20' };
@@ -55,7 +55,7 @@ block content
                             td=key
                             td=val
                
-            a#reinitialiserStatistiques.flatButton(href="") Réinitialiser les statistiques
+            a#reinitialiserStatistiques.flatButton(href="" onclick="localStorage.clear();") Réinitialiser les statistiques
             a#fermer.flatButton(href="") Fermer
         a.closeModal(href="")
 
