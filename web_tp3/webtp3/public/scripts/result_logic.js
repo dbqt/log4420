@@ -1,5 +1,5 @@
 var domaine = sessionStorage.getItem("choixDomaine");
-var nb = sessionStorage.getItem("choixNombre"); 
+var nb = Number(sessionStorage.getItem("choixNombre")); 
 var mode = sessionStorage.getItem("mode");
 var score = Number(sessionStorage.getItem("currentScore"));
 
