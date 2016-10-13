@@ -245,3 +245,52 @@ h2, h3 {
 {
     display:block; /* Chaque span, contenant un radio button et un label, termine avec un line break */
 }
+
+/***********************
+ Exemple pour draggable
+ ***********************/
+
+/* Prevent the text contents of draggable elements from being selectable. */
+[draggable] {
+    -moz-user-select: none;
+    -khtml-user-select: none;
+    -webkit-user-select: none;
+    user-select: none;
+    /* Required to make elements draggable in old WebKit */
+    -khtml-user-drag: element;
+    -webkit-user-drag: element;
+}
+
+div .choixDeReponse, div #zoneReponse {
+    font-family: beleren;
+    width: 300px;
+    height: 15px;
+    padding: 10px;
+    margin: 5px;
+    border: 2px solid lightgray;
+    text-align: center;
+    vertical-align: middle;
+}
+
+div .choixDeReponse.disabled
+{
+    opacity: 0.4;
+}
+
+#zoneReponse.over {
+    border: 2px dashed lightgray;
+}
+
+#zoneReponse.vrai {
+    opacity: 1.0;
+    border: 2px solid darkgreen;
+    background-color: green;
+    color: white;
+}
+
+#zoneReponse.faux {
+    opacity: 1.0;
+    border: 2px solid firebrick;
+    background-color: darkred;
+    color: white;
+}

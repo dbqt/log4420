@@ -15,17 +15,26 @@ block content
         section
             h3#domaine
             h3#question
-            
-            form.question()
-                span
-                    input(type="radio" name="answer" value="reponse1")
-                    label#reponse1
-                span
-                    input(type="radio" name="answer" value="reponse2")
-                    label#reponse2
-                span
-                    input(type="radio" name="answer" value="reponse3")
-                    label#reponse3
+
+            div#reponse1.choixDeReponse(draggable="true")
+            div#reponse2.choixDeReponse(draggable="true")
+            div#reponse3.choixDeReponse(draggable="true")
+            <br>
+            h3 Glissez votre réponse ci-dessous
+            div#zoneReponse.choixDeReponse
+
+            //- Remove 1 indent in the whole commment if you want to bring it back
+                form.question
+                    span.choixDeReponse(draggable="true")
+                        input(type="radio" name="answer" value="reponse1")
+                        label#reponse1
+                    span.choixDeReponse(draggable="true")
+                        input(type="radio" name="answer" value="reponse2")
+                        label#reponse2
+                    span.choixDeReponse(draggable="true")
+                        input(type="radio" name="answer" value="reponse3")
+                        label#reponse3
+                    span#zoneReponse(draggable="true")
 
             a.flatButton(href="/dashboard") Retour au tableau de bord
             button#abandonner.flatButton Abandonner

@@ -3,31 +3,150 @@ var nb = Number(sessionStorage.getItem("choixNombre"));
 var mode = sessionStorage.getItem("mode");
 var currentAnswer;
 
+var currentScore = 0;
+var nbCurr = 0;
 
 document.getElementById("suivant").onclick = updateQuestion;
 document.getElementById("abandonner").onclick = giveUp;
+
+/***********************
+ Event Listeners
+ ***********************/
+var zones = document.querySelectorAll('.choixDeReponse');
+var zoneReponse = document.getElementById("zoneReponse");
+
+var elementBeingDragged = null;
+
+enableAllEventListeners();
+
+function handleDragStart(e){
+    // L'opacité de notre réponse choisie (que l'on commence à drag) est réduite.
+    //e.target.style.opacity = "0.4"; 
+
+    elementBeingDragged = e.target;
+
+    // On détermine le type de drag-and-drop ici.
+    e.dataTransfer.effectAllowed = "move";
+    
+    e.dataTransfer.setData("text/html", e.target.innerHTML);
+    e.dataTransfer.setData("id", e.target.id)
+}
+
+function handleDragEnter(e) {
+    // Si l'on approche un endroit où l'on peut drop, alors on utilise le style de over grâce à la classe ".column.over"
+    if (e.target == zoneReponse)
+    {
+        e.target.classList.add("over");
+    }
+}
+
+function handleDragOver(e) {
+    if (e.preventDefault) {
+        e.preventDefault(); // Necessary. Allows us to drop.
+    }
+
+    // On détermine le type de drag-and-drop ici.
+    e.dataTransfer.dropEffect = "move";
+
+    return false;
+}
+
+function handleDragLeave(e) {
+    // Si l'on s'éloigne d'un endroit où l'on pouvait drop, alors on retire le style de over grâce à la classe ".column.over"
+    e.target.classList.remove("over");
+}
+
+function handleDrop(e) {
+    // e.target devrait être notre zone de réponse
+    if (e.stopPropagation) {
+        e.stopPropagation(); // Stops some browsers from redirecting.
+    }
+
+    if (e.target == zoneReponse && zoneReponse.innerHTML == "") {
+        // On remplace le contenu de la zone de réponse par le contenu du choix de réponse
+        e.target.innerHTML = e.dataTransfer.getData("text/html");
+
+        // S'il s'agit de la bonne réponse (vérifié par le id du choix de réponse qui devrait correspondre avec currentAnswer)
+        if (e.dataTransfer.getData("id") == currentAnswer)
+        {
+            // On associe le style vert de vérité
+            zoneReponse.classList.add("vrai");
+
+            // On incrémente le score du joueur et on affiche le nouveau score dans les statistiques en bas
+            ++currentScore;
+            sessionStorage.setItem("currentScore", currentScore);
+            document.getElementById("noteCourante").innerHTML = "Note actuelle: " + currentScore + "/" + nbCurr;
+            
+
+        }
+        else
+        {
+            // On associe le style rouge de fausseté
+            zoneReponse.classList.add("faux");
+
+            // On affiche le nouveau score dans les statistiques en bas
+            document.getElementById("noteCourante").innerHTML = "Note actuelle: " + currentScore + "/" + nbCurr;
+
+        }
+        // On désactive les choix de réponse jusqu'à la prochaine question
+        disableAllEventListeners();
+    }
+    else
+    {
+        //elementBeingDragged.style.opacity = '1.0';
+    }
+
+    return false;
+}
+
+function handleDragEnd(e) {
+    // this/e.target is the source node.
+
+    [].forEach.call(zones, function (zone) {
+        zone.classList.remove("over");
+    });
+}
+
+function disableAllEventListeners()
+{
+    [].forEach.call(zones, function (zone) {
+        zone.classList.add("disabled");
+    });
+}
+
+function enableAllEventListeners()
+{
+    [].forEach.call(zones, function (zone) {
+        zone.classList.remove("disabled");
+        zone.addEventListener("dragstart", handleDragStart, false);
+        zone.addEventListener("dragenter", handleDragEnter, false)
+        zone.addEventListener("dragover", handleDragOver, false);
+        zone.addEventListener("dragleave", handleDragLeave, false);
+        zone.addEventListener("drop", handleDrop, false);
+        zone.addEventListener("dragend", handleDragEnd, false);
+    });
+}
+
+
 updateQuestion();
 
+/***********************
+ Mise à jour de la question
+ ***********************/
 function updateQuestion(){
     // Itérateur qui permet d'identifier où notre utilisateur est situé dans le questionnaire
-    var nbCurr = Number(sessionStorage.getItem("nbQuestionsCourant"));
+    nbCurr = Number(sessionStorage.getItem("nbQuestionsCourant"));
     // Calculer le score du joueur pour la page "result" (seulement necessaire pour "examen")
-    var currentScore = Number(sessionStorage.getItem("currentScore"));
+    currentScore = Number(sessionStorage.getItem("currentScore"));
 
     if(mode == "testrapide") 
     {
         $.get("/api/questions", function(data, status) {
 
-            if (document.querySelector('input[name="answer"]:checked') != null && document.querySelector('input[name="answer"]:checked').value == currentAnswer)
-            {
-                ++currentScore;
-                sessionStorage.setItem("currentScore", currentScore);
-            }
-
-            document.getElementById("noteCourante").innerHTML = "Note actuelle: " + currentScore + "/" + nbCurr;
-
             ++nbCurr;
             sessionStorage.setItem("nbQuestionsCourant", nbCurr);
+
+            document.getElementById("noteCourante").innerHTML = "Note actuelle: " + currentScore + "/" + nbCurr;
 
             document.getElementById("domaine").innerHTML = data.domaine;
             document.getElementById("question").innerHTML = data.question;
@@ -35,20 +154,15 @@ function updateQuestion(){
             document.getElementById("reponse2").innerHTML = data.reponse2;
             document.getElementById("reponse3").innerHTML = data.reponse3;
             currentAnswer = data.answer;
+
+            enableAllEventListeners();
         });
     }
     else if(mode == "examen") 
     {
         if(nbCurr >= nb) 
         {
-            if (document.querySelector('input[name="answer"]:checked') != null && document.querySelector('input[name="answer"]:checked').value == currentAnswer)
-            {
-                ++currentScore;
-                sessionStorage.setItem("currentScore", currentScore);
-            }
-
-            document.getElementById("noteCourante").innerHTML = "Note actuelle: " + currentScore + "/" + nbCurr + " (sur " + nb + " questions)"; // Facultatif ici
-            
+            document.getElementById("noteCourante").innerHTML = "Note actuelle: " + currentScore + "/" + nbCurr;
             window.location.href = "/result";
         }
         else
@@ -57,15 +171,6 @@ function updateQuestion(){
             $.post("/api/questions", 
             {domaine: domaine, nombredequestions: nb, currentNb:nbCurr}, 
             function(data, status) {
-
-                // Si une reponse a été cochée ET que c'est la bonne, on incrémente le score du joueur.
-                // Ceci fera nécessairement rien à la première exécution puisque rien sera initialement coché.
-                if (document.querySelector('input[name="answer"]:checked') != null && document.querySelector('input[name="answer"]:checked').value == currentAnswer)
-                {
-                    ++currentScore;
-                    sessionStorage.setItem("currentScore", currentScore);
-                }
-                document.getElementById("noteCourante").innerHTML = "Note actuelle: " + currentScore + "/" + nbCurr + " (sur " + nb + " questions)";
 
                 document.getElementById("domaine").innerHTML = data.domaine;
                 document.getElementById("question").innerHTML = data.question;
@@ -76,16 +181,26 @@ function updateQuestion(){
 
                 ++nbCurr;
                 sessionStorage.setItem("nbQuestionsCourant", nbCurr);
+                document.getElementById("noteCourante").innerHTML = "Note actuelle: " + currentScore + "/" + nbCurr;
                 document.getElementById("numerotation").innerHTML = "Question "+ nbCurr + "/" + nb;
             });
+
+            enableAllEventListeners();
         }
          
     }
 
-    /*{id: 11, domaine: "CSS", question: "Que veut dire CSS?", reponse1: "C'mon Sarcasm Sometimes", reponse2: "Cascade Style Sheet"…}*/
-
+    document.getElementById("reponse1").style.opacity = "1.0";
+    document.getElementById("reponse2").style.opacity = "1.0";
+    document.getElementById("reponse3").style.opacity = "1.0";
+    zoneReponse.classList.remove("vrai");
+    zoneReponse.classList.remove("faux");
+    zoneReponse.innerHTML = "";
 }
 
+/***********************
+ Abandonner
+ ***********************/
 function giveUp()
 {
     if (mode == "testrapide")
