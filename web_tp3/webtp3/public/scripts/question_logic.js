@@ -6,18 +6,101 @@ var currentAnswer;
 var currentScore = 0;
 var nbCurr = 0;
 
+var zones = document.querySelectorAll('.choixDeReponse');
+var zoneReponse = document.getElementById("zoneReponse");
+
 document.getElementById("suivant").onclick = updateQuestion;
 document.getElementById("abandonner").onclick = giveUp;
+
+updateQuestion();
+
+/***********************
+ Mise à jour de la question
+ ***********************/
+function updateQuestion(){
+    // Itérateur qui permet d'identifier où notre utilisateur est situé dans le questionnaire
+    nbCurr = Number(sessionStorage.getItem("nbQuestionsCourant"));
+    // Calculer le score du joueur pour la page "result" (seulement necessaire pour "examen")
+    currentScore = Number(sessionStorage.getItem("currentScore"));
+
+    if(mode == "testrapide") 
+    {
+        $.get("/api/questions", function(data, status) {
+
+            ++nbCurr;
+            sessionStorage.setItem("nbQuestionsCourant", nbCurr);
+
+            document.getElementById("noteCourante").innerHTML = "Note actuelle: " + currentScore + "/" + nbCurr;
+
+            document.getElementById("domaine").innerHTML = data.domaine;
+            document.getElementById("question").innerHTML = data.question;
+            document.getElementById("reponse1").innerHTML = data.reponse1;
+            document.getElementById("reponse2").innerHTML = data.reponse2;
+            document.getElementById("reponse3").innerHTML = data.reponse3;
+            currentAnswer = data.answer;
+
+        });
+    }
+    else if(mode == "examen") 
+    {
+        if(nbCurr >= nb) 
+        {
+            document.getElementById("noteCourante").innerHTML = "Note actuelle: " + currentScore + "/" + nbCurr;
+            window.location.href = "/result";
+        }
+        else
+        {
+
+            $.post("/api/questions", 
+            {domaine: domaine, nombredequestions: nb, currentNb:nbCurr}, 
+            function(data, status) {
+
+                document.getElementById("domaine").innerHTML = data.domaine;
+                document.getElementById("question").innerHTML = data.question;
+                document.getElementById("reponse1").innerHTML = data.reponse1;
+                document.getElementById("reponse2").innerHTML = data.reponse2;
+                document.getElementById("reponse3").innerHTML = data.reponse3;
+                currentAnswer = data.answer;
+
+                ++nbCurr;
+                sessionStorage.setItem("nbQuestionsCourant", nbCurr);
+                document.getElementById("noteCourante").innerHTML = "Note actuelle: " + currentScore + "/" + nbCurr;
+                document.getElementById("numerotation").innerHTML = "Question "+ nbCurr + "/" + nb;
+            });
+
+        }
+         
+    }
+
+    document.getElementById("reponse1").classList.remove("disabled");
+    document.getElementById("reponse2").classList.remove("disabled");
+    document.getElementById("reponse3").classList.remove("disabled");
+    zoneReponse.classList.remove("vrai");
+    zoneReponse.classList.remove("faux");
+    zoneReponse.innerHTML = "";
+}
+
+/***********************
+ Abandonner
+ ***********************/
+function giveUp()
+{
+    if (mode == "testrapide")
+    {
+        window.location.href = "/dashboard";
+    }
+    else if(mode == "examen") 
+    {
+        sessionStorage.setItem("currentScore", 0);
+        window.location.href = "/result";
+    }
+}
 
 /***********************
  Event Listeners
  ***********************/
-var zones = document.querySelectorAll('.choixDeReponse');
-var zoneReponse = document.getElementById("zoneReponse");
 
 var elementBeingDragged = null;
-
-enableAllEventListeners();
 
 function handleDragStart(e){
     // L'opacité de notre réponse choisie (que l'on commence à drag) est réduite.
@@ -89,7 +172,9 @@ function handleDrop(e) {
 
         }
         // On désactive les choix de réponse jusqu'à la prochaine question
-        disableAllEventListeners();
+        document.getElementById("reponse1").classList.add("disabled");
+        document.getElementById("reponse2").classList.add("disabled");
+        document.getElementById("reponse3").classList.add("disabled");
     }
     else
     {
@@ -107,109 +192,11 @@ function handleDragEnd(e) {
     });
 }
 
-function disableAllEventListeners()
-{
-    [].forEach.call(zones, function (zone) {
-        zone.classList.add("disabled");
-    });
-}
-
-function enableAllEventListeners()
-{
-    [].forEach.call(zones, function (zone) {
-        zone.classList.remove("disabled");
-        zone.addEventListener("dragstart", handleDragStart, false);
-        zone.addEventListener("dragenter", handleDragEnter, false)
-        zone.addEventListener("dragover", handleDragOver, false);
-        zone.addEventListener("dragleave", handleDragLeave, false);
-        zone.addEventListener("drop", handleDrop, false);
-        zone.addEventListener("dragend", handleDragEnd, false);
-    });
-}
-
-
-updateQuestion();
-
-/***********************
- Mise à jour de la question
- ***********************/
-function updateQuestion(){
-    // Itérateur qui permet d'identifier où notre utilisateur est situé dans le questionnaire
-    nbCurr = Number(sessionStorage.getItem("nbQuestionsCourant"));
-    // Calculer le score du joueur pour la page "result" (seulement necessaire pour "examen")
-    currentScore = Number(sessionStorage.getItem("currentScore"));
-
-    if(mode == "testrapide") 
-    {
-        $.get("/api/questions", function(data, status) {
-
-            ++nbCurr;
-            sessionStorage.setItem("nbQuestionsCourant", nbCurr);
-
-            document.getElementById("noteCourante").innerHTML = "Note actuelle: " + currentScore + "/" + nbCurr;
-
-            document.getElementById("domaine").innerHTML = data.domaine;
-            document.getElementById("question").innerHTML = data.question;
-            document.getElementById("reponse1").innerHTML = data.reponse1;
-            document.getElementById("reponse2").innerHTML = data.reponse2;
-            document.getElementById("reponse3").innerHTML = data.reponse3;
-            currentAnswer = data.answer;
-
-            enableAllEventListeners();
-        });
-    }
-    else if(mode == "examen") 
-    {
-        if(nbCurr >= nb) 
-        {
-            document.getElementById("noteCourante").innerHTML = "Note actuelle: " + currentScore + "/" + nbCurr;
-            window.location.href = "/result";
-        }
-        else
-        {
-
-            $.post("/api/questions", 
-            {domaine: domaine, nombredequestions: nb, currentNb:nbCurr}, 
-            function(data, status) {
-
-                document.getElementById("domaine").innerHTML = data.domaine;
-                document.getElementById("question").innerHTML = data.question;
-                document.getElementById("reponse1").innerHTML = data.reponse1;
-                document.getElementById("reponse2").innerHTML = data.reponse2;
-                document.getElementById("reponse3").innerHTML = data.reponse3;
-                currentAnswer = data.answer;
-
-                ++nbCurr;
-                sessionStorage.setItem("nbQuestionsCourant", nbCurr);
-                document.getElementById("noteCourante").innerHTML = "Note actuelle: " + currentScore + "/" + nbCurr;
-                document.getElementById("numerotation").innerHTML = "Question "+ nbCurr + "/" + nb;
-            });
-
-            enableAllEventListeners();
-        }
-         
-    }
-
-    document.getElementById("reponse1").style.opacity = "1.0";
-    document.getElementById("reponse2").style.opacity = "1.0";
-    document.getElementById("reponse3").style.opacity = "1.0";
-    zoneReponse.classList.remove("vrai");
-    zoneReponse.classList.remove("faux");
-    zoneReponse.innerHTML = "";
-}
-
-/***********************
- Abandonner
- ***********************/
-function giveUp()
-{
-    if (mode == "testrapide")
-    {
-        window.location.href = "/dashboard";
-    }
-    else if(mode == "examen") 
-    {
-        sessionStorage.setItem("currentScore", 0);
-        window.location.href = "/result";
-    }
-}
+[].forEach.call(zones, function (zone) {
+    zone.addEventListener("dragstart", handleDragStart, false);
+    zone.addEventListener("dragenter", handleDragEnter, false)
+    zone.addEventListener("dragover", handleDragOver, false);
+    zone.addEventListener("dragleave", handleDragLeave, false);
+    zone.addEventListener("drop", handleDrop, false);
+    zone.addEventListener("dragend", handleDragEnd, false);
+});
