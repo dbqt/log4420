@@ -3,7 +3,33 @@ var nb = Number(sessionStorage.getItem("choixNombre"));
 var mode = sessionStorage.getItem("mode");
 var score = Number(sessionStorage.getItem("currentScore"));
 
-var resultText = "Vous avez obtenu " + score + "/" + nb + "."; 
+var resultText;
+
+if (nb > 0)
+{
+    if(Math.floor((score / nb) * 100) < 25)
+    {
+        resultText = "Vous avez obtenu " + score + "/" + nb + ". Une révision sérieuse est nécessaire."; 
+    }
+    else if(Math.floor((score / nb) * 100) < 50)
+    {
+        resultText = "Vous avez obtenu " + score + "/" + nb + ". Une révision est recommandée."; 
+    }
+    else if(Math.floor((score / nb) * 100) < 75)
+    {
+        resultText = "Vous avez obtenu " + score + "/" + nb + ". La note de passage est atteinte, mais il faudrait réviser un peu quelques aspects."; 
+    }
+    else 
+    {
+        resultText = "Vous avez obtenu " + score + "/" + nb + ". Ce résultat est satisfaisant.";  
+    }
+}
+else
+{
+    resultText = "Vous avez obtenu " + score + "/" + nb + ". Il est difficile de vous évaluer sans que vous ayez donné au moins une réponse."; 
+}
+
+
 document.getElementById("resultat").innerHTML = resultText;
 
 // On met à jour les statistiques

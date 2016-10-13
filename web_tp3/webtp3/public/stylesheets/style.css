@@ -270,11 +270,14 @@ div .choixDeReponse, div #zoneReponse {
     border: 2px solid lightgray;
     text-align: center;
     vertical-align: middle;
+    cursor: move;
 }
 
 div .disabled
 {
     opacity: 0.4;
+    cursor:  default;
+
 }
 
 #zoneReponse.over {
