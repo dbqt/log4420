@@ -2,7 +2,6 @@ document.getElementById("submitExamen").onclick = save_configs;
 document.getElementById("submitTestRapide").onclick = set_mode_rapide;
 //document.getElementById("reinitialiserStatistiques").onclick = localStorage.clear(); // localStorage est uniquement utilisé pour les statistiques du joueur
 
-console.log(localStorage);
 var nbQuestionsReussiesTotal = ((localStorage.getItem("nbQuestionsReussiesTotal") != null) ? Number(localStorage.getItem("nbQuestionsReussiesTotal")) : 0);
 var nbQuestionsTotal = ((localStorage.getItem("nbQuestionsTotal") != null) ? Number(localStorage.getItem("nbQuestionsTotal")) : 0);
 var moyenne = ((nbQuestionsTotal != 0) ? Math.floor((nbQuestionsReussiesTotal / nbQuestionsTotal) * 100) : 0);

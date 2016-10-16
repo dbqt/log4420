@@ -4,13 +4,19 @@ block link
     -var selected = "Résultat"; // Not in menu
 
 block content
+    script(src='/scripts/jquery.min.js')
+    script(src='/scripts/result_logic.js')
+
     h1 Résultat
     
     section
-        h2 Examen complété
-        p#resultat
+        if(giveup)
+            h2 Examen abandonné
+            p L'examen a été abandonné avec avec une note de 0.
+        else
+            h2 Examen complété
+            p#resultat
+            script.
+                generate_result();
 
         a.flatButton(href='/dashboard') Retour au tableau de bord
-    
-    script(src='/scripts/jquery.min.js')
-    script(src='/scripts/result_logic.js')

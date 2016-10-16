@@ -1,10 +1,13 @@
 var express = require('express');
 var router = express.Router();
 
-
-/* GET users listing. */
 router.get('/', function(req, res, next) {
-  res.render('result', { title: 'Résultat'});
+  res.render('result', { title: 'Résultat', giveup: false});
+});
+
+/* En cas d'abandon */
+router.get('/abandon', function(req, res, next) {
+  res.render('result', { title: 'Résultat', giveup: true});
 });
 
 module.exports = router;

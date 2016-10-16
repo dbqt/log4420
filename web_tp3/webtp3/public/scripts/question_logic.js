@@ -92,7 +92,7 @@ function giveUp()
     else if(mode == "examen") 
     {
         sessionStorage.setItem("currentScore", 0);
-        window.location.href = "/result";
+        window.location.href = "/result/abandon";
     }
 }
 
