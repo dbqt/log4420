@@ -10,6 +10,8 @@ var moyenne = ((nbQuestionsTotal != 0) ? Math.floor((nbQuestionsReussiesTotal / 
 document.getElementById("nombreQuestionsReussies").innerHTML = "Nombre de questions réussies: " + nbQuestionsReussiesTotal + "/" + nbQuestionsTotal;
 document.getElementById("moyenneExamens").innerHTML = "Moyenne des examens: " + moyenne + "%";
 
+update_Stats();
+
 function save_configs()
 {
     var filledForm = document.getElementById("formConfigs");
@@ -27,4 +29,36 @@ function set_mode_rapide()
     sessionStorage.setItem("nbQuestionsCourant", 0);
     sessionStorage.setItem("mode", "testrapide");
     sessionStorage.setItem("currentScore", 0);
+}
+
+function update_Stats()
+{
+    // On recupere les stats
+    var statsArray = [];
+    if (localStorage.getItem("examScores") != null)
+    {
+        statsArray = $.parseJSON(localStorage.getItem("examScores"));
+    }
+    // Pour chaque examen dans les stats, on ajoute les infos dans la table detaillee
+    statsArray.forEach(function(element) { 
+        var row = document.createElement("tr"); // creer une rangee
+
+        var examName = document.createElement("td"); // creer la colonne nom
+        var examNameText = document.createTextNode(element.nom);
+        examName.appendChild(examNameText);
+
+        var examDomaine = document.createElement("td"); // creer la colonne domaine
+        var examDomaineText = document.createTextNode(element.domaine);
+        examDomaine.appendChild(examDomaineText);
+
+        var examScore = document.createElement("td"); // creer la colonne note
+        var examScoreText = document.createTextNode((element.score*100/element.nb).toFixed(2) + " %");
+        examScore.appendChild(examScoreText);
+        
+        // ajouter tous les elements a la rangee
+        row.appendChild(examName);
+        row.appendChild(examDomaine);
+        row.appendChild(examScore);
+        document.getElementById("tableStats").appendChild(row); // ajouter la rangee a la table
+    }, this);   
 }

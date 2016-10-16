@@ -1,14 +1,10 @@
 extends layout
 
-
-
 block link
     -var selected = "Tableau de bord";
 
 block content
-    
     h1= title  
-
     div.flexBox
         // Mode test rapide
         section
@@ -26,12 +22,10 @@ block content
                     option(value="JavaScript") JavaScript
                     option(value="CSS") CSS
 
-            
                 label Nombre de questions: 
                 input(name="choix_nombre" type="number"  value=5 required)
 
                 input#submitExamen.flatButton(type="submit" value="Débuter l'examen")
-           
             
         //Statistiques
         aside
@@ -40,7 +34,6 @@ block content
             p#moyenneExamens
             a.flatButton(href="#openModalBox") Statistiques Détaillées
 
-    - var examScores = { 'Exam 1': '10/20', 'Exam 2': '12/20', 'Exam 3': '17/20', 'Exam 4': '15/20', 'Exam 5': '19/20', 'Exam 6': '11/20', 'Exam 7': '17/20' };
     div.modalBox#openModalBox
         div.modalBoxMessage()
             h2 Statistiques détaillées
@@ -48,15 +41,13 @@ block content
                 thead
                     tr
                         th Nom de l'examen
+                        th Domaine
                         th Note obtenue
-                tbody
-                    each val, key in examScores
-                        tr
-                            td=key
-                            td=val
-               
+                tbody#tableStats
+
             a#reinitialiserStatistiques.flatButton(href="" onclick="localStorage.clear();") Réinitialiser les statistiques
             a#fermer.flatButton(href="") Fermer
         a.closeModal(href="")
 
+    script(src='/scripts/jquery.min.js')
     script(src='/scripts/dashboard_logic.js')
