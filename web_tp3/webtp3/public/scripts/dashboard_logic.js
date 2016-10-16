@@ -51,7 +51,7 @@ function update_Stats()
         examDomaine.appendChild(examDomaineText);
 
         var examScore = document.createElement("td"); // creer la colonne note
-        var examScoreText = document.createTextNode((element.score*100/element.nb).toFixed(2) + " %");
+        var examScoreText = document.createTextNode(element.score + "/" + element.nb);
         examScore.appendChild(examScoreText);
         
         // ajouter tous les elements a la rangee
