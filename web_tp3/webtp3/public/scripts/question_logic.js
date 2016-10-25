@@ -136,7 +136,9 @@ function handleDragOver(e) {
 
 function handleDragLeave(e) {
     // Si l'on s'éloigne d'un endroit où l'on pouvait drop, alors on retire le style de over grâce à la classe ".column.over"
-    e.target.classList.remove("over");
+    if (e.target.classList != undefined){
+		e.target.classList.remove("over");
+	}
 }
 
 function handleDrop(e) {
@@ -157,16 +159,33 @@ function handleDrop(e) {
 
             // On incrémente le score du joueur et on affiche le nouveau score dans les statistiques en bas
             ++currentScore;
+            if(mode == "testrapide")
+            {
+				var questionSucceed = Number(localStorage.getItem("questionSucceedCount"));
+				if (questionSucceed == null)
+				{
+					questionSucceed = 0;
+				}
+				localStorage.setItem("questionSucceedCount", questionSucceed+1);
+			}
             sessionStorage.setItem("currentScore", currentScore);
             document.getElementById("noteCourante").innerHTML = "Note actuelle: " + currentScore + "/" + nbCurr;
-            
-
         }
         else
         {
             // On associe le style rouge de fausseté
             zoneReponse.classList.add("faux");
-
+            
+            // On incrémente le score du joueur en mode test rapide
+			if(mode == "testrapide")
+            {
+				var questionFail = Number(localStorage.getItem("questionFailCount"));
+				if (questionFail == null)
+				{
+					questionFail = 0;
+				}
+				localStorage.setItem("questionFailCount", questionFail+1);
+			}
             // On affiche le nouveau score dans les statistiques en bas
             document.getElementById("noteCourante").innerHTML = "Note actuelle: " + currentScore + "/" + nbCurr;
 

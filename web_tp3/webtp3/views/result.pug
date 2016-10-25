@@ -12,11 +12,12 @@ block content
     section
         if(giveup)
             h2 Examen abandonné
-            p L'examen a été abandonné avec avec une note de 0.
+            p L'examen a été abandonné.
         else
             h2 Examen complété
-            p#resultat
-            script.
-                generate_result();
+            
+        p#resultat
+        script.
+            generate_result();
 
         a.flatButton(href='/dashboard') Retour au tableau de bord

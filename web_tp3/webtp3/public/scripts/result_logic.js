@@ -13,18 +13,42 @@ function generate_result()
         if(Math.floor((score / nb) * 100) < 25)
         {
             resultText = "Vous avez obtenu " + score + "/" + nb + ". Une révision sérieuse est nécessaire."; 
+            var examFailCount = Number(localStorage.getItem("examFailCount"+domaine));
+			if (examFailCount == null)
+			{
+				examFailCount = 0;
+			}
+			localStorage.setItem("examFailCount"+domaine, examFailCount+1);
         }
         else if(Math.floor((score / nb) * 100) < 50)
         {
-            resultText = "Vous avez obtenu " + score + "/" + nb + ". Une révision est recommandée."; 
+            resultText = "Vous avez obtenu " + score + "/" + nb + ". Une révision est recommandée.";
+            var examFailCount = Number(localStorage.getItem("examFailCount"+domaine));
+			if (examFailCount == null)
+			{
+				examFailCount = 0;
+			}
+			localStorage.setItem("examFailCount"+domaine, examFailCount+1);
         }
         else if(Math.floor((score / nb) * 100) < 75)
         {
-            resultText = "Vous avez obtenu " + score + "/" + nb + ". La note de passage est atteinte, mais il faudrait réviser un peu quelques aspects."; 
+            resultText = "Vous avez obtenu " + score + "/" + nb + ". La note de passage est atteinte, mais il faudrait réviser un peu quelques aspects.";
+            var examSuccessCount = Number(localStorage.getItem("examSuccessCount"+domaine));
+			if (examSuccessCount == null)
+			{
+				examSuccessCount = 0;
+			}
+			localStorage.setItem("examSuccessCount"+domaine, examSuccessCount+1);
         }
         else 
         {
             resultText = "Vous avez obtenu " + score + "/" + nb + ". Ce résultat est satisfaisant.";  
+            var examSuccessCount = Number(localStorage.getItem("examSuccessCount"+domaine));
+			if (examSuccessCount == null)
+			{
+				examSuccessCount = 0;
+			}
+			localStorage.setItem("examSuccessCount"+domaine, examSuccessCount+1);
         }
         update_statistics();
     }
