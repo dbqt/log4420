@@ -12,6 +12,10 @@ var instructions = require('./routes/instructions');
 var dashboard = require('./routes/dashboard');
 var ajax = require('./routes/ajax');
 
+var db = require('./lib/db');
+var mongoose = require( 'mongoose' );
+var Todo = mongoose.model( 'Todo' );
+
 var app = express();
 
 // view engine setup
