@@ -14,7 +14,7 @@ var ajax = require('./routes/ajax');
 
 var db = require('./lib/db');
 var mongoose = require( 'mongoose' );
-var Todo = mongoose.model( 'Todo' );
+var Questions = mongoose.model( 'Questions' );
 
 var app = express();
 

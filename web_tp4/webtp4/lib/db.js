@@ -1,10 +1,16 @@
 var mongoose = require( 'mongoose' );
 var Schema = mongoose.Schema;
-var Todo = new Schema({
- content : String,
- updated_at : Date
+var Questions = new Schema({
+ id : Number,
+ domaine : String,
+ question : String,
+ reponse1 : String,
+ reponse2 : String,
+ reponse3 : String,
+ answer : String
 });
 
-mongoose.model( 'Todo', Todo );
-// the next line crashes
-//mongoose.connect( 'mongodb://localhost/express-todo' );
+mongoose.model( 'Questions', Questions );
+// user: 'epicUser' 
+// password: 'epicpassword1'
+mongoose.connect( 'mongodb://epicUser:epicpassword1@ds050189.mlab.com:50189/tpweb' );
