@@ -14,9 +14,10 @@ router.get('/admin', function(req, res, next) {
 
 /* ajouter une question au db */
 router.post('/addQuestion', function(req, res, next) {
+  var nbQuestions = QuestionsDB.count();
   // creer un objet Questions a partir du form
    new Questions({
-    id : 42,
+    id : nbQuestions + 1,
     domaine : req.body.domaine,
     question : req.body.question,
     reponse1 : req.body.reponse1,
@@ -37,10 +38,9 @@ router.get('/', function(req, res, next) {
 
 /* GET questions api. */
 router.get('/questions', function(req, res, next) {
-    console.log(req.body.domaine);
-    console.log(req.body.nombredequestions);
-  var random = Math.floor(Math.random() * pseudoBD.length);
-  res.json(pseudoBD[random]);
+  var nbQuestions = QuestionsDB.count();
+  var random = Math.floor(Math.random() * nbQuestions);
+  //res.json(pseudoBD[random]);
 });
 
 /* Returns the next question with the correct subject */
