@@ -4,7 +4,7 @@ extends layout
 block content
     h1 Ajouter une question
     
-    form(action="/api/addQuestion" method="post")
+    form#adminform(method="post")
         label Domaine: 
         select(name="domaine" required)
             option(value="HTML") HTML
@@ -25,4 +25,7 @@ block content
             option(value="reponse2") 2e
             option(value="reponse3") 3e
 
-        input.flatButton(type="submit")
+    button#envoyer.flatButton Envoyer
+	
+    script(src='/scripts/jquery.min.js')
+    script(src='/scripts/admin_logic.js')
