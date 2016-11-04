@@ -31,9 +31,10 @@ document.getElementById("countCSSwrong").innerHTML = "Nombre d'examens échoués
 document.getElementById("questionSucceedCount").innerHTML = "Nombre de questions rapides réussies: " + questionSucceedCount;
 document.getElementById("questionFailCount").innerHTML = "Nombre de questions rapides échouées: " + questionFailCount;
 
-
+document.getElementById("domaineChoice").onchange = checkQuestionsCount;
 
 update_Stats();
+checkQuestionsCount();
 
 function save_configs()
 {
@@ -84,4 +85,36 @@ function update_Stats()
         row.appendChild(examScore);
         document.getElementById("tableStats").appendChild(row); // ajouter la rangee a la table
     }, this);   
+}
+
+
+
+function checkQuestionsCount()
+{
+	console.log("check");
+	$.get(
+		"/api/nbQuestionsMax", 
+		function(data)
+		{                          
+			switch(document.getElementById("domaineChoice").value)
+			{
+				case "HTML":
+					document.getElementById("nombreQuestionsInput").max = data.HTML;
+					break;
+				
+				case "JavaScript":
+					document.getElementById("nombreQuestionsInput").max = data.JavaScript;
+					break;
+				
+				case "CSS":
+					document.getElementById("nombreQuestionsInput").max = data.CSS;
+					break;
+				
+				default:
+					console.log("Mauvais choix de domaine...");
+					break;
+			}        
+		}      
+	);
+	document.getElementById("nombreQuestionsInput").value = 1;
 }

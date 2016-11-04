@@ -82,6 +82,25 @@ router.post('/questions', function(req, res, next) {
   //res.json(filteredQuestions[curr%filteredQuestions.length])
 });
 
+router.get('/nbQuestionsMax', function(req, res, next) {
+	Questions.aggregate({
+    $group : { _id : '$domaine', count : {$sum : 1}}},
+     function(err, data){
+        if(err){
+            res.status(500).send(err);
+            console.log(err);
+        }
+        else {
+            // reformat the previous result into { JavaScript: 1, CSS: 1, HTML: 14 }
+            var domaineCount = {};
+            data.forEach(function(entry){
+              domaineCount[entry._id] = entry.count;
+            });
+            res.json(domaineCount);
+        }
+   });
+});
+
 function isQuestionValid(question) {
   //console.log(question);
   if(question.domaine != 'HTML' && question.domaine != 'CSS' && question.domaine != 'JavaScript')
