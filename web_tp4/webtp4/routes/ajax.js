@@ -14,22 +14,25 @@ router.get('/admin', function(req, res, next) {
 
 /* ajouter une question au db */
 router.post('/addQuestion', function(req, res, next) {
-  var nbQuestions = Questions.count();
-  // creer un objet Questions a partir du form
-   new Questions({
-    domaine : req.body.domaine,
-    question : req.body.question,
-    reponse1 : req.body.reponse1,
-    reponse2 : req.body.reponse2,
-    reponse3 : req.body.reponse3,
-    answer : req.body.answer
-    //appeler save pour enregistrer cet objet dans la db
-  }).save(function( err, Questions, count ){
-	  console.log(Questions);
-	  if (err != null){ console.log(err);}
-	  
-	  res.send(200);
-  });
+  if(isQuestionValid(req.body)) {
+      // creer un objet Questions a partir du form
+      new Questions({
+        domaine : req.body.domaine,
+        question : req.body.question,
+        reponse1 : req.body.reponse1,
+        reponse2 : req.body.reponse2,
+        reponse3 : req.body.reponse3,
+        answer : req.body.answer
+        //appeler save pour enregistrer cet objet dans la db
+      }).save(function( err, Questions, count ){
+        console.log(Questions);
+        if (err != null){ console.log(err);}
+        
+        res.sendStatus(200);
+      });
+  } else {
+    res.sendStatus(400);
+  }
 });
 
 /* GET base api. */
@@ -59,5 +62,24 @@ router.post('/questions', function(req, res, next) {
 
   res.json(filteredQuestions[curr%filteredQuestions.length])
 });
+
+function isQuestionValid(question) {
+  console.log(question);
+  if(question.domaine != 'HTML' && question.domaine != 'CSS' && question.domaine != 'JavaScript')
+      return false;
+  console.log("domaine ok");
+  if(question.question == "") return false;
+  console.log("question ok");
+  if(question.reponse1 == "") return false;
+  console.log("reponse1 ok");
+  if(question.reponse2 == "") return false;
+  console.log("reponse2 ok");
+  if(question.reponse3 == "") return false;
+  console.log("reponse3 ok");
+  if(question.answer != 'reponse1' && question.answer != 'reponse2' && question.answer != 'reponse3')
+      return false;
+  console.log("answser ok");
+  return true;
+}
 
 module.exports = router;
