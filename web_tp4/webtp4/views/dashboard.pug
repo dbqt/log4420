@@ -4,6 +4,9 @@ block link
     -var selected = "Tableau de bord";
 
 block content
+    -var nbHTML = domaineNb.HTML;
+    -var nbCSS = domaineNb.CSS;
+    -var nbJS = domaineNb.JavaScript;
     h1= title  
     div.flexBox
         // Mode test rapide
@@ -23,6 +26,7 @@ block content
                     option(value="CSS") CSS
 
                 label Nombre de questions: 
+                //- TODO: change max to nbHTML, nbCSS or nbJS
                 input(name="choix_nombre" type="number" value=5 min="1" required)
 
                 input#submitExamen.flatButton(type="submit" value="Débuter l'examen")

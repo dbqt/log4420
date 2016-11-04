@@ -26,12 +26,16 @@ router.post('/addQuestion', function(req, res, next) {
         //appeler save pour enregistrer cet objet dans la db
       }).save(function( err, Questions, count ){
         console.log(Questions);
-        if (err != null){ console.log(err);}
-        
-        res.sendStatus(200);
+        if(err) {
+          res.status(500).send(err); 
+          console.log(err);
+        }
+        else { 
+          res.sendStatus(200);
+        }
       });
   } else {
-    res.sendStatus(400);
+    res.status(400).send('Invalid question');
   }
 });
 
@@ -42,16 +46,16 @@ router.get('/', function(req, res, next) {
 
 /* GET questions api. */
 router.get('/questions', function(req, res, next) {
-
-  Questions.count(function(err, nb){
-    console.log("count "+nb);
-    var random = Math.floor(Math.random() * nb);
+    // get a random question
     Questions.find().exec(function(err, data) {
-		  res.json(data[random]);
+      if(err) {
+        console.log(err);
+        res.status(500).send(err);
+      } else {
+        var random = Math.floor(Math.random() * data.length);
+        res.json(data[random]);
+      }
 	  });
-  });
-  
-  //res.json(pseudoBD[random]);
 });
 
 /* Returns the next question with the correct subject */
@@ -60,33 +64,34 @@ router.post('/questions', function(req, res, next) {
   var nombredequestions = req.body.nombredequestions;
   var curr = req.body.currentNb;
 
-  var filteredQuestions = pseudoBD.filter(function(element) {
+  /*var filteredQuestions = pseudoBD.filter(function(element) {
     return element.domaine == domaineChoisi;
-  });
+  });*/
 
+  // pick a question in a filtered array of questions with the right domain
   Questions.find( { domaine: domaineChoisi } ).exec(function(err, data) {
-		res.json(data[curr%data.length])
+    if(err) {
+      res.status(500).send(err); 
+      console.log(err);
+    }
+		else {
+      res.json(data[curr%data.length]);
+    }
 	});
 
   //res.json(filteredQuestions[curr%filteredQuestions.length])
 });
 
 function isQuestionValid(question) {
-  console.log(question);
+  //console.log(question);
   if(question.domaine != 'HTML' && question.domaine != 'CSS' && question.domaine != 'JavaScript')
       return false;
-  console.log("domaine ok");
   if(question.question == "") return false;
-  console.log("question ok");
   if(question.reponse1 == "") return false;
-  console.log("reponse1 ok");
   if(question.reponse2 == "") return false;
-  console.log("reponse2 ok");
   if(question.reponse3 == "") return false;
-  console.log("reponse3 ok");
   if(question.answer != 'reponse1' && question.answer != 'reponse2' && question.answer != 'reponse3')
       return false;
-  console.log("answser ok");
   return true;
 }
 
