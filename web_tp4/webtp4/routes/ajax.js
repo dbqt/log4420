@@ -42,25 +42,33 @@ router.get('/', function(req, res, next) {
 
 /* GET questions api. */
 router.get('/questions', function(req, res, next) {
-  var nbQuestions = Questions.count();
-  var random = Math.floor(Math.random() * nbQuestions);
-  Questions.find().exec(function(err, data) {
-		console.log(data);
-	});
+
+  Questions.count(function(err, nb){
+    console.log("count "+nb);
+    var random = Math.floor(Math.random() * nb);
+    Questions.find().exec(function(err, data) {
+		  res.json(data[random]);
+	  });
+  });
+  
   //res.json(pseudoBD[random]);
 });
 
 /* Returns the next question with the correct subject */
 router.post('/questions', function(req, res, next) {
-  var domaine = req.body.domaine;
+  var domaineChoisi = req.body.domaine;
   var nombredequestions = req.body.nombredequestions;
   var curr = req.body.currentNb;
 
   var filteredQuestions = pseudoBD.filter(function(element) {
-    return element.domaine == domaine;
+    return element.domaine == domaineChoisi;
   });
 
-  res.json(filteredQuestions[curr%filteredQuestions.length])
+  Questions.find( { domaine: domaineChoisi } ).exec(function(err, data) {
+		res.json(data[curr%data.length])
+	});
+
+  //res.json(filteredQuestions[curr%filteredQuestions.length])
 });
 
 function isQuestionValid(question) {

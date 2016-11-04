@@ -61,7 +61,7 @@ function updateQuestion(){
                 document.getElementById("reponse2").innerHTML = data.reponse2;
                 document.getElementById("reponse3").innerHTML = data.reponse3;
                 currentAnswer = data.answer;
-
+                
                 ++nbCurr;
                 sessionStorage.setItem("nbQuestionsCourant", nbCurr);
                 document.getElementById("noteCourante").innerHTML = "Note actuelle: " + currentScore + "/" + nbCurr;
