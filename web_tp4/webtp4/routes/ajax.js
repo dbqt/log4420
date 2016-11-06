@@ -15,6 +15,40 @@ router.get('/admin', function(req, res, next) {
 
 /* REST API */
 
+/* /next */
+router.get('/next', function(req, res, next) {
+    var mode = "testrapide";
+    if(mode == "testrapide") {
+      // get a random question
+      Questions.find().exec(function(err, data) {
+        if(err) {
+          console.log(err);
+          res.status(500).send(err);
+        } else {
+          // TODO : change random logic to use mongosse-simple-random
+          var random = Math.floor(Math.random() * data.length);
+          res.json(data[random]);
+        }
+      });
+    }
+    else {
+      var domaineChoisi = "HTML";
+      var nombredequestions = 2;
+      var curr = 1;
+
+      // pick a question in a filtered array of questions with the right domain
+      Questions.find( { domaine: domaineChoisi } ).exec(function(err, data) {
+        if(err) {
+          res.status(500).send(err); 
+          console.log(err);
+        }
+        else {
+          res.json(data[curr%data.length]);
+        }
+      });
+    }
+});
+
 /* /question */
 // get all questions
 router.get('/question', function(req, res, next) {
@@ -65,6 +99,30 @@ router.delete('/question', function(req, res, next) {
     // this is powerful, use with care
 });
 
+
+router.get('/stats', function(req, res, next) {
+  res.sendStatus(200);
+});
+
+router.delete('/stats', function(req, res, next) {
+  res.sendStatus(200);
+});
+
+router.get('/stats/examens-detailles', function(req, res, next) {
+  res.sendStatus(200);
+});
+
+router.delete('/stats/examens-detailles', function(req, res, next) {
+  res.sendStatus(200);
+});
+
+router.get('/stats/progres', function(req, res, next) {
+  res.sendStatus(200);
+});
+
+router.delete('/stats/progres', function(req, res, next) {
+  res.sendStatus(200);
+});
 /* LEGACY */
 
 /* ajouter une question au db */

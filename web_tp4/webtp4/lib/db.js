@@ -1,5 +1,8 @@
 var mongoose = require( 'mongoose' );
+var random = require('mongosse-simple-random');
+
 var Schema = mongoose.Schema;
+
 var Questions = new Schema({
  domaine : String,
  question : String,
@@ -8,6 +11,7 @@ var Questions = new Schema({
  reponse3 : String,
  answer : String
 });
+Questions.plugin(random);
 
 var Stats = new Schema({
     testRapide : {
