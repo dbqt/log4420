@@ -12,12 +12,27 @@ var zoneReponse = document.getElementById("zoneReponse");
 document.getElementById("suivant").onclick = updateQuestion;
 document.getElementById("abandonner").onclick = giveUp;
 
+// Nouveau systeme
+
+var domaineEnCours;
+var scoreEnCours;
+var nbQuestionsEnCours;
+var nombreQuestionEnCours;
+
 updateQuestion();
 
 /***********************
  Mise à jour de la question
  ***********************/
 function updateQuestion(){
+
+    $.get("/api/progres", function(data, status) {
+        domaineEnCours = data.domaine;
+        scoreEnCours = data.score;
+        nbQuestionsEnCours = data.nb;
+        nombreQuestionEnCours = data.nombreQuestionEnCours;
+    });
+
     // Itérateur qui permet d'identifier où notre utilisateur est situé dans le questionnaire
     nbCurr = Number(sessionStorage.getItem("nbQuestionsCourant"));
     // Calculer le score du joueur pour la page "result" (seulement necessaire pour "examen")

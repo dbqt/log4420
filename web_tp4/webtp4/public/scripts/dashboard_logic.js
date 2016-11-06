@@ -36,6 +36,16 @@ document.getElementById("domaineChoice").onchange = checkQuestionsCount;
 update_Stats();
 checkQuestionsCount();
 
+
+// CONTINUER UN EXAMEN
+
+var domaineEnCours;
+var scoreEnCours;
+var nbQuestionsEnCours;
+var nombreQuestionEnCours;
+
+check_if_exam_in_progress();
+
 function save_configs()
 {
     var filledForm = document.getElementById("formConfigs");
@@ -112,4 +122,38 @@ function checkQuestionsCount()
         }        
     });
 	document.getElementById("nombreQuestionsInput").value = 1;
+}
+
+function check_if_exam_in_progress()
+{
+    $.get("/api/nbQuestionsMax", function(data){
+        if (data.examenEnCours)
+        {
+            domaineEnCours = data.domaine;
+            scoreEnCours = data.score;
+            nbQuestionsEnCours = data.nb;
+            nombreQuestionEnCours = data.nombreQuestionEnCours;
+            document.getElementById("continuerExamen").onclick = continue_exam;
+        }
+    });
+}
+
+function continue_exam()
+{
+
+/*
+    $.post("/api/reset", {}, function(data, status){
+        console.log("OK");
+    });
+*/
+    /*
+    $.post("/continuerExamen", {
+        domaineEnCours: domaineEnCours,
+        scoreEnCours: scoreEnCours,
+        nbQuestionsEnCours: nbQuestionsEnCours,
+        nombreQuestionEnCours: nombreQuestionEnCours
+    }, function(data, status) {
+        // Nothing?
+    });
+    */
 }
