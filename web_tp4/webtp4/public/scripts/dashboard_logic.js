@@ -91,30 +91,25 @@ function update_Stats()
 
 function checkQuestionsCount()
 {
-	console.log("check");
-	$.get(
-		"/api/nbQuestionsMax", 
-		function(data)
-		{                          
-			switch(document.getElementById("domaineChoice").value)
-			{
-				case "HTML":
-					document.getElementById("nombreQuestionsInput").max = data.HTML;
-					break;
-				
-				case "JavaScript":
-					document.getElementById("nombreQuestionsInput").max = data.JavaScript;
-					break;
-				
-				case "CSS":
-					document.getElementById("nombreQuestionsInput").max = data.CSS;
-					break;
-				
-				default:
-					console.log("Mauvais choix de domaine...");
-					break;
-			}        
-		}      
-	);
+	$.get("/api/nbQuestionsMax", function(data){                          
+        switch(document.getElementById("domaineChoice").value)
+        {
+            case "HTML":
+                document.getElementById("nombreQuestionsInput").max = data.HTML;
+                break;
+            
+            case "JavaScript":
+                document.getElementById("nombreQuestionsInput").max = data.JavaScript;
+                break;
+            
+            case "CSS":
+                document.getElementById("nombreQuestionsInput").max = data.CSS;
+                break;
+            
+            default:
+                console.log("Mauvais choix de domaine...");
+                break;
+        }        
+    });
 	document.getElementById("nombreQuestionsInput").value = 1;
 }
