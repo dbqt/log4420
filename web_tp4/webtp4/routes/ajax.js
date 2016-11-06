@@ -38,79 +38,90 @@ router.get('/nbQuestionsMax', function(req, res, next) {
 router.get('/next', function(req, res, next) {
     //load progress stats
     Stats.findOne(function(err, statsData){     
-        var mode = statsData.progres.modeEnCours;
-
-        if(mode == 'testrapide') {
+        if(statsData.mode == 'testrapide') {
           // get a random question
           Questions.findOneRandom(function(err, data) {
-            if(err) {
-              console.log(err);
-              res.status(500).send(err);
-            } else {
-                // increment current question count, then respond with next question
-                statsData.progres.numeroQuestionEnCours = statsData.progres.numeroQuestionEnCours + 1;
-                statsData.progres.nbQuestionsEnCours = statsData.progres.nbQuestionsEnCours + 1;
-                statsData.save(); 
-                res.json(data);
-            }
+              if(err)
+              {
+                  console.log(err);
+                  res.status(500).send(err);
+              }
+              else
+              {
+                  statsData.save(function(err) {
+                      if (err) res.send(err);
+                      else res.json(data);
+                  });
+              }
           });
         }
         // mode examen
-        else {
-          var domaineChoisi = statsData.progres.domaineEnCours;
-          var nombredequestions = statsData.progres.nbQuestionsEnCours;
-          var curr = statsData.progres.numeroQuestionEnCours;
-
+        else
+        {
           // pick a question in a filtered array of questions with the right domain
-          Questions.find( { domaine: domaineChoisi } ).exec(function(err, data) {
-            if(err) {
-              res.status(500).send(err); 
-              console.log(err);
-            }
-            else {
-              statsData.progres.numeroQuestionEnCours = statsData.progres.numeroQuestionEnCours + 1;
-              statsData.save();
-              res.json(data[curr%data.length]);
-            }
+          Questions.find( { domaine: statsData.progres.domaineEnCours } ).exec(function(err, data) {
+              if(err)
+              {
+                  res.status(500).send(err); 
+                  console.log(err);
+              }
+              else
+              {
+                  //statsData.progres.numeroQuestionEnCours = statsData.progres.numeroQuestionEnCours + 1;
+                  statsData.save(function(err) {
+                      if (err) res.send(err);
+                      else res.json(data[statsData.progres.numeroQuestionEnCours%data.length]);
+                  });
+              }
           });
         }
     });
 });
 
 router.post('/verifyAnswer', function(req, res, next) {
-  var questionId = req.body.questionId;
-  var reponseChoisie = req.body.reponseChoisie;
-
-  Stats.findOne(function(err, statsData){
-    Questions.findOne( { _id: questionId } ).exec(function(err, data) {
-      if(err)
-      {
-        res.status(500).send(err); 
-        console.log(err);
-      }
-      else
-      {
-        if (data.answer == reponseChoisie)
-        {
-            if(statsData.progres.modeEnCours == "testrapide"){
-              statsData.testRapide.reussi = statsData.testRapide.reussi + 1;
+    Stats.findOne(function(err, statsData){
+        Questions.findOne( { _id: req.body.questionId } ).exec(function(err, data) {
+            if(err)
+            {
+                res.status(500).send(err); 
+                console.log(err);
             }
-              statsData.progres.scoreEnCours = statsData.progres.scoreEnCours + 1;
-              statsData.save();
-            
-          res.json(1);
-        }
-        else
-        {
-            if(statsData.progres.modeEnCours == "testrapide"){
-              statsData.testRapide.echoue = statsData.testRapide.echoue + 1;
+            else
+            {
+                if (data.answer == req.body.reponseChoisie)
+                {
+                    if(statsData.mode == "testrapide")
+                    {
+                        statsData.testRapide.reussi = statsData.testRapide.reussi + 1;
+                    }
+                    else
+                    {
+                        statsData.progres.scoreEnCours = statsData.progres.scoreEnCours + 1;
+                        statsData.progres.numeroQuestionEnCours = statsData.progres.numeroQuestionEnCours + 1;
+                    }
+                    
+                    statsData.save(function(err) {
+                        if (err) res.send(err);
+                        else res.json(1);
+                    });
+                }
+                else
+                {
+                    if(statsData.mode == "testrapide"){
+                        statsData.testRapide.echoue = statsData.testRapide.echoue + 1;
+                    }
+                    else
+                    {
+                        statsData.progres.numeroQuestionEnCours = statsData.progres.numeroQuestionEnCours + 1;
+                    }
+                    statsData.save(function(err) {
+                        if (err) res.send(err);
+                        else res.json(0);
+                    });
+                }
             }
-            statsData.save();
-            res.json(0);
-        }
-      }
+        });
     });
-  });
 });
 
 /* REST API */
@@ -133,22 +144,23 @@ router.post('/question', function(req, res, next) {
     if(isQuestionValid(req.body)) {
       // creer un objet Questions a partir du form
       new Questions({
-        domaine : req.body.domaine,
-        question : req.body.question,
-        reponse1 : req.body.reponse1,
-        reponse2 : req.body.reponse2,
-        reponse3 : req.body.reponse3,
-        answer : req.body.answer
-        //appeler save pour enregistrer cet objet dans la db
+          domaine : req.body.domaine,
+          question : req.body.question,
+          reponse1 : req.body.reponse1,
+          reponse2 : req.body.reponse2,
+          reponse3 : req.body.reponse3,
+          answer : req.body.answer
+          //appeler save pour enregistrer cet objet dans la db
       }).save(function( err, Questions, count ){
-        console.log(Questions);
-        if(err) {
-          res.send(err); 
-          console.log(err);
-        }
-        else { 
-          res.sendStatus(201);
-        }
+          //console.log(Questions);
+          if(err) {
+              res.send(err); 
+              console.log(err);
+          }
+          else
+          { 
+              res.sendStatus(201);
+          }
       });
   } else {
     res.status(400).send('Invalid question');
@@ -175,7 +187,7 @@ router.get('/stats', function(req, res, next) {
     else
     {
       if(!data) data = new Stats();
-      console.log(data);
+      //console.log(data);
       res.json(data);
     }
   });
@@ -198,9 +210,12 @@ router.delete('/stats', function(req, res, next) {
         data.progres.domaineEnCours = "";
         data.progres.scoreEnCours = 0;
         data.progres.nbQuestionsEnCours = 0;
-        data.progres.numeroQuestionEnCours = 0;
-        data.progres.modeEnCours = "";
-        data.save();
+        data.progres.numeroQuestionEnCours = 1;
+        data.mode = "";
+        data.save(function(err) {
+            if (err) res.send(err);
+            else res.sendStatus(200);
+        });
     });
   res.sendStatus(200);
 });
@@ -223,8 +238,10 @@ router.delete('/stats/examens-detailles', function(req, res, next) {
       else {
           if(!data) data = new Stats();
           data.examensDetailles = [];
-          data.save();
-          res.sendStatus(200);
+          data.save(function(err) {
+              if (err) res.send(err);
+              else res.sendStatus(200);
+          });
       }
     });
     
@@ -240,7 +257,7 @@ router.get('/stats/progres', function(req, res, next) {
     }
     else
     {
-      console.log(data);
+      //console.log(data);
       res.json(data.progres);
     }
    });
@@ -253,7 +270,8 @@ router.post('/stats/progres/:mode', function(req, res, next) {
       if(err) {
         res.status(500).send(err); 
       }
-      else {
+      else
+      {
         // if for some reason the db is empty, create one stats object
         if(!data) {
           data = new Stats();
@@ -261,27 +279,29 @@ router.post('/stats/progres/:mode', function(req, res, next) {
 
         // init the progress
         if(req.params.mode == "examen") {
-          data.progres.examenEnCours = true;
-          data.progres.domaineEnCours = req.body.choix_domaine;
-          data.progres.scoreEnCours = 0;
-          data.progres.nbQuestionsEnCours = req.body.choix_nombre;
-          data.progres.numeroQuestionEnCours = 0;
-          data.progres.modeEnCours = req.params.mode;
-          data.save(function(err) {
-            if (err) res.send(err);
-            else res.sendStatus(200);
-          });    
+            data.progres.examenEnCours = true;
+            data.progres.domaineEnCours = req.body.choix_domaine;
+            data.progres.scoreEnCours = 0;
+            data.progres.nbQuestionsEnCours = req.body.choix_nombre;
+            data.progres.numeroQuestionEnCours = 1;
+            data.mode = req.params.mode;
+            data.save(function(err) {
+                if (err) res.send(err);
+                else res.sendStatus(200);
+            });    
         }
         else {
+          /*
           data.progres.examenEnCours = false;
           data.progres.domaineEnCours = "Tous";
           data.progres.scoreEnCours = 0;
           data.progres.nbQuestionsEnCours = 0;
-          data.progres.numeroQuestionEnCours = 0;
-          data.progres.modeEnCours = req.params.mode;
+          data.progres.numeroQuestionEnCours = 1;
+          */
+          data.mode = req.params.mode;
           data.save(function(err) {
-            if (err) res.send(err);
-            else res.sendStatus(200);
+              if (err) res.send(err);
+              else res.sendStatus(200);
           }); 
         } 
       }
@@ -306,14 +326,124 @@ router.delete('/stats/progres', function(req, res, next) {
         data.progres.domaineEnCours = req.body.choix_domaine;
         data.progres.scoreEnCours = 0;
         data.progres.nbQuestionsEnCours = req.body.choix_nombre;
-        data.progres.numeroQuestionEnCours = 0;
-        data.progres.modeEnCours = 'examen';
+        data.progres.numeroQuestionEnCours = 1;
+        data.mode = 'examen';
         data.save(function(err) {
-          if (err) res.send(err);
-          else res.sendStatus(200);
+            if (err) res.send(err);
+            else res.sendStatus(200);
         });        
       }
   });
+});
+
+//handle exam results
+router.post('/handleResult', function(req, res, next){
+    var resultText;
+    Stats.findOne().exec(function(err, data) {
+        if (data.progres.nbQuestionsEnCours > 0)
+        {
+            if(Math.floor((data.progres.scoreEnCours / data.progres.nbQuestionsEnCours) * 100) < 25)
+            {
+                resultText = "Vous avez obtenu " + data.progres.scoreEnCours + "/" + data.progres.nbQuestionsEnCours + ". Une révision sérieuse est nécessaire."; 
+                switch(data.progres.domaineEnCours)
+                {
+                  case "HTML": data.examen.echoue.HTML = data.examen.echoue.HTML + 1; break;
+                  case "JavaScript": data.examen.echoue.JavaScript = data.examen.echoue.JavaScript + 1; break;
+                  case "CSS": data.examen.echoue.CSS = data.examen.echoue.CSS + 1; break;
+                  default: break;
+                }
+            }
+            else if(Math.floor((data.progres.scoreEnCours / data.progres.nbQuestionsEnCours) * 100) < 50)
+            {
+                resultText = "Vous avez obtenu " + data.progres.scoreEnCours + "/" + data.progres.nbQuestionsEnCours + ". Une révision est recommandée.";
+                switch(data.progres.domaineEnCours)
+                {
+                  case "HTML": data.examen.echoue.HTML = data.examen.echoue.HTML + 1; break;
+                  case "JavaScript": data.examen.echoue.JavaScript = data.examen.echoue.JavaScript + 1; break;
+                  case "CSS": data.examen.echoue.CSS = data.examen.echoue.CSS + 1; break;
+                  default: break;
+                }
+            }
+            else if(Math.floor((data.progres.scoreEnCours / data.progres.nbQuestionsEnCours) * 100) < 75)
+            {
+                resultText = "Vous avez obtenu " + data.progres.scoreEnCours + "/" + data.progres.nbQuestionsEnCours + ". La note de passage est atteinte, mais il faudrait réviser un peu quelques aspects.";
+                switch(data.progres.domaineEnCours)
+                {
+                  case "HTML": data.examen.reussi.HTML = data.examen.reussi.HTML + 1; break;
+                  case "JavaScript": data.examen.reussi.JavaScript = data.examen.reussi.JavaScript + 1; break;
+                  case "CSS": data.examen.reussi.CSS = data.examen.reussi.CSS + 1; break;
+                  default: break;
+                }
+            }
+            else 
+            {
+                resultText = "Vous avez obtenu " + data.progres.scoreEnCours + "/" + data.progres.nbQuestionsEnCours + ". Ce résultat est satisfaisant.";  
+                switch(data.progres.domaineEnCours)
+                {
+                  case "HTML": data.examen.reussi.HTML = data.examen.reussi.HTML + 1; break;
+                  case "JavaScript": data.examen.reussi.JavaScript = data.examen.reussi.JavaScript + 1; break;
+                  case "CSS": data.examen.reussi.CSS = data.examen.reussi.CSS + 1; break;
+                  default: break;
+                }
+            }
+
+            var examens = data.examensDetailles;
+            var completedExam = {
+                nom: "TODO: NOM D'EXAMEN",
+                domaine : data.progres.domaineEnCours,
+                score: data.progres.scoreEnCours,
+                nbQuestions: data.progres.nbQuestionsEnCours
+            };
+            examens.push(completedExam);
+            data.examensDetailles = examens;
+            data.save(function(err) {
+                if (err) res.send(err);
+                else res.json(resultText);
+            }); 
+        }
+        else
+        {
+            res.json("Désolé, il est difficile de vous évaluer avec " + data.progres.nbQuestionsEnCours + " question(s)..."); 
+        }
+   });
+});
+
+router.post('/giveUp', function(req, res, next){
+   Stats.findOne().exec(function(err, data) {
+      if(err){ res.status(500).send(err); console.log(err); }
+      else
+      {
+          data.progres.scoreEnCours = 0;
+          data.save(function(err) {
+              if (err) res.send(err);
+              else res.sendStatus(200);
+          }); 
+      }
+   });
+});
+
+router.get("/getMode", function(req, res, next){
+    Stats.findOne().exec(function(err, data) {
+        if(err){ res.status(500).send(err); console.log(err); }
+        else
+        {
+            res.send(data.mode);
+        }
+    });
+});
+
+router.post("/continueExam", function(req, res, next){
+    Stats.findOne().exec(function(err, data) {
+        if(err){ res.status(500).send(err); console.log(err); }
+        else
+        {
+            data.mode = "examen";
+            data.save(function(err) {
+                if (err) res.send(err);
+                else res.sendStatus(200);
+            }); 
+        }
+    });
 });
 
 // All under this should disapear

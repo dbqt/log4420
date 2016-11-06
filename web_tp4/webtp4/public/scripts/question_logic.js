@@ -1,10 +1,4 @@
-var domaine = sessionStorage.getItem("choixDomaine");
-var nb = Number(sessionStorage.getItem("choixNombre")); 
-//var mode = sessionStorage.getItem("mode");
 var questionId;
-
-//var currentScore = 0;
-//var nbCurr = 0;
 
 var zones = document.querySelectorAll('.choixDeReponse');
 var zoneReponse = document.getElementById("zoneReponse");
@@ -13,25 +7,30 @@ document.getElementById("suivant").onclick = updateQuestion;
 document.getElementById("abandonner").onclick = giveUp;
 
 // Nouveau systeme
-
 var domaineEnCours;
 var scoreEnCours;
-var numeroQuestionsEnCours;
+var numeroQuestionEnCours;
 var nbQuestionsEnCours;
-var modeEnCours;
+//var modeEnCours;
 
-updateQuestion();
+$.get("/api/getMode", function(data, status){
+    mode = data;
+    updateQuestion();
+});
 
 /***********************
  Mise à jour de la question
  ***********************/
 function updateQuestion(){
     $.get("/api/stats/progres", function(data, status) {
-        domaineEnCours = data.domaineEnCours;
-        scoreEnCours = data.scoreEnCours;
+        console.log(data);
         numeroQuestionEnCours = data.numeroQuestionEnCours;
         nbQuestionsEnCours = data.nbQuestionsEnCours;
-        modeEnCours = data.modeEnCours;
+        scoreEnCours = data.scoreEnCours;
+
+        if (mode != "testrapide" && data.numeroQuestionEnCours <= data.nbQuestionsEnCours){document.getElementById("numerotation").innerHTML = "Question "+ data.numeroQuestionEnCours + "/" + data.nbQuestionsEnCours;}
+        if (mode != "testrapide") document.getElementById("noteCourante").innerHTML = "Note actuelle: " + data.scoreEnCours + "/" + data.nbQuestionsEnCours;
+
         updateQuestionTexts();
     }); 
 }
@@ -39,23 +38,33 @@ function updateQuestion(){
 function updateQuestionTexts()
 {
     $('#suivant').attr('disabled', 'disabled');
-    if(modeEnCours == "testrapide") 
+    if(mode == "testrapide") 
     {
         $.get("/api/next", function(data, status) {
+            
+            questionId = data._id;
 
-            document.getElementById("noteCourante").innerHTML = "Note actuelle: " + scoreEnCours + "/" + (nbQuestionsEnCours+1);
             document.getElementById("domaine").innerHTML = data.domaine;
             document.getElementById("question").innerHTML = data.question;
             document.getElementById("reponse1").innerHTML = data.reponse1;
             document.getElementById("reponse2").innerHTML = data.reponse2;
-            document.getElementById("reponse3").innerHTML = data.reponse3;
+            document.getElementById("reponse3").innerHTML = data.reponse3;   
+            //document.getElementById("noteCourante").innerHTML = "Note actuelle: " + scoreEnCours + "/" + (nbQuestionsEnCours+1);
 
-            questionId = data._id;
+            $.get("/api/stats/progres", function(data, status) {
+                numeroQuestionEnCours = data.numeroQuestionEnCours;
+                nbQuestionsEnCours = data.nbQuestionsEnCours;
+                scoreEnCours = data.scoreEnCours;
+
+                //if (mode != "testrapide" && data.numeroQuestionEnCours <= data.nbQuestionsEnCours){document.getElementById("numerotation").innerHTML = "Question "+ data.numeroQuestionEnCours + "/" + data.nbQuestionsEnCours;}
+                //if (mode != "testrapide") document.getElementById("noteCourante").innerHTML = "Note actuelle: " + data.scoreEnCours + "/" + data.nbQuestionsEnCours;
+
+            }); 
         });
     }
-    else if(modeEnCours == "examen") 
+    else if(mode == "examen") 
     {
-        if(nbQuestionsEnCours >= nb) 
+        if(numeroQuestionEnCours > nbQuestionsEnCours) 
         {
             document.getElementById("noteCourante").innerHTML = "Note actuelle: " + scoreEnCours + "/" + nbQuestionsEnCours;
             window.location.href = "/result";
@@ -63,22 +72,30 @@ function updateQuestionTexts()
         else
         {
 
-            $.post("/api/questions", 
-            {domaine: domaine, nombredequestions: nb, currentNb:nbQuestionsEnCours}, 
-            function(data, status) {
+            $.get("/api/next", function(data, status) {
+
+                questionId = data._id;
 
                 document.getElementById("domaine").innerHTML = data.domaine;
                 document.getElementById("question").innerHTML = data.question;
                 document.getElementById("reponse1").innerHTML = data.reponse1;
                 document.getElementById("reponse2").innerHTML = data.reponse2;
                 document.getElementById("reponse3").innerHTML = data.reponse3;
-
-                questionId = data._id;
                 
-                //++nbCurr;
-                //sessionStorage.setItem("nbQuestionsCourant", nbCurr);
-                document.getElementById("noteCourante").innerHTML = "Note actuelle: " + scoreEnCours + "/" + nbQuestionsEnCours;
-                document.getElementById("numerotation").innerHTML = "Question "+ nbQuestionsEnCours + "/" + nb;
+                //document.getElementById("numerotation").innerHTML = "Question "+ numeroQuestionEnCours + "/" + nbQuestionsEnCours;
+                //document.getElementById("noteCourante").innerHTML = "Note actuelle: " + scoreEnCours + "/" + nbQuestionsEnCours;
+        
+                $.get("/api/stats/progres", function(data, status) {
+
+                    numeroQuestionEnCours = data.numeroQuestionEnCours;
+                    nbQuestionsEnCours = data.nbQuestionsEnCours;
+                    scoreEnCours = data.scoreEnCours;
+
+                    if (mode != "testrapide" && data.numeroQuestionEnCours <= data.nbQuestionsEnCours){document.getElementById("numerotation").innerHTML = "Question "+ data.numeroQuestionEnCours + "/" + data.nbQuestionsEnCours;}
+                    if (mode != "testrapide") document.getElementById("noteCourante").innerHTML = "Note actuelle: " + data.scoreEnCours + "/" + data.nbQuestionsEnCours;
+
+                }); 
+
             });
         }       
     }
@@ -96,14 +113,15 @@ function updateQuestionTexts()
  ***********************/
 function giveUp()
 {
-    if (modeEnCours == "testrapide")
+    if (mode == "testrapide")
     {
         window.location.href = "/dashboard";
     }
-    else if(modeEnCours == "examen") 
+    else if(mode == "examen") 
     {
-        //sessionStorage.setItem("currentScore", 0);
-        window.location.href = "/result/abandon";
+        $.post("/api/giveUp", function(data, status) {
+            window.location.href = "/result/abandon";
+        });
     }
 }
 
@@ -172,44 +190,14 @@ function handleDrop(e) {
             datatype: "text",
             success: function(data)
             {
-                if (data == 1)
-                {
-                    // On associe le style vert de vérité
-                    zoneReponse.classList.add("vrai");
+                // On associe la bonne couleur pour la zoneReponse
+                if (data == 1 ? zoneReponse.classList.add("vrai") : zoneReponse.classList.add("faux"));
 
-                    // On incrémente le score du joueur et on affiche le nouveau score dans les statistiques en bas
-                    //++currentScore;
-                    if(modeEnCours == "testrapide")
-                    {
-                        var questionSucceed = Number(localStorage.getItem("questionSucceedCount"));
-                        if (questionSucceed == null)
-                        {
-                            questionSucceed = 0;
-                        }
-                        localStorage.setItem("questionSucceedCount", questionSucceed+1);
-                    }
-                    //sessionStorage.setItem("currentScore", currentScore);
-                    document.getElementById("noteCourante").innerHTML = "Note actuelle: " + scoreEnCours + "/" + (nbQuestionsEnCours+1);
-                }
-                else
-                {
-                    // On associe le style rouge de fausseté
-                    zoneReponse.classList.add("faux");
-                    
-                    // On incrémente le score du joueur en mode test rapide
-                    if(modeEnCours == "testrapide")
-                    {
-                        var questionFail = Number(localStorage.getItem("questionFailCount"));
-                        if (questionFail == null)
-                        {
-                            questionFail = 0;
-                        }
-                        localStorage.setItem("questionFailCount", questionFail+1);
-                    }
-                    // On affiche le nouveau score dans les statistiques en bas
-                    document.getElementById("noteCourante").innerHTML = "Note actuelle: " + scoreEnCours + "/" + (nbQuestionsEnCours+1);
+                // On met à jour le score
+                $.get("/api/stats/progres", function(data, status) {
+                    if (mode != "testrapide") document.getElementById("noteCourante").innerHTML = "Note actuelle: " + data.scoreEnCours + "/" + data.nbQuestionsEnCours;
+                }); 
 
-                }
                 // On désactive les choix de réponse jusqu'à la prochaine question
                 document.getElementById("reponse1").classList.add("disabled");
                 document.getElementById("reponse2").classList.add("disabled");
@@ -217,7 +205,6 @@ function handleDrop(e) {
             },
             error: function(e)
             {
-                alert("You broke something Charles");
                 console.log(e);
             }           
         });

@@ -17,18 +17,17 @@ block content
 
             input#continuerExamen.flatButton.unseen(type="submit" value="Continuer l'examen en cours")
         
-            form#formConfigs(action="/question/examen" method="post")
-                label Domaine: 
-                select#domaineChoice(name="choix_domaine" required)
-                    option(value="HTML") HTML
-                    option(value="JavaScript") JavaScript
-                    option(value="CSS") CSS
+            //form#formConfigs
+            label Domaine: 
+            select#domaineChoice(name="choix_domaine" required)
+                option(value="HTML") HTML
+                option(value="JavaScript") JavaScript
+                option(value="CSS") CSS
 
-                label Nombre de questions: 
-                //- TODO: change max to nbHTML, nbCSS or nbJS
-                input#nombreQuestionsInput(name="choix_nombre" type="number" value=5 min="1" required)
+            label Nombre de questions: 
+            input#nombreQuestionsInput(name="choix_nombre" type="number" value=5 min="1" required)
 
-                input#submitExamen.flatButton(type="submit" value="Débuter un nouvel examen")
+            input#submitExamen.flatButton(type="submit" value="Débuter un nouvel examen")
             
         //Statistiques
         aside

@@ -43,9 +43,9 @@ var Stats = new Schema({
         domaineEnCours : String,
         scoreEnCours : Number,
         nbQuestionsEnCours : Number,
-        numeroQuestionEnCours : Number,
-        modeEnCours : String
-    }
+        numeroQuestionEnCours : Number
+    },
+    mode : String
 });
 
 mongoose.model( 'Questions', Questions );

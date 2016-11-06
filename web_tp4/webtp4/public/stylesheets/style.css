@@ -148,10 +148,6 @@ h2, h3 {
 	font-family: beleren;
 }
 
-.unseen {
-    display: none;
-}
-
 /***********************
  Ids
  ***********************/
@@ -304,4 +300,8 @@ div .disabled
     border: 2px solid firebrick;
     background-color: darkred;
     color: white;
+}
+
+.unseen {
+    display: none;
 }

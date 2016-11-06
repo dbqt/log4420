@@ -1,19 +1,13 @@
 document.getElementById("submitExamen").onclick = save_configs;
 document.getElementById("submitTestRapide").onclick = set_mode_rapide;
-document.getElementById("reinitialiserStatistiques").onclick = resetAllStats; // localStorage est uniquement utilisé pour les statistiques du joueur
+document.getElementById("reinitialiserStatistiques").onclick = resetAllStats;
 
 document.getElementById("domaineChoice").onchange = checkQuestionsCount;
 
+var examenEnCours;
+
 update_Stats();
 checkQuestionsCount();
-
-
-// CONTINUER UN EXAMEN
-
-var domaineEnCours;
-var scoreEnCours;
-var nbQuestionsEnCours;
-var nombreQuestionEnCours;
 
 check_if_exam_in_progress();
 
@@ -28,45 +22,54 @@ function resetAllStats()
 
 function save_configs()
 {
-    var filledForm = document.getElementById("formConfigs");
-    var form_data = $("#formConfigs").serialize();
-    $.post('api/stats/progres/examen', form_data);
-
-    sessionStorage.setItem("choixDomaine", filledForm.elements["choix_domaine"].value);
-    sessionStorage.setItem("choixNombre", filledForm.elements["choix_nombre"].value);
-    sessionStorage.setItem("nbQuestionsCourant", 0);
-    sessionStorage.setItem("mode", "examen");
-    sessionStorage.setItem("currentScore", 0);
+    if (examenEnCours)
+    {
+        $.post('/api/giveUp', function(data, status){
+            $.post('/api/handleResult', function(data, status){
+                $.ajax({
+                    url: '/api/stats/progres',
+                    type: 'DELETE',
+                    success: function(result) {
+                        var parametres = {"choix_domaine" : document.getElementById("domaineChoice").value, "choix_nombre" : document.getElementById("nombreQuestionsInput").value };
+                        $.post('api/stats/progres/examen', parametres, function(data, status){
+                            window.location.href = "/question/examen";
+                        });
+                    }
+                });
+            });
+        });
+    }
+    else
+    {
+        var parametres = {"choix_domaine" : document.getElementById("domaineChoice").value, "choix_nombre" : document.getElementById("nombreQuestionsInput").value };
+        $.post('api/stats/progres/examen', parametres, function(data, status){
+            window.location.href = "/question/examen";
+        });
+    }
 }
 
 function set_mode_rapide()
 {
     $.post('api/stats/progres/testrapide');
-    sessionStorage.setItem("choixDomaine", "Tous");
-    sessionStorage.setItem("choixNombre", -1);
-    sessionStorage.setItem("nbQuestionsCourant", 0);
-    sessionStorage.setItem("mode", "testrapide");
-    sessionStorage.setItem("currentScore", 0);
 }
 
 function update_Stats()
 {
     $.get('api/stats', function(data, status) {
 
-        var countHTMLgood = data.examen.reussi.HTML; //((localStorage.getItem("examSuccessCountHTML") != null) ? Number(localStorage.getItem("examSuccessCountHTML")) : 0);
-        var countHTMLwrong = data.examen.echoue.HTML; //((localStorage.getItem("examFailCountHTML") != null) ? Number(localStorage.getItem("examFailCountHTML")) : 0);
-        var countJavaScriptgood = data.examen.reussi.JavaScript; //((localStorage.getItem("examSuccessCountJavaScript") != null) ? Number(localStorage.getItem("examSuccessCountJavaScript")) : 0);
-        var countJavaScriptwrong = data.examen.echoue.JavaScript; //((localStorage.getItem("examFailCountJavaScript") != null) ? Number(localStorage.getItem("examFailCountJavaScript")) : 0);
-        var countCSSgood = data.examen.reussi.CSS; //((localStorage.getItem("examSuccessCountCSS") != null) ? Number(localStorage.getItem("examSuccessCountCSS")) : 0);
-        var countCSSwrong = data.examen.echoue.CSS; //((localStorage.getItem("examFailCountCSS") != null) ? Number(localStorage.getItem("examFailCountCSS")) : 0);
+        var countHTMLgood = data.examen.reussi.HTML;
+        var countHTMLwrong = data.examen.echoue.HTML;
+        var countJavaScriptgood = data.examen.reussi.JavaScript; 
+        var countJavaScriptwrong = data.examen.echoue.JavaScript; 
+        var countCSSgood = data.examen.reussi.CSS; 
+        var countCSSwrong = data.examen.echoue.CSS;
 
-        var nbQuestionsReussiesTotal = countHTMLgood + countJavaScriptgood + countCSSgood;//((localStorage.getItem("nbQuestionsReussiesTotal") != null) ? Number(localStorage.getItem("nbQuestionsReussiesTotal")) : 0);
-        var nbQuestionsTotal = countHTMLwrong + countJavaScriptwrong + countCSSwrong + nbQuestionsReussiesTotal;//((localStorage.getItem("nbQuestionsTotal") != null) ? Number(localStorage.getItem("nbQuestionsTotal")) : 0);
+        var nbQuestionsReussiesTotal = countHTMLgood + countJavaScriptgood + countCSSgood;
+        var nbQuestionsTotal = countHTMLwrong + countJavaScriptwrong + countCSSwrong + nbQuestionsReussiesTotal;
         var moyenne = ((nbQuestionsTotal != 0) ? Math.floor((nbQuestionsReussiesTotal / nbQuestionsTotal) * 100) : 0);
-        //console.log(localStorage);
 
-        var questionSucceedCount = data.testRapide.reussi; //((localStorage.getItem("questionSucceedCount") != null) ? Number(localStorage.getItem("questionSucceedCount")) : 0);
-        var questionFailCount = data.testRapide.echoue; // ((localStorage.getItem("questionFailCount") != null) ? Number(localStorage.getItem("questionFailCount")) : 0);
+        var questionSucceedCount = data.testRapide.reussi;
+        var questionFailCount = data.testRapide.echoue; 
 
         document.getElementById("nombreQuestionsReussies").innerHTML = "Nombre de questions d'examen réussies total: " + nbQuestionsReussiesTotal + "/" + nbQuestionsTotal;
         document.getElementById("moyenneExamens").innerHTML = "Moyenne des examens: " + moyenne + "%";
@@ -83,33 +86,30 @@ function update_Stats()
 
 
         // On recupere les stats
-        var statsArray = [];
-        if (localStorage.getItem("examScores") != null)
-        {
-            statsArray = $.parseJSON(localStorage.getItem("examScores"));
-        }
-        // Pour chaque examen dans les stats, on ajoute les infos dans la table detaillee
-        statsArray.forEach(function(element) { 
-            var row = document.createElement("tr"); // creer une rangee
+        $.get('/api/stats/examens-detailles', function(data) {
+            // Pour chaque examen dans les stats, on ajoute les infos dans la table detaillee
+            data.forEach(function(element) { 
+                var row = document.createElement("tr"); // creer une rangee
 
-            var examName = document.createElement("td"); // creer la colonne nom
-            var examNameText = document.createTextNode(element.nom);
-            examName.appendChild(examNameText);
+                var examName = document.createElement("td"); // creer la colonne nom
+                var examNameText = document.createTextNode(element.nom);
+                examName.appendChild(examNameText);
 
-            var examDomaine = document.createElement("td"); // creer la colonne domaine
-            var examDomaineText = document.createTextNode(element.domaine);
-            examDomaine.appendChild(examDomaineText);
+                var examDomaine = document.createElement("td"); // creer la colonne domaine
+                var examDomaineText = document.createTextNode(element.domaine);
+                examDomaine.appendChild(examDomaineText);
 
-            var examScore = document.createElement("td"); // creer la colonne note
-            var examScoreText = document.createTextNode(element.score + "/" + element.nb);
-            examScore.appendChild(examScoreText);
-            
-            // ajouter tous les elements a la rangee
-            row.appendChild(examName);
-            row.appendChild(examDomaine);
-            row.appendChild(examScore);
-            document.getElementById("tableStats").appendChild(row); // ajouter la rangee a la table
-        }, this);
+                var examScore = document.createElement("td"); // creer la colonne note
+                var examScoreText = document.createTextNode(element.score + "/" + element.nbQuestions);
+                examScore.appendChild(examScoreText);
+                
+                // ajouter tous les elements a la rangee
+                row.appendChild(examName);
+                row.appendChild(examDomaine);
+                row.appendChild(examScore);
+                document.getElementById("tableStats").appendChild(row); // ajouter la rangee a la table
+            }, this);
+        });
     });     
 }
 
@@ -142,34 +142,21 @@ function checkQuestionsCount()
 
 function check_if_exam_in_progress()
 {
-    $.get("/api/nbQuestionsMax", function(data){
+    $.get("/api/stats/progres", function(data){
+
+        examenEnCours = data.examenEnCours;
+        console.log(data);
         if (data.examenEnCours)
         {
-            domaineEnCours = data.domaine;
-            scoreEnCours = data.score;
-            nbQuestionsEnCours = data.nb;
-            nombreQuestionEnCours = data.nombreQuestionEnCours;
             document.getElementById("continuerExamen").onclick = continue_exam;
+            document.getElementById("continuerExamen").classList.remove("unseen");
         }
     });
 }
 
 function continue_exam()
 {
-
-/*
-    $.post("/api/reset", {}, function(data, status){
-        console.log("OK");
+    $.post('/api/continueExam', function(data, status){
+        window.location.href = "/question/examen";
     });
-*/
-    /*
-    $.post("/continuerExamen", {
-        domaineEnCours: domaineEnCours,
-        scoreEnCours: scoreEnCours,
-        nbQuestionsEnCours: nbQuestionsEnCours,
-        nombreQuestionEnCours: nombreQuestionEnCours
-    }, function(data, status) {
-        // Nothing?
-    });
-    */
 }
