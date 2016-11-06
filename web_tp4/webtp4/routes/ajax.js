@@ -4,7 +4,7 @@ var pseudoBD = require('./../data/pseudoBD');
 var db = require('../lib/db.js')
 var mongoose = require( 'mongoose' );
 var Questions = mongoose.model( 'Questions' );
-var Userbase = mongoose.model( 'Userbase' );
+var Stats = mongoose.model( 'Stats' );
 
 var router = express.Router();
 
@@ -106,7 +106,7 @@ router.post('/verifyAnswer', function(req, res, next) {
   var questionId = req.body.questionId;
   var reponseChoisie = req.body.reponseChoisie;
 
-  Questions.find( { _id: questionId } ).exec(function(err, data) {
+  Questions.findOne( { _id: questionId } ).exec(function(err, data) {
     if(err)
     {
       res.status(500).send(err); 
@@ -114,7 +114,7 @@ router.post('/verifyAnswer', function(req, res, next) {
     }
     else
     {
-      if (data[0].answer == reponseChoisie)
+      if (data.answer == reponseChoisie)
       {
         res.json(1);
       }
@@ -126,9 +126,10 @@ router.post('/verifyAnswer', function(req, res, next) {
   });
 });
 
-// Statistiques du user 
-router.get('/userStats', function(req, res, next) {
-  Userbase.find({ _id: req.body.id }).exec(function(err, data) {
+// Progrès courant du user lors de l'examen (exemple: rendu à question 2, 1 point d'accumulé)
+router.get('/progres', function(req, res, next) {
+
+ Stats.findOne().exec(function(err, data) {
     if(err)
     {
       res.status(500).send(err); 
@@ -136,20 +137,13 @@ router.get('/userStats', function(req, res, next) {
     }
     else
     {
+      console.log(data);
       res.json(data);
     }
   });
 });
 
-router.put('/userStats', function(req, res, next) {
-  
-});
-
-// Progrès courant du user lors de l'examen (exemple: rendu à question 2, 1 point d'accumulé)
-router.get('/currentProgress', function(req, res, next) {
-});
-
-router.put('/currentProgress', function(req, res, next) {
+router.put('/stats/progres', function(req, res, next) {
   
 });
 

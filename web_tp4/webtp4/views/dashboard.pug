@@ -14,6 +14,8 @@ block content
         // Configurations de l'examen
         section
             h2 Configurations de l'examen
+
+            input#continuerExamen.flatButton.unseen(type="submit" value="Continuer l'examen en cours")
         
             form#formConfigs(action="/question/examen" method="post")
                 label Domaine: 

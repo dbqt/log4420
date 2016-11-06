@@ -9,12 +9,42 @@ var Questions = new Schema({
  answer : String
 });
 
-var Userbase = new Schema({
-    name : String,
+var Stats = new Schema({
+    testRapide : {
+        reussi : Number,
+        echoue : Number
+    },
+    examen : {
+        reussi : {
+            HTML : Number,
+            JavaScript : Number,
+            CSS : Number
+        },
+        echoue : {
+            HTML : Number,
+            JavaScript : Number,
+            CSS : Number
+        }
+    },
+    examensDetailles : [
+        {
+            nom: String,
+            domaine : String,
+            score : Number,
+            nbQuestions : Number
+        }
+    ],
+    progres : {
+        examenEnCours: Boolean,
+        domaineEnCours : String,
+        scoreEnCours : Number,
+        nbQuestionsEnCours : Number,
+        numeroQuestionEnCours : Number
+    }
 });
 
 mongoose.model( 'Questions', Questions );
-mongoose.model( 'Userbase', Userbase );
+mongoose.model( 'Stats', Stats );
 // user: 'epicUser' 
 // password: 'epicpassword1'
 mongoose.connect( 'mongodb://epicUser:epicpassword1@ds050189.mlab.com:50189/tpweb' );
