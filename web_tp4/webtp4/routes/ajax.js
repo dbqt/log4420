@@ -13,6 +13,60 @@ router.get('/admin', function(req, res, next) {
   res.render('admin', { title: 'admin' });
 });
 
+/* REST API */
+
+/* /question */
+// get all questions
+router.get('/question', function(req, res, next) {
+    Questions.find().exec(function(err, data) {
+      if(err) {
+        console.log(err);
+        res.status(500).send(err);
+      } else {
+        res.status(200).json(data);
+      }
+	  });
+});
+// create new question
+router.post('/question', function(req, res, next) {
+    // get a random question
+    if(isQuestionValid(req.body)) {
+      // creer un objet Questions a partir du form
+      new Questions({
+        domaine : req.body.domaine,
+        question : req.body.question,
+        reponse1 : req.body.reponse1,
+        reponse2 : req.body.reponse2,
+        reponse3 : req.body.reponse3,
+        answer : req.body.answer
+        //appeler save pour enregistrer cet objet dans la db
+      }).save(function( err, Questions, count ){
+        console.log(Questions);
+        if(err) {
+          res.send(err); 
+          console.log(err);
+        }
+        else { 
+          res.sendStatus(201);
+        }
+      });
+  } else {
+    res.status(400).send('Invalid question');
+  }
+});
+
+// delete all questions
+router.delete('/question', function(req, res, next) {
+    // get a random question
+    Questions.remove(function(err) {
+      if(err) res.send(err);
+      else res.sendStatus(200);
+    })
+    // this is powerful, use with care
+});
+
+/* LEGACY */
+
 /* ajouter une question au db */
 router.post('/addQuestion', function(req, res, next) {
   if(isQuestionValid(req.body)) {
