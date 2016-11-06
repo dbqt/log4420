@@ -9,7 +9,7 @@ function envoyerQuestion()
 	var form_method = $("#adminform").attr("method").toUpperCase();
 	
 	$.ajax({
-		url: "/api/addQuestion", 
+		url: "/api/question", 
 		type: form_method,      
 		data: form_data,
 		datatype: "text",
