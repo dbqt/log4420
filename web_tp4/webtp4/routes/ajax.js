@@ -8,6 +8,8 @@ var Stats = mongoose.model( 'Stats' );
 
 var router = express.Router();
 
+/* NON-REST API */
+
 /* page d'admin */
 router.get('/admin', function(req, res, next) {
   res.render('admin', { title: 'admin' });
@@ -113,8 +115,6 @@ router.post('/verifyAnswer', function(req, res, next) {
 
 /* REST API */
 
-
-
 /* /question */
 // get all questions
 router.get('/question', function(req, res, next) {
@@ -162,10 +162,9 @@ router.delete('/question', function(req, res, next) {
       if(err) res.send(err);
       else res.sendStatus(200);
     })
-    // this is powerful, use with care
 });
 
-
+// get all stats
 router.get('/stats', function(req, res, next) {
   Stats.findOne().exec(function(err, data) {
     if(err)
@@ -175,12 +174,14 @@ router.get('/stats', function(req, res, next) {
     }
     else
     {
+      if(!data) data = new Stats();
       console.log(data);
       res.json(data);
     }
   });
 });
 
+// delete all stats
 router.delete('/stats', function(req, res, next) {
     Stats.findOne(function(err, data) {
       if(!data) data = new Stats();
@@ -204,14 +205,32 @@ router.delete('/stats', function(req, res, next) {
   res.sendStatus(200);
 });
 
+// get detailed exams
 router.get('/stats/examens-detailles', function(req, res, next) {
-  res.sendStatus(200);
+  Stats.findOne(function(err, data) {
+      if(err) res.send(err);
+      else {
+          if(!data) data = new Stats();
+          res.send(data.examensDetailles);
+      }
+    });
 });
 
+// reset detailed exams
 router.delete('/stats/examens-detailles', function(req, res, next) {
-  res.sendStatus(200);
+  Stats.findOne(function(err, data) {
+      if(err) res.send(err);
+      else {
+          if(!data) data = new Stats();
+          data.examensDetailles = [];
+          data.save();
+          res.sendStatus(200);
+      }
+    });
+    
 });
 
+// get progress
 router.get('/stats/progres', function(req, res, next) {
    Stats.findOne().exec(function(err, data) {
     if(err)
@@ -227,6 +246,7 @@ router.get('/stats/progres', function(req, res, next) {
    });
 });
 
+//initialize progress at start of test
 router.post('/stats/progres/:mode', function(req, res, next) {
   // get the progress to change it
   Stats.findOne(function(err, data) {
@@ -268,6 +288,7 @@ router.post('/stats/progres/:mode', function(req, res, next) {
   });
 });
 
+//reset progress
 router.delete('/stats/progres', function(req, res, next) {
   Stats.findOne(function(err, data) {
       if(err)
@@ -294,34 +315,10 @@ router.delete('/stats/progres', function(req, res, next) {
       }
   });
 });
-/* LEGACY */
 
-/* ajouter une question au db */
-router.post('/addQuestion', function(req, res, next) {
-  if(isQuestionValid(req.body)) {
-      // creer un objet Questions a partir du form
-      new Questions({
-        domaine : req.body.domaine,
-        question : req.body.question,
-        reponse1 : req.body.reponse1,
-        reponse2 : req.body.reponse2,
-        reponse3 : req.body.reponse3,
-        answer : req.body.answer
-        //appeler save pour enregistrer cet objet dans la db
-      }).save(function( err, Questions, count ){
-        console.log(Questions);
-        if(err) {
-          res.status(500).send(err); 
-          console.log(err);
-        }
-        else { 
-          res.sendStatus(200);
-        }
-      });
-  } else {
-    res.status(400).send('Invalid question');
-  }
-});
+// All under this should disapear
+//**************************************************************************************************
+/* LEGACY */
 
 /* GET base api. */
 router.get('/', function(req, res, next) {
@@ -352,10 +349,6 @@ router.post('/questions', function(req, res, next) {
   //res.json(filteredQuestions[curr%filteredQuestions.length])
 });
 
-
-
-
-
 // Progrès courant du user lors de l'examen (exemple: rendu à question 2, 1 point d'accumulé)
 router.get('/progres', function(req, res, next) {
 
@@ -372,7 +365,8 @@ router.get('/progres', function(req, res, next) {
     }
   });
 });
-
+// All over this should disapear
+//**************************************************************************************************
 
 function isQuestionValid(question) {
   //console.log(question);
