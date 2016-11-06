@@ -13,21 +13,36 @@ router.get('/admin', function(req, res, next) {
   res.render('admin', { title: 'admin' });
 });
 
-/* REST API */
+router.get('/nbQuestionsMax', function(req, res, next) {
+	Questions.aggregate({
+    $group : { _id : '$domaine', count : {$sum : 1}}},
+     function(err, data){
+        if(err){
+            res.status(500).send(err);
+            console.log(err);
+        }
+        else {
+            // reformat the previous result into { JavaScript: 1, CSS: 1, HTML: 14 }
+            var domaineCount = {};
+            data.forEach(function(entry){
+              domaineCount[entry._id] = entry.count;
+            });
+            res.json(domaineCount);
+        }
+   });
+});
 
 /* /next */
 router.get('/next', function(req, res, next) {
     var mode = "testrapide";
     if(mode == "testrapide") {
       // get a random question
-      Questions.find().exec(function(err, data) {
+      Questions.findOneRandom(function(err, data) {
         if(err) {
           console.log(err);
           res.status(500).send(err);
         } else {
-          // TODO : change random logic to use mongosse-simple-random
-          var random = Math.floor(Math.random() * data.length);
-          res.json(data[random]);
+          res.json(data);
         }
       });
     }
@@ -48,6 +63,34 @@ router.get('/next', function(req, res, next) {
       });
     }
 });
+
+router.post('/verifyAnswer', function(req, res, next) {
+  var questionId = req.body.questionId;
+  var reponseChoisie = req.body.reponseChoisie;
+
+  Questions.findOne( { _id: questionId } ).exec(function(err, data) {
+    if(err)
+    {
+      res.status(500).send(err); 
+      console.log(err);
+    }
+    else
+    {
+      if (data.answer == reponseChoisie)
+      {
+        res.json(1);
+      }
+      else
+      {
+        res.json(0);
+      }
+    }
+  });
+});
+
+/* REST API */
+
+
 
 /* /question */
 // get all questions
@@ -101,7 +144,18 @@ router.delete('/question', function(req, res, next) {
 
 
 router.get('/stats', function(req, res, next) {
-  res.sendStatus(200);
+  Stats.find().exec(function(err, data) {
+    if(err)
+    {
+      res.status(500).send(err); 
+      console.log(err);
+    }
+    else
+    {
+      console.log(data);
+      res.json(data);
+    }
+  });
 });
 
 router.delete('/stats', function(req, res, next) {
@@ -117,11 +171,89 @@ router.delete('/stats/examens-detailles', function(req, res, next) {
 });
 
 router.get('/stats/progres', function(req, res, next) {
-  res.sendStatus(200);
+  console.log("get stats progres");
+   Stats.findOne().exec(function(err, data) {
+    if(err)
+    {
+      res.status(500).send(err); 
+      console.log(err);
+    }
+    else
+    {
+      console.log(data);
+      res.json(data);
+    }
+   });
+});
+
+router.post('/stats/progres/:mode', function(req, res, next) {
+  // get the progress to change it
+  Stats.findOne(function(err, data) {
+      if(err)
+      {
+        res.status(500).send(err); 
+      }
+      else
+      {
+        // if for some reason the db is empty, create one stats object
+        if(!data) {
+          data = new Stats();
+        }
+
+        if(req.params.mode == "examen"){
+          // init the progress
+          data.progres.examenEnCours = true;
+          data.progres.domaineEnCours = req.body.choix_domaine;
+          data.progres.scoreEnCours = 0;
+          data.progres.nbQuestionsEnCours = req.body.choix_nombre;
+          data.progres.numeroQuestionEnCours = 0;
+          data.progres.modeEnCours = req.params.mode;
+          data.save(function(err) {
+            if (err) res.send(err);
+            else res.sendStatus(200);
+          });    
+        }
+        else {
+          data.progres.examenEnCours = false;
+          data.progres.domaineEnCours = "Tous";
+          data.progres.scoreEnCours = 0;
+          data.progres.nbQuestionsEnCours = -1;
+          data.progres.numeroQuestionEnCours = 0;
+          data.progres.modeEnCours = req.params.mode;
+          data.save(function(err) {
+            if (err) res.send(err);
+            else res.sendStatus(200);
+          }); 
+        } 
+      }
+  });
 });
 
 router.delete('/stats/progres', function(req, res, next) {
-  res.sendStatus(200);
+  Stats.findOne(function(err, data) {
+      if(err)
+      {
+        res.status(500).send(err);
+      }
+      else
+      {
+        // if for some reason the db is empty, create one stats object
+        if(!data) {
+          data = new Stats();
+        }
+        // reset the progress
+        data.progres.examenEnCours = false;
+        data.progres.domaineEnCours = req.body.choix_domaine;
+        data.progres.scoreEnCours = 0;
+        data.progres.nbQuestionsEnCours = req.body.choix_nombre;
+        data.progres.numeroQuestionEnCours = 0;
+        data.progres.modeEnCours = 'examen';
+        data.save(function(err) {
+          if (err) res.send(err);
+          else res.sendStatus(200);
+        });        
+      }
+  });
 });
 /* LEGACY */
 
@@ -157,20 +289,6 @@ router.get('/', function(req, res, next) {
   res.json({data: "test", id: 12123, table: [4, 3, 2 ,1 ,0], dict: {a : 'A', b: 'B', c: 'C'}})
 });
 
-/* GET questions api. */
-router.get('/questions', function(req, res, next) {
-    // get a random question
-    Questions.find().exec(function(err, data) {
-      if(err) {
-        console.log(err);
-        res.status(500).send(err);
-      } else {
-        var random = Math.floor(Math.random() * data.length);
-        res.json(data[random]);
-      }
-	  });
-});
-
 /* Returns the next question with the correct subject */
 router.post('/questions', function(req, res, next) {
   var domaineChoisi = req.body.domaine;
@@ -195,48 +313,9 @@ router.post('/questions', function(req, res, next) {
   //res.json(filteredQuestions[curr%filteredQuestions.length])
 });
 
-router.get('/nbQuestionsMax', function(req, res, next) {
-	Questions.aggregate({
-    $group : { _id : '$domaine', count : {$sum : 1}}},
-     function(err, data){
-        if(err){
-            res.status(500).send(err);
-            console.log(err);
-        }
-        else {
-            // reformat the previous result into { JavaScript: 1, CSS: 1, HTML: 14 }
-            var domaineCount = {};
-            data.forEach(function(entry){
-              domaineCount[entry._id] = entry.count;
-            });
-            res.json(domaineCount);
-        }
-   });
-});
 
-router.post('/verifyAnswer', function(req, res, next) {
-  var questionId = req.body.questionId;
-  var reponseChoisie = req.body.reponseChoisie;
 
-  Questions.findOne( { _id: questionId } ).exec(function(err, data) {
-    if(err)
-    {
-      res.status(500).send(err); 
-      console.log(err);
-    }
-    else
-    {
-      if (data.answer == reponseChoisie)
-      {
-        res.json(1);
-      }
-      else
-      {
-        res.json(0);
-      }
-    }
-  });
-});
+
 
 // Progrès courant du user lors de l'examen (exemple: rendu à question 2, 1 point d'accumulé)
 router.get('/progres', function(req, res, next) {
@@ -249,14 +328,10 @@ router.get('/progres', function(req, res, next) {
     }
     else
     {
-      console.log(data);
+      //console.log(data);
       res.json(data);
     }
   });
-});
-
-router.put('/stats/progres', function(req, res, next) {
-  
 });
 
 

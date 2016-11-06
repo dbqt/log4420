@@ -1,5 +1,5 @@
 var mongoose = require( 'mongoose' );
-var random = require('mongosse-simple-random');
+var random = require('mongoose-simple-random');
 
 var Schema = mongoose.Schema;
 
@@ -43,7 +43,8 @@ var Stats = new Schema({
         domaineEnCours : String,
         scoreEnCours : Number,
         nbQuestionsEnCours : Number,
-        numeroQuestionEnCours : Number
+        numeroQuestionEnCours : Number,
+        modeEnCours : String
     }
 });
 

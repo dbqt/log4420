@@ -26,7 +26,7 @@ updateQuestion();
  ***********************/
 function updateQuestion(){
 
-    $.get("/api/progres", function(data, status) {
+    $.get("/api/stats/progres", function(data, status) {
         domaineEnCours = data.domaine;
         scoreEnCours = data.score;
         nbQuestionsEnCours = data.nb;
@@ -40,7 +40,7 @@ function updateQuestion(){
 
     if(mode == "testrapide") 
     {
-        $.get("/api/questions", function(data, status) {
+        $.get("/api/next", function(data, status) {
 
             ++nbCurr;
             sessionStorage.setItem("nbQuestionsCourant", nbCurr);

@@ -13,7 +13,7 @@ var countJavaScriptwrong = ((localStorage.getItem("examFailCountJavaScript") != 
 var countCSSgood = ((localStorage.getItem("examSuccessCountCSS") != null) ? Number(localStorage.getItem("examSuccessCountCSS")) : 0);
 var countCSSwrong = ((localStorage.getItem("examFailCountCSS") != null) ? Number(localStorage.getItem("examFailCountCSS")) : 0);
 
-console.log(localStorage);
+//console.log(localStorage);
 
 var questionSucceedCount = ((localStorage.getItem("questionSucceedCount") != null) ? Number(localStorage.getItem("questionSucceedCount")) : 0);
 var questionFailCount = ((localStorage.getItem("questionFailCount") != null) ? Number(localStorage.getItem("questionFailCount")) : 0);
@@ -49,6 +49,9 @@ check_if_exam_in_progress();
 function save_configs()
 {
     var filledForm = document.getElementById("formConfigs");
+    var form_data = $("#formConfigs").serialize();
+    $.post('api/stats/progres/examen', form_data);
+
     sessionStorage.setItem("choixDomaine", filledForm.elements["choix_domaine"].value);
     sessionStorage.setItem("choixNombre", filledForm.elements["choix_nombre"].value);
     sessionStorage.setItem("nbQuestionsCourant", 0);
@@ -58,6 +61,7 @@ function save_configs()
 
 function set_mode_rapide()
 {
+    $.post('api/stats/progres/testrapide');
     sessionStorage.setItem("choixDomaine", "Tous");
     sessionStorage.setItem("choixNombre", -1);
     sessionStorage.setItem("nbQuestionsCourant", 0);
