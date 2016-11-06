@@ -1,35 +1,6 @@
 document.getElementById("submitExamen").onclick = save_configs;
 document.getElementById("submitTestRapide").onclick = set_mode_rapide;
-//document.getElementById("reinitialiserStatistiques").onclick = localStorage.clear(); // localStorage est uniquement utilisé pour les statistiques du joueur
-
-var nbQuestionsReussiesTotal = ((localStorage.getItem("nbQuestionsReussiesTotal") != null) ? Number(localStorage.getItem("nbQuestionsReussiesTotal")) : 0);
-var nbQuestionsTotal = ((localStorage.getItem("nbQuestionsTotal") != null) ? Number(localStorage.getItem("nbQuestionsTotal")) : 0);
-var moyenne = ((nbQuestionsTotal != 0) ? Math.floor((nbQuestionsReussiesTotal / nbQuestionsTotal) * 100) : 0);
-
-var countHTMLgood = ((localStorage.getItem("examSuccessCountHTML") != null) ? Number(localStorage.getItem("examSuccessCountHTML")) : 0);
-var countHTMLwrong = ((localStorage.getItem("examFailCountHTML") != null) ? Number(localStorage.getItem("examFailCountHTML")) : 0);
-var countJavaScriptgood = ((localStorage.getItem("examSuccessCountJavaScript") != null) ? Number(localStorage.getItem("examSuccessCountJavaScript")) : 0);
-var countJavaScriptwrong = ((localStorage.getItem("examFailCountJavaScript") != null) ? Number(localStorage.getItem("examFailCountJavaScript")) : 0);
-var countCSSgood = ((localStorage.getItem("examSuccessCountCSS") != null) ? Number(localStorage.getItem("examSuccessCountCSS")) : 0);
-var countCSSwrong = ((localStorage.getItem("examFailCountCSS") != null) ? Number(localStorage.getItem("examFailCountCSS")) : 0);
-
-//console.log(localStorage);
-
-var questionSucceedCount = ((localStorage.getItem("questionSucceedCount") != null) ? Number(localStorage.getItem("questionSucceedCount")) : 0);
-var questionFailCount = ((localStorage.getItem("questionFailCount") != null) ? Number(localStorage.getItem("questionFailCount")) : 0);
-
-document.getElementById("nombreQuestionsReussies").innerHTML = "Nombre de questions d'examen réussies total: " + nbQuestionsReussiesTotal + "/" + nbQuestionsTotal;
-document.getElementById("moyenneExamens").innerHTML = "Moyenne des examens: " + moyenne + "%";
-
-document.getElementById("countHTMLgood").innerHTML = "Nombre d'examens réussis en HTML: " + countHTMLgood;
-document.getElementById("countHTMLwrong").innerHTML = "Nombre d'examens échoués en HTML: " + countHTMLwrong;
-document.getElementById("countJavaScriptgood").innerHTML = "Nombre d'examens réussis en JavaScript: " + countJavaScriptgood;
-document.getElementById("countJavaScriptwrong").innerHTML = "Nombre d'examens échoués en JavaScript: " + countJavaScriptwrong;
-document.getElementById("countCSSgood").innerHTML = "Nombre d'examens réussis en CSS: " + countCSSgood;
-document.getElementById("countCSSwrong").innerHTML = "Nombre d'examens échoués en CSS: " + countCSSwrong;
-
-document.getElementById("questionSucceedCount").innerHTML = "Nombre de questions rapides réussies: " + questionSucceedCount;
-document.getElementById("questionFailCount").innerHTML = "Nombre de questions rapides échouées: " + questionFailCount;
+document.getElementById("reinitialiserStatistiques").onclick = resetAllStats(); // localStorage est uniquement utilisé pour les statistiques du joueur
 
 document.getElementById("domaineChoice").onchange = checkQuestionsCount;
 
@@ -45,6 +16,15 @@ var nbQuestionsEnCours;
 var nombreQuestionEnCours;
 
 check_if_exam_in_progress();
+
+function resetAllStats()
+{
+    console.log("Delete all stats");
+    $.ajax({ 
+        url: '/api/stats',
+        type: 'DELETE'
+    });
+}
 
 function save_configs()
 {
@@ -71,34 +51,66 @@ function set_mode_rapide()
 
 function update_Stats()
 {
-    // On recupere les stats
-    var statsArray = [];
-    if (localStorage.getItem("examScores") != null)
-    {
-        statsArray = $.parseJSON(localStorage.getItem("examScores"));
-    }
-    // Pour chaque examen dans les stats, on ajoute les infos dans la table detaillee
-    statsArray.forEach(function(element) { 
-        var row = document.createElement("tr"); // creer une rangee
+    $.get('api/stats', function(data, status) {
 
-        var examName = document.createElement("td"); // creer la colonne nom
-        var examNameText = document.createTextNode(element.nom);
-        examName.appendChild(examNameText);
+        var countHTMLgood = data.examen.reussi.HTML; //((localStorage.getItem("examSuccessCountHTML") != null) ? Number(localStorage.getItem("examSuccessCountHTML")) : 0);
+        var countHTMLwrong = data.examen.echoue.HTML; //((localStorage.getItem("examFailCountHTML") != null) ? Number(localStorage.getItem("examFailCountHTML")) : 0);
+        var countJavaScriptgood = data.examen.reussi.JavaScript; //((localStorage.getItem("examSuccessCountJavaScript") != null) ? Number(localStorage.getItem("examSuccessCountJavaScript")) : 0);
+        var countJavaScriptwrong = data.examen.echoue.JavaScript; //((localStorage.getItem("examFailCountJavaScript") != null) ? Number(localStorage.getItem("examFailCountJavaScript")) : 0);
+        var countCSSgood = data.examen.reussi.CSS; //((localStorage.getItem("examSuccessCountCSS") != null) ? Number(localStorage.getItem("examSuccessCountCSS")) : 0);
+        var countCSSwrong = data.examen.echoue.CSS; //((localStorage.getItem("examFailCountCSS") != null) ? Number(localStorage.getItem("examFailCountCSS")) : 0);
 
-        var examDomaine = document.createElement("td"); // creer la colonne domaine
-        var examDomaineText = document.createTextNode(element.domaine);
-        examDomaine.appendChild(examDomaineText);
+        var nbQuestionsReussiesTotal = countHTMLgood + countJavaScriptgood + countCSSgood;//((localStorage.getItem("nbQuestionsReussiesTotal") != null) ? Number(localStorage.getItem("nbQuestionsReussiesTotal")) : 0);
+        var nbQuestionsTotal = countHTMLwrong + countJavaScriptwrong + countCSSwrong + nbQuestionsReussiesTotal;//((localStorage.getItem("nbQuestionsTotal") != null) ? Number(localStorage.getItem("nbQuestionsTotal")) : 0);
+        var moyenne = ((nbQuestionsTotal != 0) ? Math.floor((nbQuestionsReussiesTotal / nbQuestionsTotal) * 100) : 0);
+        //console.log(localStorage);
 
-        var examScore = document.createElement("td"); // creer la colonne note
-        var examScoreText = document.createTextNode(element.score + "/" + element.nb);
-        examScore.appendChild(examScoreText);
-        
-        // ajouter tous les elements a la rangee
-        row.appendChild(examName);
-        row.appendChild(examDomaine);
-        row.appendChild(examScore);
-        document.getElementById("tableStats").appendChild(row); // ajouter la rangee a la table
-    }, this);   
+        var questionSucceedCount = data.testRapide.reussi; //((localStorage.getItem("questionSucceedCount") != null) ? Number(localStorage.getItem("questionSucceedCount")) : 0);
+        var questionFailCount = data.testRapide.echoue; // ((localStorage.getItem("questionFailCount") != null) ? Number(localStorage.getItem("questionFailCount")) : 0);
+
+        document.getElementById("nombreQuestionsReussies").innerHTML = "Nombre de questions d'examen réussies total: " + nbQuestionsReussiesTotal + "/" + nbQuestionsTotal;
+        document.getElementById("moyenneExamens").innerHTML = "Moyenne des examens: " + moyenne + "%";
+
+        document.getElementById("countHTMLgood").innerHTML = "Nombre d'examens réussis en HTML: " + countHTMLgood;
+        document.getElementById("countHTMLwrong").innerHTML = "Nombre d'examens échoués en HTML: " + countHTMLwrong;
+        document.getElementById("countJavaScriptgood").innerHTML = "Nombre d'examens réussis en JavaScript: " + countJavaScriptgood;
+        document.getElementById("countJavaScriptwrong").innerHTML = "Nombre d'examens échoués en JavaScript: " + countJavaScriptwrong;
+        document.getElementById("countCSSgood").innerHTML = "Nombre d'examens réussis en CSS: " + countCSSgood;
+        document.getElementById("countCSSwrong").innerHTML = "Nombre d'examens échoués en CSS: " + countCSSwrong;
+
+        document.getElementById("questionSucceedCount").innerHTML = "Nombre de questions rapides réussies: " + questionSucceedCount;
+        document.getElementById("questionFailCount").innerHTML = "Nombre de questions rapides échouées: " + questionFailCount;
+
+
+        // On recupere les stats
+        var statsArray = [];
+        if (localStorage.getItem("examScores") != null)
+        {
+            statsArray = $.parseJSON(localStorage.getItem("examScores"));
+        }
+        // Pour chaque examen dans les stats, on ajoute les infos dans la table detaillee
+        statsArray.forEach(function(element) { 
+            var row = document.createElement("tr"); // creer une rangee
+
+            var examName = document.createElement("td"); // creer la colonne nom
+            var examNameText = document.createTextNode(element.nom);
+            examName.appendChild(examNameText);
+
+            var examDomaine = document.createElement("td"); // creer la colonne domaine
+            var examDomaineText = document.createTextNode(element.domaine);
+            examDomaine.appendChild(examDomaineText);
+
+            var examScore = document.createElement("td"); // creer la colonne note
+            var examScoreText = document.createTextNode(element.score + "/" + element.nb);
+            examScore.appendChild(examScoreText);
+            
+            // ajouter tous les elements a la rangee
+            row.appendChild(examName);
+            row.appendChild(examDomaine);
+            row.appendChild(examScore);
+            document.getElementById("tableStats").appendChild(row); // ajouter la rangee a la table
+        }, this);
+    });     
 }
 
 

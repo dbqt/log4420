@@ -79,27 +79,35 @@ router.post('/verifyAnswer', function(req, res, next) {
   var questionId = req.body.questionId;
   var reponseChoisie = req.body.reponseChoisie;
 
-  Questions.findOne( { _id: questionId } ).exec(function(err, data) {
-    if(err)
-    {
-      res.status(500).send(err); 
-      console.log(err);
-    }
-    else
-    {
-      if (data.answer == reponseChoisie)
+  Stats.findOne(function(err, statsData){
+    Questions.findOne( { _id: questionId } ).exec(function(err, data) {
+      if(err)
       {
-          Stats.findOne(function(err, data){
-            data.progres.scoreEnCours = data.progres.scoreEnCours + 1;
-            data.save();
-          })
-        res.json(1);
+        res.status(500).send(err); 
+        console.log(err);
       }
       else
       {
-        res.json(0);
+        if (data.answer == reponseChoisie)
+        {
+            if(statsData.progres.modeEnCours == "testrapide"){
+              statsData.testRapide.reussi = statsData.testRapide.reussi + 1;
+            }
+              statsData.progres.scoreEnCours = statsData.progres.scoreEnCours + 1;
+              statsData.save();
+            
+          res.json(1);
+        }
+        else
+        {
+            if(statsData.progres.modeEnCours == "testrapide"){
+              statsData.testRapide.echoue = statsData.testRapide.echoue + 1;
+            }
+            statsData.save();
+            res.json(0);
+        }
       }
-    }
+    });
   });
 });
 
@@ -159,7 +167,7 @@ router.delete('/question', function(req, res, next) {
 
 
 router.get('/stats', function(req, res, next) {
-  Stats.find().exec(function(err, data) {
+  Stats.findOne().exec(function(err, data) {
     if(err)
     {
       res.status(500).send(err); 
@@ -174,6 +182,25 @@ router.get('/stats', function(req, res, next) {
 });
 
 router.delete('/stats', function(req, res, next) {
+    Stats.findOne(function(err, data) {
+      if(!data) data = new Stats();
+        data.testRapide.reussi = 0;
+        data.testRapide.echoue = 0;
+        data.examen.reussi.HTML = 0;
+        data.examen.reussi.JavaScript = 0;
+        data.examen.reussi.CSS = 0;
+        data.examen.echoue.HTML = 0;
+        data.examen.echoue.JavaScript = 0;
+        data.examen.echoue.CSS = 0;
+        data.examensDetailles = [];
+        data.progres.examenEnCours = false;
+        data.progres.domaineEnCours = "";
+        data.progres.scoreEnCours = 0;
+        data.progres.nbQuestionsEnCours = 0;
+        data.progres.numeroQuestionEnCours = 0;
+        data.progres.modeEnCours = "";
+        data.save();
+    });
   res.sendStatus(200);
 });
 
