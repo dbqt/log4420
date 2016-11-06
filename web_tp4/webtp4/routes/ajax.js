@@ -34,39 +34,45 @@ router.get('/nbQuestionsMax', function(req, res, next) {
 
 /* /next */
 router.get('/next', function(req, res, next) {
-    var mode = "testrapide";
-    if(mode == "testrapide") {
-      // get a random question
-      Questions.findOneRandom(function(err, data) {
-        if(err) {
-          console.log(err);
-          res.status(500).send(err);
-        } else {
-          Stats.findOne(function(err, data){
-            data.progres.numeroQuestionEnCours = data.progres.numeroQuestionEnCours + 1;
-            data.save();
-          })
-          res.json(data);
-        }
-      });
-    }
-    // mode examen
-    else {
-      var domaineChoisi = "HTML";
-      var nombredequestions = 2;
-      var curr = 1;
+    //load progress stats
+    Stats.findOne(function(err, statsData){     
+        var mode = statsData.progres.modeEnCours;
 
-      // pick a question in a filtered array of questions with the right domain
-      Questions.find( { domaine: domaineChoisi } ).exec(function(err, data) {
-        if(err) {
-          res.status(500).send(err); 
-          console.log(err);
+        if(mode == 'testrapide') {
+          // get a random question
+          Questions.findOneRandom(function(err, data) {
+            if(err) {
+              console.log(err);
+              res.status(500).send(err);
+            } else {
+                // increment current question count, then respond with next question
+                statsData.progres.numeroQuestionEnCours = statsData.progres.numeroQuestionEnCours + 1;
+                statsData.progres.nbQuestionsEnCours = statsData.progres.nbQuestionsEnCours + 1;
+                statsData.save(); 
+                res.json(data);
+            }
+          });
         }
+        // mode examen
         else {
-          res.json(data[curr%data.length]);
+          var domaineChoisi = statsData.progres.domaineEnCours;
+          var nombredequestions = statsData.progres.nbQuestionsEnCours;
+          var curr = statsData.progres.numeroQuestionEnCours;
+
+          // pick a question in a filtered array of questions with the right domain
+          Questions.find( { domaine: domaineChoisi } ).exec(function(err, data) {
+            if(err) {
+              res.status(500).send(err); 
+              console.log(err);
+            }
+            else {
+              statsData.progres.numeroQuestionEnCours = statsData.progres.numeroQuestionEnCours + 1;
+              statsData.save();
+              res.json(data[curr%data.length]);
+            }
+          });
         }
-      });
-    }
+    });
 });
 
 router.post('/verifyAnswer', function(req, res, next) {
@@ -189,7 +195,7 @@ router.get('/stats/progres', function(req, res, next) {
     else
     {
       console.log(data);
-      res.json(data);
+      res.json(data.progres);
     }
    });
 });
@@ -223,7 +229,7 @@ router.post('/stats/progres/:mode', function(req, res, next) {
           data.progres.examenEnCours = false;
           data.progres.domaineEnCours = "Tous";
           data.progres.scoreEnCours = 0;
-          data.progres.nbQuestionsEnCours = -1;
+          data.progres.nbQuestionsEnCours = 0;
           data.progres.numeroQuestionEnCours = 0;
           data.progres.modeEnCours = req.params.mode;
           data.save(function(err) {

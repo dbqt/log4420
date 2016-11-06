@@ -1,10 +1,10 @@
 var domaine = sessionStorage.getItem("choixDomaine");
 var nb = Number(sessionStorage.getItem("choixNombre")); 
-var mode = sessionStorage.getItem("mode");
+//var mode = sessionStorage.getItem("mode");
 var questionId;
 
-var currentScore = 0;
-var nbCurr = 0;
+//var currentScore = 0;
+//var nbCurr = 0;
 
 var zones = document.querySelectorAll('.choixDeReponse');
 var zoneReponse = document.getElementById("zoneReponse");
@@ -16,8 +16,9 @@ document.getElementById("abandonner").onclick = giveUp;
 
 var domaineEnCours;
 var scoreEnCours;
+var numeroQuestionsEnCours;
 var nbQuestionsEnCours;
-var nombreQuestionEnCours;
+var modeEnCours;
 
 updateQuestion();
 
@@ -25,28 +26,23 @@ updateQuestion();
  Mise à jour de la question
  ***********************/
 function updateQuestion(){
-
     $.get("/api/stats/progres", function(data, status) {
-        domaineEnCours = data.domaine;
-        scoreEnCours = data.score;
-        nbQuestionsEnCours = data.nb;
-        nombreQuestionEnCours = data.nombreQuestionEnCours;
-    });
+        domaineEnCours = data.domaineEnCours;
+        scoreEnCours = data.scoreEnCours;
+        numeroQuestionEnCours = data.numeroQuestionEnCours;
+        nbQuestionsEnCours = data.nbQuestionsEnCours;
+        modeEnCours = data.modeEnCours;
+        updateQuestionTexts();
+    }); 
+}
 
-    // Itérateur qui permet d'identifier où notre utilisateur est situé dans le questionnaire
-    nbCurr = Number(sessionStorage.getItem("nbQuestionsCourant"));
-    // Calculer le score du joueur pour la page "result" (seulement necessaire pour "examen")
-    currentScore = Number(sessionStorage.getItem("currentScore"));
-
-    if(mode == "testrapide") 
+function updateQuestionTexts()
+{
+    if(modeEnCours == "testrapide") 
     {
         $.get("/api/next", function(data, status) {
 
-            ++nbCurr;
-            sessionStorage.setItem("nbQuestionsCourant", nbCurr);
-
-            document.getElementById("noteCourante").innerHTML = "Note actuelle: " + currentScore + "/" + nbCurr;
-
+            document.getElementById("noteCourante").innerHTML = "Note actuelle: " + scoreEnCours + "/" + (nbQuestionsEnCours+1);
             document.getElementById("domaine").innerHTML = data.domaine;
             document.getElementById("question").innerHTML = data.question;
             document.getElementById("reponse1").innerHTML = data.reponse1;
@@ -54,21 +50,20 @@ function updateQuestion(){
             document.getElementById("reponse3").innerHTML = data.reponse3;
 
             questionId = data._id;
-
         });
     }
-    else if(mode == "examen") 
+    else if(modeEnCours == "examen") 
     {
-        if(nbCurr >= nb) 
+        if(nbQuestionsEnCours >= nb) 
         {
-            document.getElementById("noteCourante").innerHTML = "Note actuelle: " + currentScore + "/" + nbCurr;
+            document.getElementById("noteCourante").innerHTML = "Note actuelle: " + scoreEnCours + "/" + nbQuestionsEnCours;
             window.location.href = "/result";
         }
         else
         {
 
             $.post("/api/questions", 
-            {domaine: domaine, nombredequestions: nb, currentNb:nbCurr}, 
+            {domaine: domaine, nombredequestions: nb, currentNb:nbQuestionsEnCours}, 
             function(data, status) {
 
                 document.getElementById("domaine").innerHTML = data.domaine;
@@ -79,14 +74,12 @@ function updateQuestion(){
 
                 questionId = data._id;
                 
-                ++nbCurr;
-                sessionStorage.setItem("nbQuestionsCourant", nbCurr);
-                document.getElementById("noteCourante").innerHTML = "Note actuelle: " + currentScore + "/" + nbCurr;
-                document.getElementById("numerotation").innerHTML = "Question "+ nbCurr + "/" + nb;
+                //++nbCurr;
+                //sessionStorage.setItem("nbQuestionsCourant", nbCurr);
+                document.getElementById("noteCourante").innerHTML = "Note actuelle: " + scoreEnCours + "/" + nbQuestionsEnCours;
+                document.getElementById("numerotation").innerHTML = "Question "+ nbQuestionsEnCours + "/" + nb;
             });
-
-        }
-         
+        }       
     }
 
     document.getElementById("reponse1").classList.remove("disabled");
@@ -102,13 +95,13 @@ function updateQuestion(){
  ***********************/
 function giveUp()
 {
-    if (mode == "testrapide")
+    if (modeEnCours == "testrapide")
     {
         window.location.href = "/dashboard";
     }
-    else if(mode == "examen") 
+    else if(modeEnCours == "examen") 
     {
-        sessionStorage.setItem("currentScore", 0);
+        //sessionStorage.setItem("currentScore", 0);
         window.location.href = "/result/abandon";
     }
 }
@@ -183,8 +176,8 @@ function handleDrop(e) {
                     zoneReponse.classList.add("vrai");
 
                     // On incrémente le score du joueur et on affiche le nouveau score dans les statistiques en bas
-                    ++currentScore;
-                    if(mode == "testrapide")
+                    //++currentScore;
+                    if(modeEnCours == "testrapide")
                     {
                         var questionSucceed = Number(localStorage.getItem("questionSucceedCount"));
                         if (questionSucceed == null)
@@ -193,8 +186,8 @@ function handleDrop(e) {
                         }
                         localStorage.setItem("questionSucceedCount", questionSucceed+1);
                     }
-                    sessionStorage.setItem("currentScore", currentScore);
-                    document.getElementById("noteCourante").innerHTML = "Note actuelle: " + currentScore + "/" + nbCurr;
+                    //sessionStorage.setItem("currentScore", currentScore);
+                    document.getElementById("noteCourante").innerHTML = "Note actuelle: " + scoreEnCours + "/" + (nbQuestionsEnCours+1);
                 }
                 else
                 {
@@ -202,7 +195,7 @@ function handleDrop(e) {
                     zoneReponse.classList.add("faux");
                     
                     // On incrémente le score du joueur en mode test rapide
-                    if(mode == "testrapide")
+                    if(modeEnCours == "testrapide")
                     {
                         var questionFail = Number(localStorage.getItem("questionFailCount"));
                         if (questionFail == null)
@@ -212,7 +205,7 @@ function handleDrop(e) {
                         localStorage.setItem("questionFailCount", questionFail+1);
                     }
                     // On affiche le nouveau score dans les statistiques en bas
-                    document.getElementById("noteCourante").innerHTML = "Note actuelle: " + currentScore + "/" + nbCurr;
+                    document.getElementById("noteCourante").innerHTML = "Note actuelle: " + scoreEnCours + "/" + (nbQuestionsEnCours+1);
 
                 }
                 // On désactive les choix de réponse jusqu'à la prochaine question
