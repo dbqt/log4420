@@ -38,6 +38,7 @@ function updateQuestion(){
 
 function updateQuestionTexts()
 {
+    $('#suivant').attr('disabled', 'disabled');
     if(modeEnCours == "testrapide") 
     {
         $.get("/api/next", function(data, status) {
@@ -158,6 +159,7 @@ function handleDrop(e) {
     }
 
     if (e.target == zoneReponse && zoneReponse.innerHTML == "") {
+        $('#suivant').removeAttr("disabled");
         // On remplace le contenu de la zone de réponse par le contenu du choix de réponse
         e.target.innerHTML = e.dataTransfer.getData("text/html");
 
