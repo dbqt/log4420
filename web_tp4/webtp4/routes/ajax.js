@@ -42,10 +42,15 @@ router.get('/next', function(req, res, next) {
           console.log(err);
           res.status(500).send(err);
         } else {
+          Stats.findOne(function(err, data){
+            data.progres.numeroQuestionEnCours = data.progres.numeroQuestionEnCours + 1;
+            data.save();
+          })
           res.json(data);
         }
       });
     }
+    // mode examen
     else {
       var domaineChoisi = "HTML";
       var nombredequestions = 2;
@@ -78,6 +83,10 @@ router.post('/verifyAnswer', function(req, res, next) {
     {
       if (data.answer == reponseChoisie)
       {
+          Stats.findOne(function(err, data){
+            data.progres.scoreEnCours = data.progres.scoreEnCours + 1;
+            data.save();
+          })
         res.json(1);
       }
       else
@@ -171,7 +180,6 @@ router.delete('/stats/examens-detailles', function(req, res, next) {
 });
 
 router.get('/stats/progres', function(req, res, next) {
-  console.log("get stats progres");
    Stats.findOne().exec(function(err, data) {
     if(err)
     {
@@ -189,19 +197,17 @@ router.get('/stats/progres', function(req, res, next) {
 router.post('/stats/progres/:mode', function(req, res, next) {
   // get the progress to change it
   Stats.findOne(function(err, data) {
-      if(err)
-      {
+      if(err) {
         res.status(500).send(err); 
       }
-      else
-      {
+      else {
         // if for some reason the db is empty, create one stats object
         if(!data) {
           data = new Stats();
         }
 
-        if(req.params.mode == "examen"){
-          // init the progress
+        // init the progress
+        if(req.params.mode == "examen") {
           data.progres.examenEnCours = true;
           data.progres.domaineEnCours = req.body.choix_domaine;
           data.progres.scoreEnCours = 0;
