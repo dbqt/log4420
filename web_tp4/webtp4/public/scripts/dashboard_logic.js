@@ -1,6 +1,6 @@
 document.getElementById("submitExamen").onclick = save_configs;
 document.getElementById("submitTestRapide").onclick = set_mode_rapide;
-document.getElementById("reinitialiserStatistiques").onclick = resetAllStats(); // localStorage est uniquement utilisé pour les statistiques du joueur
+document.getElementById("reinitialiserStatistiques").onclick = resetAllStats; // localStorage est uniquement utilisé pour les statistiques du joueur
 
 document.getElementById("domaineChoice").onchange = checkQuestionsCount;
 
