@@ -8,7 +8,9 @@ var Stats = mongoose.model( 'Stats' );
 
 var router = express.Router();
 
-/* NON-REST API */
+/*************************************************************************
+* NON-REST API 
+**************************************************************************/
 
 router.get('/nbQuestionsMax', function(req, res, next) {
 	Questions.aggregate({
@@ -119,7 +121,47 @@ router.post('/verifyAnswer', function(req, res, next) {
     });
 });
 
-/* REST API */
+router.post('/giveUp', function(req, res, next){
+   Stats.findOne().exec(function(err, data) {
+      if(err){ res.status(500).send(err); console.log(err); }
+      else
+      {
+          data.progres.scoreEnCours = 0;
+          data.save(function(err) {
+              if (err) res.send(err);
+              else res.sendStatus(200);
+          }); 
+      }
+   });
+});
+
+router.get("/getMode", function(req, res, next){
+    Stats.findOne().exec(function(err, data) {
+        if(err){ res.status(500).send(err); console.log(err); }
+        else
+        {
+            res.send(data.mode);
+        }
+    });
+});
+
+router.post("/continueExam", function(req, res, next){
+    Stats.findOne().exec(function(err, data) {
+        if(err){ res.status(500).send(err); console.log(err); }
+        else
+        {
+            data.mode = "examen";
+            data.save(function(err) {
+                if (err) res.send(err);
+                else res.sendStatus(200);
+            }); 
+        }
+    });
+});
+
+/*************************************************************************
+* REST API 
+**************************************************************************/
 
 /* /question */
 // get all questions
@@ -405,94 +447,6 @@ router.post('/handleResult', function(req, res, next){
    });
 });
 
-router.post('/giveUp', function(req, res, next){
-   Stats.findOne().exec(function(err, data) {
-      if(err){ res.status(500).send(err); console.log(err); }
-      else
-      {
-          data.progres.scoreEnCours = 0;
-          data.save(function(err) {
-              if (err) res.send(err);
-              else res.sendStatus(200);
-          }); 
-      }
-   });
-});
-
-router.get("/getMode", function(req, res, next){
-    Stats.findOne().exec(function(err, data) {
-        if(err){ res.status(500).send(err); console.log(err); }
-        else
-        {
-            res.send(data.mode);
-        }
-    });
-});
-
-router.post("/continueExam", function(req, res, next){
-    Stats.findOne().exec(function(err, data) {
-        if(err){ res.status(500).send(err); console.log(err); }
-        else
-        {
-            data.mode = "examen";
-            data.save(function(err) {
-                if (err) res.send(err);
-                else res.sendStatus(200);
-            }); 
-        }
-    });
-});
-
-// All under this should disapear
-//**************************************************************************************************
-/* LEGACY */
-
-/* GET base api. */
-router.get('/', function(req, res, next) {
-  res.json({data: "test", id: 12123, table: [4, 3, 2 ,1 ,0], dict: {a : 'A', b: 'B', c: 'C'}})
-});
-
-/* Returns the next question with the correct subject */
-router.post('/questions', function(req, res, next) {
-  var domaineChoisi = req.body.domaine;
-  var nombredequestions = req.body.nombredequestions;
-  var curr = req.body.currentNb;
-
-  /*var filteredQuestions = pseudoBD.filter(function(element) {
-    return element.domaine == domaineChoisi;
-  });*/
-
-  // pick a question in a filtered array of questions with the right domain
-  Questions.find( { domaine: domaineChoisi } ).exec(function(err, data) {
-    if(err) {
-      res.status(500).send(err); 
-      console.log(err);
-    }
-		else {
-      res.json(data[curr%data.length]);
-    }
-	});
-
-  //res.json(filteredQuestions[curr%filteredQuestions.length])
-});
-
-// Progrès courant du user lors de l'examen (exemple: rendu à question 2, 1 point d'accumulé)
-router.get('/progres', function(req, res, next) {
-
- Stats.findOne().exec(function(err, data) {
-    if(err)
-    {
-      res.status(500).send(err); 
-      console.log(err);
-    }
-    else
-    {
-      //console.log(data);
-      res.json(data);
-    }
-  });
-});
-// All over this should disapear
 //**************************************************************************************************
 
 function isQuestionValid(question) {

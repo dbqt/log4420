@@ -220,7 +220,7 @@ h2, h3 {
 }
 
 .modalBoxMessage {
-	width: 400px;
+	width: 500px;
     max-height: 80%;
     overflow: auto;
     position: absolute;
