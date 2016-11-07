@@ -10,11 +10,6 @@ var router = express.Router();
 
 /* NON-REST API */
 
-/* page d'admin */
-router.get('/admin', function(req, res, next) {
-  res.render('admin', { title: 'admin' });
-});
-
 router.get('/nbQuestionsMax', function(req, res, next) {
 	Questions.aggregate({
     $group : { _id : '$domaine', count : {$sum : 1}}},

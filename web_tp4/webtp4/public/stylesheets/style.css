@@ -43,6 +43,10 @@ body footer {
     clear: both;
 }
 
+section label, input, a {
+    display: block;
+}
+
 /***********************
  Aside
  ***********************/
@@ -175,6 +179,7 @@ h2, h3 {
 .flatButton {
     display: inline-block;
     text-decoration: none;
+    font-family: beleren;
     color: white;
     background-color: #C8B21C;
     padding: 8px 16px;

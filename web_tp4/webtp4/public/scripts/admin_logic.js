@@ -1,4 +1,5 @@
 document.getElementById("envoyer").onclick = envoyerQuestion;
+document.getElementById("toutdelete").onclick = effacerTousQuestions;
 
 function envoyerQuestion()
 {
@@ -25,4 +26,21 @@ function envoyerQuestion()
 		}           
 	});
 	
+}
+
+function effacerTousQuestions()
+{
+	$.ajax({
+		url: "/api/question", 
+		type: 'DELETE',
+		success: function(data)
+		{                          
+			alert("Toutes les questions ont été effacées!");           
+		},
+		error: function(e)
+		{
+			alert("e");
+			console.log(e);
+		}           
+	});
 }

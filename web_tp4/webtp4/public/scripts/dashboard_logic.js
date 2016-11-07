@@ -16,7 +16,10 @@ function resetAllStats()
     console.log("Delete all stats");
     $.ajax({ 
         url: '/api/stats',
-        type: 'DELETE'
+        type: 'DELETE',
+        success : function() {
+            update_Stats();
+        }
     });
 }
 
