@@ -64,15 +64,8 @@ function update_Stats()
         var countCSSgood = data.examen.reussi.CSS; 
         var countCSSwrong = data.examen.echoue.CSS;
 
-        var nbQuestionsReussiesTotal = countHTMLgood + countJavaScriptgood + countCSSgood;
-        var nbQuestionsTotal = countHTMLwrong + countJavaScriptwrong + countCSSwrong + nbQuestionsReussiesTotal;
-        var moyenne = ((nbQuestionsTotal != 0) ? Math.floor((nbQuestionsReussiesTotal / nbQuestionsTotal) * 100) : 0);
-
         var questionSucceedCount = data.testRapide.reussi;
         var questionFailCount = data.testRapide.echoue; 
-
-        document.getElementById("nombreQuestionsReussies").innerHTML = "Nombre de questions d'examen réussies total: " + nbQuestionsReussiesTotal + "/" + nbQuestionsTotal;
-        document.getElementById("moyenneExamens").innerHTML = "Moyenne des examens: " + moyenne + "%";
 
         document.getElementById("countHTMLgood").innerHTML = "Nombre d'examens réussis en HTML: " + countHTMLgood;
         document.getElementById("countHTMLwrong").innerHTML = "Nombre d'examens échoués en HTML: " + countHTMLwrong;
@@ -87,6 +80,8 @@ function update_Stats()
 
         // On recupere les stats
         $.get('/api/stats/examens-detailles', function(data) {
+            var scoreTotal = 0;
+            var nbQuestionsTotal = 0;
             // Pour chaque examen dans les stats, on ajoute les infos dans la table detaillee
             data.forEach(function(element) { 
                 var row = document.createElement("tr"); // creer une rangee
@@ -102,13 +97,19 @@ function update_Stats()
                 var examScore = document.createElement("td"); // creer la colonne note
                 var examScoreText = document.createTextNode(element.score + "/" + element.nbQuestions);
                 examScore.appendChild(examScoreText);
-                
+                scoreTotal += element.score;
+                nbQuestionsTotal += element.nbQuestions;
+
                 // ajouter tous les elements a la rangee
                 row.appendChild(examName);
                 row.appendChild(examDomaine);
                 row.appendChild(examScore);
                 document.getElementById("tableStats").appendChild(row); // ajouter la rangee a la table
             }, this);
+
+            var moyenne = ((nbQuestionsTotal != 0) ? Math.floor((scoreTotal / nbQuestionsTotal) * 100) : 0);
+            document.getElementById("nombreQuestionsReussies").innerHTML = "Nombre de questions d'examen réussies total: " + scoreTotal + "/" + nbQuestionsTotal;
+            document.getElementById("moyenneExamens").innerHTML = "Moyenne des examens: " + moyenne + "%";
         });
     });     
 }

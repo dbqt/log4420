@@ -59,7 +59,7 @@ router.get('/next', function(req, res, next) {
         else
         {
           // pick a question in a filtered array of questions with the right domain
-          Questions.find( { domaine: statsData.progres.domaineEnCours } ).exec(function(err, data) {
+          Questions.findOneRandom( { domaine: statsData.progres.domaineEnCours }, function(err, data) {
               if(err)
               {
                   res.status(500).send(err); 
@@ -70,7 +70,7 @@ router.get('/next', function(req, res, next) {
                   //statsData.progres.numeroQuestionEnCours = statsData.progres.numeroQuestionEnCours + 1;
                   statsData.save(function(err) {
                       if (err) res.send(err);
-                      else res.json(data[statsData.progres.numeroQuestionEnCours%data.length]);
+                      else res.json(data);
                   });
               }
           });
@@ -196,6 +196,8 @@ router.get('/stats', function(req, res, next) {
 // delete all stats
 router.delete('/stats', function(req, res, next) {
     Stats.findOne(function(err, data) {
+      if(err) res.send(err);
+      else {
       if(!data) data = new Stats();
         data.testRapide.reussi = 0;
         data.testRapide.echoue = 0;
@@ -216,8 +218,8 @@ router.delete('/stats', function(req, res, next) {
             if (err) res.send(err);
             else res.sendStatus(200);
         });
+      }
     });
-  res.sendStatus(200);
 });
 
 // get detailed exams
@@ -389,7 +391,7 @@ router.post('/handleResult', function(req, res, next){
 
             var examens = data.examensDetailles;
             var completedExam = {
-                nom: "TODO: NOM D'EXAMEN",
+                nom: "examen-" + data.progres.domaineEnCours + "-" + new Date().toLocaleString(),
                 domaine : data.progres.domaineEnCours,
                 score: data.progres.scoreEnCours,
                 nbQuestions: data.progres.nbQuestionsEnCours
