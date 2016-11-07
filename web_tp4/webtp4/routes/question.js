@@ -2,13 +2,12 @@ var express = require('express');
 var router = express.Router();
 
 
-/* GET users listing. */
+/* GET testrapide. */
 router.get('/testrapide'/*:mode/:nb'*/, function(req, res, next) {
     
   res.render('question', { 
       title: 'Question',
       mode: "testrapide",
-      nb: 1,
       domaine: "domaine",
       question: "question",
       reponse1: "reponse1",
@@ -17,11 +16,11 @@ router.get('/testrapide'/*:mode/:nb'*/, function(req, res, next) {
   });
 });
 
+/* GET examen */
 router.get('/examen'/*:mode/:nb'*/, function(req, res, next) {
   res.render('question', { 
       title: 'Question',
       mode: "examen",
-      nb: 1,
       domaine: "domaine",
       question: "question",
       reponse1: "reponse1",
@@ -29,12 +28,11 @@ router.get('/examen'/*:mode/:nb'*/, function(req, res, next) {
       reponse3: "reponse3"
   });
 });
-
+/* POST examen */
 router.post('/examen'/*:mode/:nb'*/, function(req, res, next) {
   res.render('question', { 
       title: 'Question',
       mode: "examen",
-      nb: 1,
       domaine: "domaine",
       question: "question",
       reponse1: "reponse1",

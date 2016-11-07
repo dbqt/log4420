@@ -80,7 +80,6 @@ function update_Stats()
         document.getElementById("questionSucceedCount").innerHTML = "Nombre de questions rapides réussies: " + questionSucceedCount;
         document.getElementById("questionFailCount").innerHTML = "Nombre de questions rapides échouées: " + questionFailCount;
 
-
         // On recupere les stats
         $.get('/api/stats/examens-detailles', function(data) {
             var scoreTotal = 0;
@@ -116,8 +115,6 @@ function update_Stats()
         });
     });     
 }
-
-
 
 function checkQuestionsCount()
 {

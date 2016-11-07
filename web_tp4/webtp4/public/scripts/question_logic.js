@@ -11,7 +11,6 @@ var domaineEnCours;
 var scoreEnCours;
 var numeroQuestionEnCours;
 var nbQuestionsEnCours;
-//var modeEnCours;
 
 $.get("/api/getMode", function(data, status){
     mode = data;
@@ -49,16 +48,11 @@ function updateQuestionTexts()
             document.getElementById("reponse1").innerHTML = data.reponse1;
             document.getElementById("reponse2").innerHTML = data.reponse2;
             document.getElementById("reponse3").innerHTML = data.reponse3;   
-            //document.getElementById("noteCourante").innerHTML = "Note actuelle: " + scoreEnCours + "/" + (nbQuestionsEnCours+1);
 
             $.get("/api/stats/progres", function(data, status) {
                 numeroQuestionEnCours = data.numeroQuestionEnCours;
                 nbQuestionsEnCours = data.nbQuestionsEnCours;
                 scoreEnCours = data.scoreEnCours;
-
-                //if (mode != "testrapide" && data.numeroQuestionEnCours <= data.nbQuestionsEnCours){document.getElementById("numerotation").innerHTML = "Question "+ data.numeroQuestionEnCours + "/" + data.nbQuestionsEnCours;}
-                //if (mode != "testrapide") document.getElementById("noteCourante").innerHTML = "Note actuelle: " + data.scoreEnCours + "/" + data.nbQuestionsEnCours;
-
             }); 
         });
     }
@@ -71,7 +65,6 @@ function updateQuestionTexts()
         }
         else
         {
-
             $.get("/api/next", function(data, status) {
 
                 questionId = data._id;
@@ -82,9 +75,6 @@ function updateQuestionTexts()
                 document.getElementById("reponse2").innerHTML = data.reponse2;
                 document.getElementById("reponse3").innerHTML = data.reponse3;
                 
-                //document.getElementById("numerotation").innerHTML = "Question "+ numeroQuestionEnCours + "/" + nbQuestionsEnCours;
-                //document.getElementById("noteCourante").innerHTML = "Note actuelle: " + scoreEnCours + "/" + nbQuestionsEnCours;
-        
                 $.get("/api/stats/progres", function(data, status) {
 
                     numeroQuestionEnCours = data.numeroQuestionEnCours;
@@ -95,7 +85,6 @@ function updateQuestionTexts()
                     if (mode != "testrapide") document.getElementById("noteCourante").innerHTML = "Note actuelle: " + data.scoreEnCours + "/" + data.nbQuestionsEnCours;
 
                 }); 
-
             });
         }       
     }
@@ -132,9 +121,6 @@ function giveUp()
 var elementBeingDragged = null;
 
 function handleDragStart(e){
-    // L'opacité de notre réponse choisie (que l'on commence à drag) est réduite.
-    //e.target.style.opacity = "0.4"; 
-
     elementBeingDragged = e.target;
 
     // On détermine le type de drag-and-drop ici.
@@ -209,17 +195,12 @@ function handleDrop(e) {
             }           
         });
     }
-    else
-    {
-        //elementBeingDragged.style.opacity = '1.0';
-    }
 
     return false;
 }
 
 function handleDragEnd(e) {
     // this/e.target is the source node.
-
     [].forEach.call(zones, function (zone) {
         zone.classList.remove("over");
     });

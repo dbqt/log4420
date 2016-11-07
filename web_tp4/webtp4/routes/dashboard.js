@@ -5,7 +5,7 @@ var db = require('../lib/db.js')
 var mongoose = require( 'mongoose' );
 var Questions = mongoose.model( 'Questions' )
 
-/* GET home page. */
+/* GET dashboard page. */
 router.get('/', function(req, res, next) {
 	res.render('dashboard', { title: 'Tableau de bord' });
 });

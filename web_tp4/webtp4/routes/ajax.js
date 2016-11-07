@@ -282,8 +282,7 @@ router.delete('/stats/examens-detailles', function(req, res, next) {
               else res.sendStatus(200);
           });
       }
-    });
-    
+    });   
 });
 
 // get progress

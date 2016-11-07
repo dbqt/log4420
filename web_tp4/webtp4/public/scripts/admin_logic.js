@@ -2,10 +2,7 @@ document.getElementById("envoyer").onclick = envoyerQuestion;
 document.getElementById("toutdelete").onclick = effacerTousQuestions;
 
 function envoyerQuestion()
-{
-	
-	// TODO: VERIFIER LA SECURITE DE LA SAFETY
-	
+{	
 	var form_data = $("#adminform").serialize();
 	var form_method = $("#adminform").attr("method").toUpperCase();
 	
@@ -24,8 +21,7 @@ function envoyerQuestion()
 			alert("La question n'a pas été ajoutée \n Vérifier que les valeurs sont valides.");
 			console.log(e);
 		}           
-	});
-	
+	});	
 }
 
 function effacerTousQuestions()
