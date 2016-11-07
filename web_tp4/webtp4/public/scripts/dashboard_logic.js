@@ -121,27 +121,44 @@ function update_Stats()
 
 function checkQuestionsCount()
 {
-	$.get("/api/nbQuestionsMax", function(data){                          
+	$.get("/api/nbQuestionsMax", function(data){   
+        var min = 1;
+        var max = 1;             
         switch(document.getElementById("domaineChoice").value)
         {
             case "HTML":
-                document.getElementById("nombreQuestionsInput").max = data.HTML;
+                max = data.HTML;
+                if(data.HTML == null) { 
+                    min = 0;
+                    max = 0;
+                }
                 break;
-            
             case "JavaScript":
-                document.getElementById("nombreQuestionsInput").max = data.JavaScript;
+                max = data.JavaScript;
+                if(data.JavaScript == null) { 
+                    min = 0;
+                    max = 0;
+                }
                 break;
-            
             case "CSS":
-                document.getElementById("nombreQuestionsInput").max = data.CSS;
+                max = data.CSS;
+                if(data.CSS == null) { 
+                    min = 0;
+                    max = 0;
+                }
                 break;
-            
             default:
                 console.log("Mauvais choix de domaine...");
                 break;
-        }        
+        } 
+        document.getElementById("nombreQuestionsInput").max = max; 
+        document.getElementById("nombreQuestionsInput").min = min;  
+        document.getElementById("nombreQuestionsInput").value = min;
+        console.log("min:" + min + " , max: " + max);
+        if(min == 0 || max == 0) $("#submitExamen").attr('disabled', 'disabled');
+        else $("#submitExamen").removeAttr("disabled"); 
     });
-	document.getElementById("nombreQuestionsInput").value = 1;
+	
 }
 
 function check_if_exam_in_progress()
@@ -149,7 +166,6 @@ function check_if_exam_in_progress()
     $.get("/api/stats/progres", function(data){
 
         examenEnCours = data.examenEnCours;
-        console.log(data);
         if (data.examenEnCours)
         {
             document.getElementById("continuerExamen").onclick = continue_exam;

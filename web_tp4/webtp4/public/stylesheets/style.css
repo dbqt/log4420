@@ -43,7 +43,7 @@ body footer {
     clear: both;
 }
 
-section label, input, a {
+section label, input, a, select {
     display: block;
 }
 
