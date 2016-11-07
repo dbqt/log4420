@@ -54,6 +54,7 @@ function save_configs()
 function set_mode_rapide()
 {
     $.post('api/stats/progres/testrapide');
+    window.location.href='/question/testrapide';
 }
 
 function update_Stats()
@@ -151,9 +152,17 @@ function checkQuestionsCount()
         document.getElementById("nombreQuestionsInput").max = max; 
         document.getElementById("nombreQuestionsInput").min = min;  
         document.getElementById("nombreQuestionsInput").value = min;
-        console.log("min:" + min + " , max: " + max);
         if(min == 0 || max == 0) $("#submitExamen").attr('disabled', 'disabled');
         else $("#submitExamen").removeAttr("disabled"); 
+    });
+
+    $.get("api/question", function(data){
+        if(data.length <= 0 || data.length == null) {
+            $("#submitTestRapide").attr('disabled', 'disabled');
+        }
+        else {
+            $("#submitTestRapide").removeAttr("disabled");
+        }
     });
 	
 }
