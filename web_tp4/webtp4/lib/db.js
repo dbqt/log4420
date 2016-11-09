@@ -43,7 +43,9 @@ var Stats = new Schema({
         domaineEnCours : String,
         scoreEnCours : Number,
         nbQuestionsEnCours : Number,
-        numeroQuestionEnCours : Number
+        numeroQuestionEnCours : Number,
+        scoreTestRapide : Number,
+        numeroQuestionTestRapide : Number,
     },
     mode : String
 });

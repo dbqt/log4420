@@ -89,6 +89,8 @@ router.post('/verifyAnswer', function(req, res, next) {
                 {
                     if(statsData.mode == "testrapide")
                     {
+                        statsData.progres.scoreTestRapide = statsData.progres.scoreTestRapide + 1;
+                        statsData.progres.numeroQuestionTestRapide = statsData.progres.numeroQuestionTestRapide + 1;
                         statsData.testRapide.reussi = statsData.testRapide.reussi + 1;
                     }
                     else
@@ -106,6 +108,7 @@ router.post('/verifyAnswer', function(req, res, next) {
                 {
                     if(statsData.mode == "testrapide"){
                         statsData.testRapide.echoue = statsData.testRapide.echoue + 1;
+                        statsData.progres.numeroQuestionTestRapide = statsData.progres.numeroQuestionTestRapide + 1;
                     }
                     else
                     {
@@ -328,19 +331,22 @@ router.post('/stats/progres/:mode', function(req, res, next) {
                 else res.sendStatus(200);
             });    
         }
-        else {
-          /*
-          data.progres.examenEnCours = false;
-          data.progres.domaineEnCours = "Tous";
-          data.progres.scoreEnCours = 0;
-          data.progres.nbQuestionsEnCours = 0;
-          data.progres.numeroQuestionEnCours = 1;
-          */
-          data.mode = req.params.mode;
-          data.save(function(err) {
-              if (err) res.send(err);
-              else res.sendStatus(200);
-          }); 
+        else
+        {
+            data.progres.scoreTestRapide = 0;
+            data.progres.numeroQuestionTestRapide = 1;
+            /*
+            data.progres.examenEnCours = false;
+            data.progres.domaineEnCours = "Tous";
+            data.progres.scoreEnCours = 0;
+            data.progres.nbQuestionsEnCours = 0;
+            data.progres.numeroQuestionEnCours = 1;
+            */
+            data.mode = req.params.mode;
+            data.save(function(err) {
+                if (err) res.send(err);
+                else res.sendStatus(200);
+            }); 
         } 
       }
   });

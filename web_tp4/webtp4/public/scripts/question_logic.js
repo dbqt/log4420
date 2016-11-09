@@ -28,7 +28,14 @@ function updateQuestion(){
         scoreEnCours = data.scoreEnCours;
 
         if (mode != "testrapide" && data.numeroQuestionEnCours <= data.nbQuestionsEnCours){document.getElementById("numerotation").innerHTML = "Question "+ data.numeroQuestionEnCours + "/" + data.nbQuestionsEnCours;}
-        if (mode != "testrapide") document.getElementById("noteCourante").innerHTML = "Note actuelle: " + data.scoreEnCours + "/" + data.nbQuestionsEnCours;
+        if (mode == "testrapide")
+        {
+            document.getElementById("noteCourante").innerHTML = "Note actuelle: " + data.scoreTestRapide + "/" + data.numeroQuestionTestRapide;
+        }
+        else if (mode == "examen")
+        {
+            document.getElementById("noteCourante").innerHTML = "Note actuelle: " + data.scoreEnCours + "/" + data.nbQuestionsEnCours;
+        }
 
         updateQuestionTexts();
     }); 
@@ -82,7 +89,14 @@ function updateQuestionTexts()
                     scoreEnCours = data.scoreEnCours;
 
                     if (mode != "testrapide" && data.numeroQuestionEnCours <= data.nbQuestionsEnCours){document.getElementById("numerotation").innerHTML = "Question "+ data.numeroQuestionEnCours + "/" + data.nbQuestionsEnCours;}
-                    if (mode != "testrapide") document.getElementById("noteCourante").innerHTML = "Note actuelle: " + data.scoreEnCours + "/" + data.nbQuestionsEnCours;
+                    if (mode == "testrapide")
+                    {
+                        document.getElementById("noteCourante").innerHTML = "Note actuelle: " + data.scoreTestRapide + "/" + data.numeroQuestionTestRapide;
+                    }
+                    else if (mode == "examen")
+                    {
+                        document.getElementById("noteCourante").innerHTML = "Note actuelle: " + data.scoreEnCours + "/" + data.nbQuestionsEnCours;
+                    }
 
                 }); 
             });
@@ -181,7 +195,14 @@ function handleDrop(e) {
 
                 // On met à jour le score
                 $.get("/api/stats/progres", function(data, status) {
-                    if (mode != "testrapide") document.getElementById("noteCourante").innerHTML = "Note actuelle: " + data.scoreEnCours + "/" + data.nbQuestionsEnCours;
+                    if (mode == "testrapide")
+                    {
+                        document.getElementById("noteCourante").innerHTML = "Note actuelle: " + data.scoreTestRapide + "/" + (data.numeroQuestionTestRapide - 1);
+                    }
+                    else if (mode == "examen")
+                    {
+                        document.getElementById("noteCourante").innerHTML = "Note actuelle: " + data.scoreEnCours + "/" + data.nbQuestionsEnCours;
+                    }
                 }); 
 
                 // On désactive les choix de réponse jusqu'à la prochaine question
