@@ -197,6 +197,7 @@ function handleDrop(e) {
                 $.get("/api/stats/progres", function(data, status) {
                     if (mode == "testrapide")
                     {
+                        //quand on fait verify, cette valeur change car on veut que le # soit celui de la question suivante
                         document.getElementById("noteCourante").innerHTML = "Note actuelle: " + data.scoreTestRapide + "/" + (data.numeroQuestionTestRapide - 1);
                     }
                     else if (mode == "examen")
