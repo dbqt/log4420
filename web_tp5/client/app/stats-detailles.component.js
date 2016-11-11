@@ -9,22 +9,28 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 var core_1 = require('@angular/core');
-var platform_browser_1 = require('@angular/platform-browser');
-var forms_1 = require('@angular/forms');
-var app_component_1 = require('./app.component');
-var stats_detailles_component_1 = require('./stats-detailles.component');
-var AppModule = (function () {
-    function AppModule() {
+var Stats = (function () {
+    function Stats() {
     }
-    AppModule = __decorate([
-        core_1.NgModule({
-            imports: [platform_browser_1.BrowserModule, forms_1.FormsModule],
-            declarations: [app_component_1.AppComponent, stats_detailles_component_1.StatsDetaillesComponent],
-            bootstrap: [app_component_1.AppComponent]
+    return Stats;
+}());
+exports.Stats = Stats;
+var STATISTICS = [
+    { examen: "Examen1000", score: 99999 },
+    { examen: "Examen2", score: 1 }
+];
+var StatsDetaillesComponent = (function () {
+    function StatsDetaillesComponent() {
+        this.stats = STATISTICS;
+    }
+    StatsDetaillesComponent = __decorate([
+        core_1.Component({
+            selector: 'mes-stats-detailles',
+            template: "\n  <div *ngFor=\"let stat of stats\">\n    <h2>Stats detailles de {{stat.examen}}</h2>\n    <div><label>score: </label>{{stat.score}}</div>\n  </div>\n"
         }), 
         __metadata('design:paramtypes', [])
-    ], AppModule);
-    return AppModule;
+    ], StatsDetaillesComponent);
+    return StatsDetaillesComponent;
 }());
-exports.AppModule = AppModule;
-//# sourceMappingURL=app.module.js.map
+exports.StatsDetaillesComponent = StatsDetaillesComponent;
+//# sourceMappingURL=stats-detailles.component.js.map

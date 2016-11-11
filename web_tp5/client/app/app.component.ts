@@ -19,6 +19,10 @@ export class Question {
 	<p>{{question.reponse2}}</p>
 	<p>{{question.reponse3}}</p>
 	<p>{{question.answer}}</p>
+	<input [(ngModel)]="question.answer" placeholder="REPONSE">
+	
+	<mes-stats-detailles></mes-stats-detailles>
+	
 	`
 })
 
@@ -32,6 +36,6 @@ export class AppComponent {
 	reponse2: "d",
 	reponse3: "t",
 	answer: "reponse1"
-};
+  };
 }
 

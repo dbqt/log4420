@@ -31,7 +31,7 @@ var AppComponent = (function () {
     AppComponent = __decorate([
         core_1.Component({
             selector: 'mon-app',
-            template: "\n    <h1>{{title}}</h1>\n    <p>{{value}}</p>\n    <h2>{{question.domaine}}</h2>\n    <h3>{{question.question}}</h3>\n    <p>{{question.reponse1}}</p>\n\t<p>{{question.reponse2}}</p>\n\t<p>{{question.reponse3}}</p>\n\t<p>{{question.answer}}</p>\n\t"
+            template: "\n    <h1>{{title}}</h1>\n    <p>{{value}}</p>\n    <h2>{{question.domaine}}</h2>\n    <h3>{{question.question}}</h3>\n    <p>{{question.reponse1}}</p>\n\t<p>{{question.reponse2}}</p>\n\t<p>{{question.reponse3}}</p>\n\t<p>{{question.answer}}</p>\n\t<input [(ngModel)]=\"question.answer\" placeholder=\"REPONSE\">\n\t\n\t<mes-stats-detailles></mes-stats-detailles>\n\t\n\t"
         }), 
         __metadata('design:paramtypes', [])
     ], AppComponent);
