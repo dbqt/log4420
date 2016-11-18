@@ -9,19 +9,24 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 var core_1 = require('@angular/core');
-var AppComponent = (function () {
-    function AppComponent() {
-        this.title = "Happy";
-        this.value = "Tests";
+var http_1 = require('@angular/http');
+require('rxjs/add/operator/toPromise');
+var StatsService = (function () {
+    function StatsService(http) {
+        this.http = http;
+        this.headers = new http_1.Headers({ 'Content-Type': 'application/json' });
+        this.statsUrl = 'app/stats'; // URL to web api
     }
-    AppComponent = __decorate([
-        core_1.Component({
-            selector: 'mon-app',
-            template: "\n\t\t<h1>{{title}}</h1>\n\t\t<nav>\n\t\t\t<a routerLink=\"/home\" routerLinkActive=\"active\">Accueil</a>\n\t\t\t<a routerLink=\"/dashboard\" routerLinkActive=\"active\">Tableau de bord</a>\n\t\t\t<a routerLink=\"/instructions\" routerLinkActive=\"active\">Instructions</a>\n\t\t</nav>\n\t\t<router-outlet></router-outlet>\n\t"
-        }), 
-        __metadata('design:paramtypes', [])
-    ], AppComponent);
-    return AppComponent;
+    StatsService = __decorate([
+        core_1.Injectable(), 
+        __metadata('design:paramtypes', [http_1.Http])
+    ], StatsService);
+    return StatsService;
 }());
-exports.AppComponent = AppComponent;
-//# sourceMappingURL=app.component.js.map
+exports.StatsService = StatsService;
+/*
+Copyright 2016 Google Inc. All Rights Reserved.
+Use of this source code is governed by an MIT-style license that
+can be found in the LICENSE file at http://angular.io/license
+*/
+//# sourceMappingURL=stats.service.js.map

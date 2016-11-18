@@ -9,12 +9,6 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 var core_1 = require('@angular/core');
-var Stats = (function () {
-    function Stats() {
-    }
-    return Stats;
-}());
-exports.Stats = Stats;
 var STATISTICS = [
     { examen: "Examen1000", score: 99999 },
     { examen: "Examen2", score: 1 }

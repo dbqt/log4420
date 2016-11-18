@@ -1,11 +1,8 @@
 import { Component, Input } from '@angular/core';
 
-export class Stats {
-	examen: string;
-	score: number;
-}
+import { Stat } from './stat'
 
-const STATISTICS: Stats[] = [
+const STATISTICS: Stat[] = [
   { examen: "Examen1000", score: 99999},
   { examen: "Examen2", score: 1}
 ];
