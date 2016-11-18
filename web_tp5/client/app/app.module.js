@@ -8,15 +8,11 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-require('./rxjs-extensions');
 var core_1 = require('@angular/core');
 var platform_browser_1 = require('@angular/platform-browser');
 var forms_1 = require('@angular/forms');
 var http_1 = require('@angular/http');
 var app_routing_module_1 = require('./app-routing.module');
-// Imports for loading & configuring the in-memory web api
-//import { InMemoryWebApiModule } from 'angular-in-memory-web-api';
-//import { InMemoryDataService }  from './in-memory-data.service';
 var app_component_1 = require('./app.component');
 var home_component_1 = require('./home.component');
 var dashboard_component_1 = require('./dashboard.component');
@@ -25,8 +21,6 @@ var question_component_1 = require('./question.component');
 var result_component_1 = require('./result.component');
 var stats_detailles_component_1 = require('./stats-detailles.component');
 var admin_component_1 = require('./admin.component');
-var question_service_1 = require('./question.service');
-var stats_service_1 = require('./stats.service');
 var AppModule = (function () {
     function AppModule() {
     }
@@ -36,7 +30,6 @@ var AppModule = (function () {
                 platform_browser_1.BrowserModule,
                 forms_1.FormsModule,
                 http_1.HttpModule,
-                //InMemoryWebApiModule.forRoot(InMemoryDataService),
                 app_routing_module_1.AppRoutingModule
             ],
             declarations: [
@@ -49,13 +42,7 @@ var AppModule = (function () {
                 stats_detailles_component_1.StatsDetaillesComponent,
                 admin_component_1.AdminComponent
             ],
-            providers: [
-                question_service_1.QuestionService,
-                stats_service_1.StatsService
-            ],
-            bootstrap: [
-                app_component_1.AppComponent
-            ]
+            bootstrap: [app_component_1.AppComponent]
         }), 
         __metadata('design:paramtypes', [])
     ], AppModule);

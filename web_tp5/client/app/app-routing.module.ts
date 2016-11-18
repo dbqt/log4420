@@ -1,4 +1,4 @@
-import { NgModule }             from '@angular/core';
+import { NgModule  }      from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
 import { HomeComponent }  		from './home.component';
@@ -14,7 +14,6 @@ const routes: Routes = [
   { path: '', redirectTo: '/dashboard', pathMatch: 'full' },
   { path: 'home',  component: HomeComponent },
   { path: 'dashboard',  component: DashboardComponent },
-  /*{ path: 'detail/:id', component: HeroDetailComponent },*/
   { path: 'instructions',     component: InstructionsComponent },
   { path: 'question',     component: QuestionComponent },
   { path: 'result',     component: ResultComponent },

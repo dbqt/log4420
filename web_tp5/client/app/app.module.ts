@@ -1,13 +1,10 @@
-import './rxjs-extensions';
-import { NgModule }      from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
-import { FormsModule }   from '@angular/forms';
+import { NgModule  }      from '@angular/core';
+import { BrowserModule  } from '@angular/platform-browser';
+import { FormsModule  }   from '@angular/forms';
 import { HttpModule }    from '@angular/http';
 import { AppRoutingModule } from './app-routing.module';
 
-// Imports for loading & configuring the in-memory web api
-//import { InMemoryWebApiModule } from 'angular-in-memory-web-api';
-//import { InMemoryDataService }  from './in-memory-data.service';
+
 import { AppComponent }         from './app.component';
 
 import { HomeComponent }  		from './home.component';
@@ -23,11 +20,10 @@ import { QuestionService }          from './question.service';
 import { StatsService }          from './stats.service';
 
 @NgModule({
-	imports: [
+  imports: [
 		BrowserModule,
 		FormsModule,
 		HttpModule,
-		//InMemoryWebApiModule.forRoot(InMemoryDataService),
 		AppRoutingModule
 	],
 	declarations: [
@@ -40,13 +36,7 @@ import { StatsService }          from './stats.service';
 		StatsDetaillesComponent,
 		AdminComponent
 	],
-	providers: [
-		QuestionService,
-		StatsService
-	],
-	bootstrap: [
-		AppComponent
-	]
+  bootstrap: [ AppComponent ]
 })
 
 export class AppModule { }

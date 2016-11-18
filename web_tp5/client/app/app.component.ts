@@ -10,6 +10,7 @@ import { Component  } from '@angular/core';
 			<a routerLink="/instructions" routerLinkActive="active">Instructions</a>
 		</nav>
 		<router-outlet></router-outlet>
+		
 	`
 })
 

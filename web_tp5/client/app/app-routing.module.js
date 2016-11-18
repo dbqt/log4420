@@ -20,7 +20,6 @@ var routes = [
     { path: '', redirectTo: '/dashboard', pathMatch: 'full' },
     { path: 'home', component: home_component_1.HomeComponent },
     { path: 'dashboard', component: dashboard_component_1.DashboardComponent },
-    /*{ path: 'detail/:id', component: HeroDetailComponent },*/
     { path: 'instructions', component: instructions_component_1.InstructionsComponent },
     { path: 'question', component: question_component_1.QuestionComponent },
     { path: 'result', component: result_component_1.ResultComponent },
