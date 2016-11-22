@@ -2,11 +2,7 @@ import { Component, Input } from '@angular/core';
 
 @Component({
   selector: 'admin-component',
-  template: `
-		<div>
-			<p>Hello Admin</p>
-		</div>
-  `
+  templateUrl: 'templates/admin'
 })
 export class AdminComponent {
 	//TODO

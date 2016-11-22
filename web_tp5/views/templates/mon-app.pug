@@ -1,0 +1,13 @@
+
+
+-var menu = { 'Accueil': '/home', 'Tableau de bord': '/dashboard', 'Instructions': '/instructions' };
+
+// navbar
+nav
+	ul
+		each val, key in menu
+			li
+				a(routerLink=val, routerLinkActive="active", title=key)=key
+
+// router-outlet
+router-outlet

@@ -2,20 +2,10 @@ import { Component  } from '@angular/core';
 
 @Component({
 	selector: 'mon-app',
-	template: `
-		<h1>{{title}}</h1>
-		<nav>
-			<a routerLink="/home" routerLinkActive="active">Accueil</a>
-			<a routerLink="/dashboard" routerLinkActive="active">Tableau de bord</a>
-			<a routerLink="/instructions" routerLinkActive="active">Instructions</a>
-		</nav>
-		<router-outlet></router-outlet>
-		
-	`
+	templateUrl: 'templates/mon-app',
+	styleUrls: ['../stylesheets/style.css']
 })
-
 export class AppComponent {
-  title = "Happy";
-  private value = "Tests";
+  //TODO
 }
 

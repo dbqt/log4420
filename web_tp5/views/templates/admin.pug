@@ -1,0 +1,33 @@
+//- This page is to access the database
+extends ../layout
+
+block content
+    section
+        h1 Ajouter une question
+        
+        form#adminform(method="post")
+            label Domaine: 
+            select(name="domaine" required)
+                option(value="HTML") HTML
+                option(value="JavaScript") JavaScript
+                option(value="CSS") CSS
+
+            label Question: 
+            input(name="question" required)
+            label Reponse 1: 
+            input(name="reponse1" required)
+            label Reponse 2: 
+            input(name="reponse2" required)
+            label Reponse 3: 
+            input(name="reponse3" required)
+            label Bonne reponse:
+            select(name="answer" required)
+                option(value="reponse1") 1er
+                option(value="reponse2") 2e
+                option(value="reponse3") 3e
+
+        button#envoyer.flatButton Envoyer
+        button#toutdelete.flatButton Effacer tous les questions (!)
+        
+        script(src='/scripts/jquery.min.js')
+        script(src='/scripts/admin_logic.js')

@@ -2,11 +2,7 @@ import { Component, Input } from '@angular/core';
 
 @Component({
   selector: 'result-component',
-  template: `
-		<div>
-			<p>Hello Result</p>
-		</div>
-  `
+  templateUrl: 'templates/result'
 })
 export class ResultComponent {
 	//TODO

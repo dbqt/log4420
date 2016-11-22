@@ -11,7 +11,7 @@ import { StatsDetaillesComponent } from './stats-detailles.component';
 import { AdminComponent } from './admin.component';
 
 const routes: Routes = [
-  { path: '', redirectTo: '/dashboard', pathMatch: 'full' },
+  { path: '', redirectTo: '/home', pathMatch: 'full'},
   { path: 'home',  component: HomeComponent },
   { path: 'dashboard',  component: DashboardComponent },
   { path: 'instructions',     component: InstructionsComponent },

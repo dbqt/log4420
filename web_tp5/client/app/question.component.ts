@@ -4,11 +4,7 @@ import { Question }                from './question';
 
 @Component({
   selector: 'question-component',
-  template: `
-		<div>
-			<p>Hello Question</p>
-		</div>
-  `
+  templateUrl: 'templates/question'
 })
 export class QuestionComponent {
 	//TODO
