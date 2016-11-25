@@ -1,3 +1,12 @@
+console.log("dashboard_logic js was loaded");
+
+function dashCtrl ($scope,$location) {
+        $scope.changeView = function(view){
+			console.log("fjsdaklh as;fj")
+            $location.path(view); // path not hash
+        }
+}
+
 document.getElementById("submitExamen").onclick = save_configs;
 document.getElementById("submitTestRapide").onclick = set_mode_rapide;
 document.getElementById("reinitialiserStatistiques").onclick = resetAllStats;
@@ -54,7 +63,9 @@ function save_configs()
 function set_mode_rapide()
 {
     $.post('api/stats/progres/testrapide');
-    window.location.href='/question/testrapide';
+    
+
+    //window.location.href='/question/testrapide';
 }
 
 function update_Stats()

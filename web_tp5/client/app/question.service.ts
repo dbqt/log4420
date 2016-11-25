@@ -9,7 +9,7 @@ import { Question } from './question';
 export class QuestionService {
 
   private headers = new Headers({'Content-Type': 'application/json'});
-  private questionsUrl = 'app/questions';  // URL to web api
+  private questionsUrl = 'api/questions';  // URL to web api
 
   constructor(private http: Http) { }
   

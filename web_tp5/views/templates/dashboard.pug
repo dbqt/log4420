@@ -3,14 +3,14 @@ extends ../layout
 block content
 
     
-
+    
     h1= title  
-    div.flexBox
+    div.flexBox(ng-controller="dashCtrl")
         // Mode test rapide
         section
             h2 Test rapide
             p Questions illimitées aléatoires
-            button#submitTestRapide.flatButton Débuter le test rapide
+            button.flatButton((click)="goTestRapide()") Débuter le test rapide
         // Configurations de l'examen
         section
             h2 Configurations de l'examen 
@@ -18,17 +18,16 @@ block content
         
             //form#formConfigs
             label Domaine: 
-            select#domaineChoice(name="choix_domaine" required)
-                option(value="HTML") HTML
-                option(value="JavaScript") JavaScript
-                option(value="CSS") CSS
+
+            select#domaineChoice(name="choix_domaine" required [(ngModel)]="domaines" "let sel" (ngChange)="onDomaineSelect(sel.value)") 
+                option(*ngFor="let domaine of domaines", [ngValue]="domaine.value") {{domaine.display}}
 
             label Nombre de questions: 
-            input#nombreQuestionsInput(name="choix_nombre" type="number" value=5 min="1" required)
+            input#nombreQuestionsInput(name="choix_nombre" type="number" min="1" required [(ngModel)]="nbQuestions")
 
             input#submitExamen.flatButton(type="submit" value="Débuter un nouvel examen")
 
-            a.flatButton(href='/admin') Ajouter des questions
+            a.flatButton(routerLink='/admin') Ajouter des questions
         
         
             
@@ -62,3 +61,5 @@ block content
 
             a#fermer.flatButton(href="") Fermer
         a.closeModal(href="")
+        
+	
