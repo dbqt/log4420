@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Output, OnInit, EventEmitter } from '@angular/core';
 import { Router }            from '@angular/router';
 import { Location } from '@angular/common';
 //import { Component, Input } from '@angular/core';
@@ -9,23 +9,15 @@ import { Location } from '@angular/common';
 })
 
 export class DashboardComponent implements OnInit{
-
-	domaines : Array<Object>
-	nbQuestions: number
+	domaines = ["HTML", "CSS", "JavaScript"];
+	nbQuestions = 1000;
+	selectedDomaine = this.domaines[0];
 
 	constructor(
 		private location: Location,
 		private router: Router,
-	){
-		this.domaines = [
-			{ value: 'HTML', display: 'HTML' },
-			{ value: 'CSS', display: 'CSS' },
-			{ value: 'JavaScript', display: 'JavaScript' }
-		];
-		this.nbQuestions = 1;
-	}
+	){ }
 
-	//TODO
 	ngOnInit(): void {
     }
     
@@ -51,10 +43,16 @@ export class DashboardComponent implements OnInit{
 		let link = ['/admin'];
 		this.router.navigate(link);
 	}
-	
-	onDomaineSelect(value): void {
-		console.log("on a choisi : " + value);
-	}
+		
+    onSelect(value) {
+        this.selectedDomaine = null;
+        for (var i = 0; i < this.domaines.length; i++)
+        {
+          if (this.domaines[i] == value) {
+            this.selectedDomaine = this.domaines[i];
+          }
+        }
+    }
 	
 	save_configs() {
 		

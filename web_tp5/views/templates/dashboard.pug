@@ -19,8 +19,8 @@ block content
             //form#formConfigs
             label Domaine: 
 
-            select#domaineChoice(name="choix_domaine" required [(ngModel)]="domaines" "let sel" (ngChange)="onDomaineSelect(sel.value)") 
-                option(*ngFor="let domaine of domaines", [ngValue]="domaine.value") {{domaine.display}}
+            select#domaineChoice(name="choix_domaine" required (change)="onSelect($event.target.value)")
+                option(*ngFor="let domaine of domaines", [ngValue]="domaine") {{domaine}}
 
             label Nombre de questions: 
             input#nombreQuestionsInput(name="choix_nombre" type="number" min="1" required [(ngModel)]="nbQuestions")
