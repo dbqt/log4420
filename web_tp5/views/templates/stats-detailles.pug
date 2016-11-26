@@ -1,0 +1,11 @@
+div.modal-dialog
+    div.modal-content((click)="hide()" ng-style="{'display': visible ? 'block' : 'none', 'opacity': visibleAnimate ? 1 : 0}")
+        p stats detailles
+    
+    
+//-<div *ngFor="let stat of stats">
+//-    <h2>Stats detailles de {{stat.examen}}</h2>
+//-    <div><label>score: </label>{{stat.score}}</div>
+//-  </div>
+//-<div (click)="hide()" class="modal fade" tabindex="-1" [ngClass]="{'in': visibleAnimate}"
+//-       [ngStyle]="{'display': visible ? 'block' : 'none', 'opacity': visibleAnimate ? 1 : 0}">

@@ -9,13 +9,22 @@ const STATISTICS: Stat[] = [
 
 @Component({
   selector: 'mes-stats-detailles',
-  template: `
-  <div *ngFor="let stat of stats">
-    <h2>Stats detailles de {{stat.examen}}</h2>
-    <div><label>score: </label>{{stat.score}}</div>
-  </div>
-`
+  templateUrl: 'templates/stats-detailles'
 })
 export class StatsDetaillesComponent {
   stats = STATISTICS;
+  
+  public visible = false;
+  private visibleAnimate = false;
+
+  public show(): void {
+  console.log("showing");
+    this.visible = true;
+    setTimeout(() => this.visibleAnimate = true);
+  }
+
+  public hide(): void {
+    this.visibleAnimate = false;
+    setTimeout(() => this.visible = false, 300);
+  }
 }

@@ -2,8 +2,6 @@ extends ../layout
 
 block content
 
-    
-    
     h1= title  
     div.flexBox(ng-controller="dashCtrl")
         // Mode test rapide
@@ -34,20 +32,22 @@ block content
         //Statistiques
         aside
             h2 Statistiques
-            p#nombreQuestionsReussies
-            p#moyenneExamens
+            p Nombre de questions réussies: {{nombreQuestionsReussies}}
+            p Moyenne des examens: {{moyenneExamens}}
             h3 Réussites et Échecs
-            p#countHTMLgood
-            p#countHTMLwrong
-            p#countJavaScriptgood
-            p#countJavaScriptwrong
-            p#countCSSgood
-            p#countCSSwrong
-            p#questionSucceedCount
-            p#questionFailCount
-            a.flatButton(href="#openModalBox") Statistiques Détaillées
-            a#reinitialiserStatistiques.flatButton Remise à zéro
+            p {{countHTMLgood}}
+            p {{countHTMLwrong}}
+            p {{countJavaScriptgood}}
+            p {{countJavaScriptwrong}}
+            p {{countCSSgood}}
+            p {{countCSSwrong}}
+            p {{questionSucceedCount}}
+            p {{questionFailCount}}
+            button.flatButton((click)="showModalStats()") Statistiques Détaillées
+            button.flatButton((click)="resetStats()") Remise à zéro
 
+    mes-stats-detailles
+    
     div.modalBox#openModalBox
         div.modalBoxMessage()
             h2 Statistiques détaillées

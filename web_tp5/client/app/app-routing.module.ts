@@ -17,7 +17,8 @@ const routes: Routes = [
   { path: 'instructions',     component: InstructionsComponent },
   { path: 'question',     component: QuestionComponent },
   { path: 'result',     component: ResultComponent },
-  { path: 'admin',     component: AdminComponent }
+  { path: 'admin',     component: AdminComponent },
+  { path: 'stats-detailles',     component: StatsDetaillesComponent },
 ];
 
 @NgModule({

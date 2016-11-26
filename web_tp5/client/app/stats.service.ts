@@ -9,9 +9,11 @@ import { Stat } from './stat';
 export class StatsService {
 
   private headers = new Headers({'Content-Type': 'application/json'});
-  private statsUrl = 'app/stats';  // URL to web api
+  private statsUrl = 'api/stats';  // URL to web api
 
   constructor(private http: Http) { }
+  
+  
 
 }
 
