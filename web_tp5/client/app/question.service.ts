@@ -12,9 +12,25 @@ export class QuestionService {
 	constructor(private http: Http) { }
   
 	getNextQuestion(): Promise<Question> {
+		console.log("HERE WE GO");
+		
+		
 		return this.http.get('api/next')
 			.toPromise()
-			.then(response => response.json().data as Question)
+			.then(response => {
+				//console.log(response.json());
+				console.log(response.json() as Question);
+				
+				var maq = new Question();
+				
+				maq.domaine = response.json().domaine;
+				maq.question = response.json().question;
+				maq.reponse1 = response.json().reponse1;
+				maq.reponse2 = response.json().reponse2;
+				maq.reponse3 = response.json().reponse3;
+				
+				return maq;
+			})
 			.catch(this.handleError);
 	}
 

@@ -20,7 +20,9 @@ export class QuestionComponent implements OnInit{
 	getNextQuestion(): void {
 		this.questionService
 			.getNextQuestion()
-			.then(question => this.question = question);
+			.then(question => {
+				this.question = question
+			});
 	}
 	
 	ngOnInit(): void {

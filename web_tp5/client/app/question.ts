@@ -4,5 +4,4 @@ export class Question {
 	reponse1: string;
 	reponse2: string;
 	reponse3: string;
-	answer: string;
 }
