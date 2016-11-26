@@ -18,6 +18,7 @@ import { AdminComponent } from './admin.component';
 
 import { QuestionService }          from './question.service';
 import { StatsService }          from './stats.service';
+import { ProgresService } from './progres.service';
 
 @NgModule({
   imports: [
@@ -36,6 +37,7 @@ import { StatsService }          from './stats.service';
 		StatsDetaillesComponent,
 		AdminComponent
 	],
+  providers: [ ProgresService, QuestionService ],
   bootstrap: [ AppComponent ]
 })
 
