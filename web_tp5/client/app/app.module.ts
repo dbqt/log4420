@@ -37,7 +37,7 @@ import { ProgresService } from './progres.service';
 		StatsDetaillesComponent,
 		AdminComponent
 	],
-  providers: [ ProgresService, QuestionService ],
+  providers: [ ProgresService, QuestionService, StatsService ],
   bootstrap: [ AppComponent ]
 })
 

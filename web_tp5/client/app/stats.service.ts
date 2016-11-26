@@ -13,7 +13,12 @@ export class StatsService {
 
   constructor(private http: Http) { }
   
-  
+  getStats(): Promise<Stat> {
+		return this.http.get(this.statsUrl)
+			.toPromise()
+			.then(response => {console.log(response.json()); return new Stat();});
+			//.catch(this.handleError);
+	}
 
 }
 

@@ -1,4 +1,8 @@
 export class Stat {
-	examen: string;
-	score: number;
+	_id: string;
+	mode: string;
+	progres: Object;
+	examensDetailles: Array;
+	examen: Object;
+	testRapide:Object;
 }

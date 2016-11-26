@@ -88,29 +88,7 @@ export class DashboardComponent implements OnInit{
 	}
 	
 	updateStats() {
-    $.get('api/stats', function(data, status) {
-
-        var countHTMLgood = data.examen.reussi.HTML;
-        var countHTMLwrong = data.examen.echoue.HTML;
-        var countJavaScriptgood = data.examen.reussi.JavaScript; 
-        var countJavaScriptwrong = data.examen.echoue.JavaScript; 
-        var countCSSgood = data.examen.reussi.CSS; 
-        var countCSSwrong = data.examen.echoue.CSS;
-
-        var questionSucceedCount = data.testRapide.reussi;
-        var questionFailCount = data.testRapide.echoue; 
-
-        document.getElementById("countHTMLgood").innerHTML = "Nombre d'examens réussis en HTML: " + countHTMLgood;
-        document.getElementById("countHTMLwrong").innerHTML = "Nombre d'examens échoués en HTML: " + countHTMLwrong;
-        document.getElementById("countJavaScriptgood").innerHTML = "Nombre d'examens réussis en JavaScript: " + countJavaScriptgood;
-        document.getElementById("countJavaScriptwrong").innerHTML = "Nombre d'examens échoués en JavaScript: " + countJavaScriptwrong;
-        document.getElementById("countCSSgood").innerHTML = "Nombre d'examens réussis en CSS: " + countCSSgood;
-        document.getElementById("countCSSwrong").innerHTML = "Nombre d'examens échoués en CSS: " + countCSSwrong;
-
-        document.getElementById("questionSucceedCount").innerHTML = "Nombre de questions rapides réussies: " + questionSucceedCount;
-        document.getElementById("questionFailCount").innerHTML = "Nombre de questions rapides échouées: " + questionFailCount;
-
-	}}
+    }
 	
     nombreQuestionsReussies = 0;
     moyenneExamens = 0;

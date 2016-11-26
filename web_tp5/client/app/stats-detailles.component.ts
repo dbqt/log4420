@@ -1,6 +1,7 @@
 import { Component, Input } from '@angular/core';
 
 import { Stat } from './stat'
+import { StatsService }			from './stats.service';
 
 const STATISTICS: Stat[] = [
   { examen: "Examen1000", score: 99999},
@@ -14,11 +15,17 @@ const STATISTICS: Stat[] = [
 export class StatsDetaillesComponent {
   stats = STATISTICS;
   
+  constructor(
+		private statsService: StatsService,
+	) {}
+	
+	  
   public visible = false;
   private visibleAnimate = false;
 
   public show(): void {
   console.log("showing");
+  this.statsService.getStats();
     this.visible = true;
     setTimeout(() => this.visibleAnimate = true);
   }
