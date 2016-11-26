@@ -3,10 +3,7 @@ import { Component, Input } from '@angular/core';
 import { Stat } from './stat'
 import { StatsService }			from './stats.service';
 
-const STATISTICS: Stat[] = [
-  { examen: "Examen1000", score: 99999},
-  { examen: "Examen2", score: 1}
-];
+const STATISTICS: Stat[] = [];
 
 @Component({
   selector: 'mes-stats-detailles',
@@ -25,7 +22,7 @@ export class StatsDetaillesComponent {
 
   public show(): void {
   console.log("showing");
-  this.statsService.getStats();
+  console.log(this.statsService.getStats());
     this.visible = true;
     setTimeout(() => this.visibleAnimate = true);
   }
