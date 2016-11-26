@@ -1,17 +1,30 @@
-import { Component, OnInit } from '@angular/core';
-//import { Component, Input } from '@angular/core';
+import { Component, OnInit }		from '@angular/core';
+import { Router }            from '@angular/router';
 
-import { Question }                from './question';
+import { Question }					from './question';
+import { QuestionService }			from './question.service';
+
 
 @Component({
   selector: 'question-component',
   templateUrl: 'templates/question'
 })
 export class QuestionComponent implements OnInit{
-	//TODO
+	question: Question;
+
+	constructor(
+		private questionService: QuestionService,
+		private router: Router
+	) {}
+	
+	getNextQuestion(): void {
+		this.questionService
+			.getNextQuestion()
+			.then(question => this.question = question);
+	}
+	
 	ngOnInit(): void {
-		var script = document.createElement('script');
-		script.src = "/scripts/question_logic.js";
-		document.getElementsByTagName('head')[0].appendChild(script);
-  }
+		this.getNextQuestion();
+	}
+
 }

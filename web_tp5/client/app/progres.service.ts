@@ -3,18 +3,23 @@ import { Headers, Http } from '@angular/http';
 
 import 'rxjs/add/operator/toPromise';
 
-import { Question } from './question';
-
 @Injectable()
-export class QuestionService {
-
+export class ProgresService {
 	private headers = new Headers({'Content-Type': 'application/json'});
 	constructor(private http: Http) { }
+	
   
-	getNextQuestion(): Promise<Question> {
-		return this.http.get('api/next')
+	commencerTestRapide(): Promise<void> {
+		return this.http.post('api/stats/progres/testrapide', null)
 			.toPromise()
-			.then(response => response.json().data as Question)
+			.then(response => console.log(response))
+			.catch(this.handleError);
+	}
+	
+	commencerExamen(mesParametres): Promise<void> {
+		return this.http.post('api/stats/progres/examen', mesParametres)
+			.toPromise()
+			.then(response => console.log(response))
 			.catch(this.handleError);
 	}
 

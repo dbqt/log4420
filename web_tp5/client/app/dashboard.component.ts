@@ -4,6 +4,8 @@ import { Location } from '@angular/common';
 import { StatsDetaillesComponent } from './stats-detailles.component';
 //import { Component, Input } from '@angular/core';
 
+import { ProgresService }			from './progres.service';
+
 @Component({
   selector: 'dashboard-component',
   templateUrl: 'templates/dashboard'
@@ -18,24 +20,34 @@ export class DashboardComponent implements OnInit{
 	public readonly modal: StatsDetaillesComponent;
 
 	constructor(
+		private progresService: ProgresService,
 		private location: Location,
 		private router: Router,
 	){ }
 
 	ngOnInit(): void {
     }
-    
-    goTestRapide(): void {
-		let link = ['/question'];
-		this.router.navigate(link);
+	
+	goTestRapide(): void {
+		this.progresService
+			.commencerTestRapide()
+			.then((data) => {
+				console.log("CHANGE MY URL PLEASE, IT CURRENTLY FAILS");
+				let link = ['/question'];
+				this.router.navigate(link);
+			});
 	}
 	
 	goNewExamen(): void {
 		
-		this.save_configs();
+		//this.save_configs();
 	
-		let link = ['/question'];
-		this.router.navigate(link);
+		this.progresService
+			.commencerExamen({"choix_domaine": this.selectedDomaine, "choix_nombre": this.nbQuestions})
+			.then((data) => {
+				let link = ['/question'];
+				this.router.navigate(link);
+			});
 	}
 	
 	goContinueExamen(): void {
@@ -59,6 +71,9 @@ export class DashboardComponent implements OnInit{
     }
 	
 	save_configs() {
+	
+	
+	
 		
 	}
 	
