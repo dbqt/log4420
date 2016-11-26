@@ -2,64 +2,64 @@ extends ../layout
 
 block content
 
-    h1= title  
-    div.flexBox(ng-controller="dashCtrl")
-        // Mode test rapide
-        section
-            h2 Test rapide
-            p Questions illimitées aléatoires
-            button.flatButton((click)="goTestRapide()") Débuter le test rapide
-        // Configurations de l'examen
-        section
-            h2 Configurations de l'examen 
-            input#continuerExamen.flatButton.unseen(type="submit" value="Continuer l'examen en cours")
-        
-            //form#formConfigs
-            label Domaine: 
+	h1= title
+	div.flexBox(ng-controller="dashCtrl")
+		// Mode test rapide
+		section
+			h2 Test rapide
+			p Questions illimitées aléatoires
+			button.flatButton((click)="goTestRapide()") Débuter le test rapide
+		// Configurations de l'examen
+		section
+			h2 Configurations de l'examen 
+			input#continuerExamen.flatButton.unseen(type="submit" value="Continuer l'examen en cours")
+		
+			//form#formConfigs
+			label Domaine: 
 
-            select#domaineChoice(name="choix_domaine" required (change)="onSelect($event.target.value)")
-                option(*ngFor="let domaine of domaines", [ngValue]="domaine") {{domaine}}
+			select#domaineChoice(name="choix_domaine" required (change)="onSelect($event.target.value)")
+				option(*ngFor="let domaine of domaines", [ngValue]="domaine") {{domaine}}
 
-            label Nombre de questions: 
-            input#nombreQuestionsInput(name="choix_nombre" type="number" min="1" required [(ngModel)]="nbQuestions")
+			label Nombre de questions: 
+			input#nombreQuestionsInput(name="choix_nombre" type="number" min="1" required [(ngModel)]="nbQuestions")
 
-            input#submitExamen.flatButton(type="submit" value="Débuter un nouvel examen")
+			input#submitExamen.flatButton(type="submit" value="Débuter un nouvel examen")
 
-            a.flatButton(routerLink='/admin') Ajouter des questions
-        
-        
-            
-        //Statistiques
-        aside
-            h2 Statistiques
-            p Nombre de questions réussies: {{nombreQuestionsReussies}}
-            p Moyenne des examens: {{moyenneExamens}}
-            h3 Réussites et Échecs
-            p {{countHTMLgood}}
-            p {{countHTMLwrong}}
-            p {{countJavaScriptgood}}
-            p {{countJavaScriptwrong}}
-            p {{countCSSgood}}
-            p {{countCSSwrong}}
-            p {{questionSucceedCount}}
-            p {{questionFailCount}}
-            button.flatButton((click)="showModalStats()") Statistiques Détaillées
-            button.flatButton((click)="resetStats()") Remise à zéro
+			a.flatButton(routerLink='/admin') Ajouter des questions
+		
+		
+			
+		//Statistiques
+		aside
+			h2 Statistiques
+			p Nombre de questions réussies: {{nombreQuestionsReussies}}
+			p Moyenne des examens: {{moyenneExamens}}
+			h3 Réussites et Échecs
+			p {{countHTMLgood}}
+			p {{countHTMLwrong}}
+			p {{countJavaScriptgood}}
+			p {{countJavaScriptwrong}}
+			p {{countCSSgood}}
+			p {{countCSSwrong}}
+			p {{questionSucceedCount}}
+			p {{questionFailCount}}
+			button.flatButton((click)="showModalStats()") Statistiques Détaillées
+			button.flatButton((click)="resetStats()") Remise à zéro
 
-    mes-stats-detailles
-    
-    div.modalBox#openModalBox
-        div.modalBoxMessage()
-            h2 Statistiques détaillées
-            table
-                thead
-                    tr
-                        th Nom de l'examen
-                        th Domaine
-                        th Note obtenue
-                tbody#tableStats
+	mes-stats-detailles
+	
+	div.modalBox#openModalBox
+		div.modalBoxMessage()
+			h2 Statistiques détaillées
+			table
+				thead
+					tr
+						th Nom de l'examen
+						th Domaine
+						th Note obtenue
+				tbody#tableStats
 
-            a#fermer.flatButton(href="") Fermer
-        a.closeModal(href="")
-        
+			a#fermer.flatButton(href="") Fermer
+		a.closeModal(href="")
+		
 	
