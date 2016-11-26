@@ -2,36 +2,22 @@ extends ../layout
 
 block content
     // - Mode
-    if(mode == "testrapide")
-        h1 Test Rapide
-    else
-        h1 Examen 
-        h2#numerotation Question 0/0
+
+	h1 Test Rapide
+	h1 Examen
+	h2#numerotation Question 0/0
     
     div.flexBox
-        section
+        section(*ngIf="question")
             h3#domaine {{question.domaine}}
             h3#question {{question.question}}
 
-            div#reponse1.choixDeReponse(draggable="true")
-            div#reponse2.choixDeReponse(draggable="true")
-            div#reponse3.choixDeReponse(draggable="true")
-            <br>
+            div#reponse1.choixDeReponse(draggable="true") {{question.reponse1}}
+            div#reponse2.choixDeReponse(draggable="true") {{question.reponse2}}
+            div#reponse3.choixDeReponse(draggable="true") {{question.reponse3}}
+                        
             h3 Glissez votre réponse ci-dessous
             div#zoneReponse.choixDeReponse
-
-            //- Remove 1 indent in the whole commment if you want to bring it back
-                form.question
-                    span.choixDeReponse(draggable="true")
-                        input(type="radio" name="answer" value="reponse1")
-                        label#reponse1
-                    span.choixDeReponse(draggable="true")
-                        input(type="radio" name="answer" value="reponse2")
-                        label#reponse2
-                    span.choixDeReponse(draggable="true")
-                        input(type="radio" name="answer" value="reponse3")
-                        label#reponse3
-                    span#zoneReponse(draggable="true")
 
             a.flatButton(href="/dashboard") Retour au tableau de bord
             button#abandonner.flatButton Abandonner

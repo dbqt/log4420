@@ -141,7 +141,7 @@ router.get("/getMode", function(req, res, next){
         if(err){ res.status(500).send(err); console.log(err); }
         else
         {
-            res.send(data.mode);
+            res.json(data.mode);
         }
     });
 });
@@ -266,7 +266,7 @@ router.get('/stats/examens-detailles', function(req, res, next) {
       if(err) res.send(err);
       else {
           if(!data) data = new Stats();
-          res.send(data.examensDetailles);
+          res.json(data.examensDetailles);
       }
     });
 });

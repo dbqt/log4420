@@ -32,9 +32,7 @@ export class DashboardComponent implements OnInit{
 		this.progresService
 			.commencerTestRapide()
 			.then((data) => {
-				console.log("CHANGE MY URL PLEASE, IT CURRENTLY FAILS");
-				let link = ['/question'];
-				this.router.navigate(link);
+				this.router.navigate(['/question']);
 			});
 	}
 	
@@ -45,8 +43,7 @@ export class DashboardComponent implements OnInit{
 		this.progresService
 			.commencerExamen({"choix_domaine": this.selectedDomaine, "choix_nombre": this.nbQuestions})
 			.then((data) => {
-				let link = ['/question'];
-				this.router.navigate(link);
+				this.router.navigate(['/question']);
 			});
 	}
 	
