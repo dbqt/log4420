@@ -81,12 +81,12 @@ export class QuestionComponent implements OnInit{
 		{
 			this.router.navigate(['/dashboard']);
 		}
-		else
+		else if (this.mode == "examen")
 		{
 			this.progresService
 				.giveUp(null)
 				.then(progres => {
-					this.router.navigate(['/dashboard']);
+					this.router.navigate(['/result']);
 				});
 		}
 	}

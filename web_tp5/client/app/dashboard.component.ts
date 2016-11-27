@@ -4,6 +4,7 @@ import { Location } from '@angular/common';
 import { StatsDetaillesComponent } from './stats-detailles.component';
 //import { Component, Input } from '@angular/core';
 
+import { Progres } from './progres';
 import { ProgresService }			from './progres.service';
 
 @Component({
@@ -15,6 +16,18 @@ export class DashboardComponent implements OnInit{
 	domaines = ["HTML", "CSS", "JavaScript"];
 	nbQuestions = 1000;
 	selectedDomaine = this.domaines[0];
+	examenEnCours = false;
+	
+	nombreQuestionsReussies = 0;
+	moyenneExamens = 0;
+	countHTMLgood = 0;
+	countHTMLwrong = 0;
+	countJavaScriptgood = 0;
+	countJavaScriptwrong = 0;
+	countCSSgood = 0;
+	countCSSwrong = 0;
+	questionSucceedCount = 0;
+	questionFailCount = 0;
 	
 	@ViewChild(StatsDetaillesComponent)
 	public readonly modal: StatsDetaillesComponent;
@@ -24,9 +37,6 @@ export class DashboardComponent implements OnInit{
 		private location: Location,
 		private router: Router,
 	){ }
-
-	ngOnInit(): void {
-    }
 	
 	goTestRapide(): void {
 		this.progresService
@@ -39,17 +49,47 @@ export class DashboardComponent implements OnInit{
 	goNewExamen(): void {
 		
 		//this.save_configs();
+		
+		if(this.examenEnCours)
+		{
+			// Give Up
+			this.progresService
+				.giveUp(null)
+				.then(response1 => {
+				
+					this.progresService
+						.handleResult(null)
+						.then(response2 => {
+						
+							this.progresService
+								.deleteProgres()
+								.then(response3 => {
+								
+									this.commencerExamen();
+								})
+						})
+				});
+		}
+		else
+		{
+			this.commencerExamen();
+		}
+	}
 	
+	commencerExamen(): void {
 		this.progresService
-			.commencerExamen({"choix_domaine": this.selectedDomaine, "choix_nombre": this.nbQuestions})
-			.then((data) => {
-				this.router.navigate(['/question']);
-			});
+		.commencerExamen({"choix_domaine": this.selectedDomaine, "choix_nombre": this.nbQuestions})
+		.then((data) => {
+			this.router.navigate(['/question']);
+		});
 	}
 	
 	goContinueExamen(): void {
-		let link = ['/question'];
-		this.router.navigate(link);
+		this.progresService
+			.continueExam()
+			.then((data) => {
+				this.router.navigate(['/question']);
+			});
 	}
 	
 	goAdmin(): void {
@@ -67,11 +107,7 @@ export class DashboardComponent implements OnInit{
         }
     }
 	
-	save_configs() {
-	
-	
-	
-		
+	save_configs() {	
 	}
 	
 	// Stats
@@ -86,16 +122,18 @@ export class DashboardComponent implements OnInit{
 	
 	updateStats() {
     }
+    
+    checkExamenEnCours(): void {
+		this.progresService
+			.getCurrentProgres()
+			.then((progres) => {
+				console.log(progres.examenEnCours);
+				this.examenEnCours = progres.examenEnCours;
+			});    
+    }
 	
-    nombreQuestionsReussies = 0;
-    moyenneExamens = 0;
-    countHTMLgood = 0;
-    countHTMLwrong = 0;
-    countJavaScriptgood = 0;
-    countJavaScriptwrong = 0;
-    countCSSgood = 0;
-    countCSSwrong = 0;
-    questionSucceedCount = 0;
-    questionFailCount = 0;
+    ngOnInit(): void {
+		this.checkExamenEnCours();
+    }
 }
  

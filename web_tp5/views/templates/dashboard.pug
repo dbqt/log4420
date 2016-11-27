@@ -12,7 +12,7 @@ block content
 		// Configurations de l'examen
 		section
 			h2 Configurations de l'examen 
-			input#continuerExamen.flatButton.unseen(type="submit" value="Continuer l'examen en cours")
+			input#continuerExamen.flatButton(type="submit" value="Continuer l'examen en cours", *ngIf="examenEnCours", (click)="goContinueExamen()")
 		
 			//form#formConfigs
 			label Domaine: 
@@ -23,7 +23,7 @@ block content
 			label Nombre de questions: 
 			input#nombreQuestionsInput(name="choix_nombre" type="number" min="1" required [(ngModel)]="nbQuestions")
 
-			input#submitExamen.flatButton(type="submit" value="Débuter un nouvel examen")
+			input#submitExamen.flatButton(type="submit" value="Débuter un nouvel examen", (click)="goNewExamen()")
 
 			a.flatButton(routerLink='/admin') Ajouter des questions
 		

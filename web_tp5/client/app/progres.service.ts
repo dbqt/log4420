@@ -14,22 +14,37 @@ export class ProgresService {
 	commencerTestRapide(): Promise<void> {
 		return this.http.post('api/stats/progres/testrapide', null)
 			.toPromise()
-			.then(response => console.log(response))
 			.catch(this.handleError);
 	}
 	
 	commencerExamen(mesParametres): Promise<void> {
 		return this.http.post('api/stats/progres/examen', mesParametres)
 			.toPromise()
-			.then(response => console.log(response))
 			.catch(this.handleError);
 	}
 	
-	giveUp(mesParametres): Promise<void> {
-		return this.http.post('/api/giveUp', mesParametres)
+	continueExam(): Promise<void> {
+		return this.http.post('api/continueExam')
+			.toPromise()
+			.catch(this.handleError);
+    });
+	
+	getCurrentProgres(): Promise<Progres> {
+		return this.http.get('api/stats/progres')
 			.toPromise()
 			.then(response => {
-				console.log(response);
+				var monp = new Progres();
+				
+				monp.scoreTestRapide = response.json().scoreTestRapide;
+				monp.numeroQuestionTestRapide = response.json().numeroQuestionTestRapide;
+				
+				monp.examenEnCours = response.json().examenEnCours;
+				
+				monp.scoreEnCours = response.json().scoreEnCours;
+				monp.numeroQuestionEnCours = response.json().numeroQuestionEnCours;
+				monp.nbQuestionsEnCours = response.json().nbQuestionsEnCours;
+				
+				return monp;
 			})
 			.catch(this.handleError);
 	}
@@ -43,16 +58,24 @@ export class ProgresService {
 			.catch(this.handleError);
 	}
 	
-	getCurrentProgres(): Promise<Progres> {
-		return this.http.get('api/stats/progres')
+	handleResult(mesParametres): Promise<void> {
+	         return this.http.post('/api/handleResult', mesParametres)
+				.toPromise()
+				.then(resultat => {
+					return resultat.json();
+				})
+				.catch(this.handleError);
+	}
+	
+	giveUp(mesParametres): Promise<void> {
+		return this.http.post('/api/giveUp', mesParametres)
 			.toPromise()
-			.then(response => {				
-				var monp = new Progres();	
-				monp.numeroQuestionEnCours = response.json().numeroQuestionEnCours;
-				monp.nbQuestionsEnCours = response.json().nbQuestionsEnCours;
-				monp.scoreEnCours = response.json().scoreEnCours;
-				return monp;
-			})
+			.catch(this.handleError);
+	}
+	
+	deleteProgres(): Promise<void> {
+		return this.http.delete('/api/stats/progres')
+			.toPromise()
 			.catch(this.handleError);
 	}
 

@@ -3,14 +3,14 @@ extends ../layout
 block content
     // - Mode
 
-	h1 Test Rapide
-	h1 Examen
-	h2#numerotation Question 0/0
+    h1(*ngIf="mode == 'testrapide'") Test Rapide
+    h1(*ngIf="mode == 'examen'") Examen
+    h2#numerotation(*ngIf="progres && (mode == 'examen')") Question {{progres.numeroQuestionEnCours}}/{{progres.nbQuestionsEnCours}}
     
     div.flexBox
-        section(*ngIf="question")
-            h3#domaine {{question.domaine}}
-            h3#question {{question.question}}
+        section
+            h3#domaine(*ngIf="question") {{question.domaine}}
+            h3#question(*ngIf="question") {{question.question}}
 
             div#reponse1.choixDeReponse(draggable="true") {{question.reponse1}}
             div#reponse2.choixDeReponse(draggable="true") {{question.reponse2}}
@@ -19,15 +19,14 @@ block content
             h3 Glissez votre réponse ci-dessous
             div#zoneReponse.choixDeReponse
 
-            a.flatButton(href="/dashboard") Retour au tableau de bord
-            button#abandonner.flatButton Abandonner
-            
+            a.flatButton(routerLink='/dashboard') Retour au tableau de bord
+            button#abandonner.flatButton((click)="giveUp()") Abandonner
             button#suivant.flatButton(disabled) Suivant
 
         // Statistiques
         aside
             h3 Statistiques
-            p#noteCourante 
+            p#noteCourante(*ngIf="progres && (mode == 'examen')") Note actuelle: {{progres.scoreEnCours}}/{{progres.nbQuestionsEnCours}} 
 
     script(src='/scripts/jquery.min.js')
     script(src='/scripts/question_logic.js')
