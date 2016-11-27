@@ -14,20 +14,23 @@ export class ProgresService {
 	commencerTestRapide(): Promise<void> {
 		return this.http.post('api/stats/progres/testrapide', null)
 			.toPromise()
+			.then(response => {})
 			.catch(this.handleError);
 	}
 	
 	commencerExamen(mesParametres): Promise<void> {
 		return this.http.post('api/stats/progres/examen', mesParametres)
 			.toPromise()
+			.then(response => {})
 			.catch(this.handleError);
 	}
 	
 	continueExam(): Promise<void> {
-		return this.http.post('api/continueExam')
+		return this.http.post('api/continueExam', null)
 			.toPromise()
+			.then(response => {})
 			.catch(this.handleError);
-    });
+    }
 	
 	getCurrentProgres(): Promise<Progres> {
 		return this.http.get('api/stats/progres')
@@ -58,8 +61,8 @@ export class ProgresService {
 			.catch(this.handleError);
 	}
 	
-	handleResult(mesParametres): Promise<void> {
-	         return this.http.post('/api/handleResult', mesParametres)
+	handleResult(): Promise<String> {
+	         return this.http.post('/api/handleResult', null)
 				.toPromise()
 				.then(resultat => {
 					return resultat.json();
@@ -67,15 +70,17 @@ export class ProgresService {
 				.catch(this.handleError);
 	}
 	
-	giveUp(mesParametres): Promise<void> {
-		return this.http.post('/api/giveUp', mesParametres)
+	giveUp(): Promise<void> {
+		return this.http.post('/api/giveUp', null)
 			.toPromise()
+			.then(response => {})
 			.catch(this.handleError);
 	}
 	
 	deleteProgres(): Promise<void> {
 		return this.http.delete('/api/stats/progres')
 			.toPromise()
+			.then(response => {})
 			.catch(this.handleError);
 	}
 

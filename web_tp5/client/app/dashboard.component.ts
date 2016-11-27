@@ -46,19 +46,16 @@ export class DashboardComponent implements OnInit{
 			});
 	}
 	
-	goNewExamen(): void {
-		
-		//this.save_configs();
-		
+	goNewExamen(): void {		
 		if(this.examenEnCours)
 		{
 			// Give Up
 			this.progresService
-				.giveUp(null)
+				.giveUp()
 				.then(response1 => {
 				
 					this.progresService
-						.handleResult(null)
+						.handleResult()
 						.then(response2 => {
 						
 							this.progresService
@@ -127,7 +124,6 @@ export class DashboardComponent implements OnInit{
 		this.progresService
 			.getCurrentProgres()
 			.then((progres) => {
-				console.log(progres.examenEnCours);
 				this.examenEnCours = progres.examenEnCours;
 			});    
     }

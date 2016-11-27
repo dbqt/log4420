@@ -1,5 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-//import { Component, Input } from '@angular/core';
+import { Router }            from '@angular/router';
+
+import { Progres } from './progres';
+import { ProgresService }			from './progres.service';
 
 @Component({
   selector: 'result-component',
@@ -7,13 +10,32 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ResultComponent implements OnInit{
 
+	message: String;
 	
+	constructor(
+		private progresService: ProgresService,
+		private router: Router
+	) {
+		this.message = "";
+	}
+
+	handleResult(): void {
+		this.progresService
+			.handleResult()
+			.then((data) => {
+				this.message = data;
+				this.deleteProgres();
+			});
+	
+	}
+	
+	deleteProgres(): void {
+		this.progresService
+			.deleteProgres();
+	}
 
 
-	//TODO
 	ngOnInit(): void {
-		var script = document.createElement('script');
-		script.src = "/scripts/result_logic.js";
-		document.getElementsByTagName('head')[0].appendChild(script);
+		this.handleResult();
   }
 }

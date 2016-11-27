@@ -34,6 +34,7 @@ export class QuestionComponent implements OnInit{
 			.getMode()
 			.then(mode => {
 				this.mode = mode;
+				console.log(this.mode);
 				this.getCurrentProgres(true);
 			});
 	}
@@ -43,18 +44,20 @@ export class QuestionComponent implements OnInit{
 			.getCurrentProgres()
 			.then(progres => {
 				this.progres = progres;
-				if(wantNextQuestion){ this.getNextQuestion(); }
+				console.log(this.progres);
+				if(wantNextQuestion){ this.getQuestion(); }
 			});
 	}
 	
-	getNextQuestion(): void {
+	getQuestion(): void {
 	
 		if (this.mode == "testrapide")
 		{
 			this.questionService
-				.getNextQuestion()
+				.getQuestion()
 				.then(question => {
 					this.question = question;
+					console.log(this.question);
 					this.getCurrentProgres(false);
 				});
 		}
@@ -67,9 +70,10 @@ export class QuestionComponent implements OnInit{
 			else
 			{
 				this.questionService
-					.getNextQuestion()
+					.getQuestion()
 					.then(question => {
 						this.question = question;
+						console.log(this.question);
 						this.getCurrentProgres(false);
 					});	
 			}
@@ -84,7 +88,7 @@ export class QuestionComponent implements OnInit{
 		else if (this.mode == "examen")
 		{
 			this.progresService
-				.giveUp(null)
+				.giveUp()
 				.then(progres => {
 					this.router.navigate(['/result']);
 				});

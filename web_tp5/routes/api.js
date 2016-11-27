@@ -54,7 +54,7 @@ router.get('/next', function(req, res, next) {
         else
         {
           // pick a question in a filtered array of questions with the right domain
-          Questions.findOneRandom( { domaine: statsData.progres.domaineEnCours }, function(err, data) {
+          Questions.find( { domaine: statsData.progres.domaineEnCours } ).exec(function(err, data) {
               if(err)
               {
                   res.status(500).send(err); 
@@ -65,7 +65,7 @@ router.get('/next', function(req, res, next) {
                   //statsData.progres.numeroQuestionEnCours = statsData.progres.numeroQuestionEnCours + 1;
                   statsData.save(function(err) {
                       if (err) res.send(err);
-                      else res.json(data);
+                      else res.json(data[statsData.progres.numeroQuestionEnCours%data.length]);
                   });
               }
           });

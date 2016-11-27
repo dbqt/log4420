@@ -13,8 +13,6 @@ block content
         else
             h2 Examen complété
             
-        p#resultat
-        //script.
-            generate_result();
+        p#resultat(*ngIf="message") {{message}}
 
-        a.flatButton(href='/dashboard') Retour au tableau de bord
+        a.flatButton(routerLink='/dashboard') Retour au tableau de bord

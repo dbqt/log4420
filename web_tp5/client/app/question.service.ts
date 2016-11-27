@@ -11,7 +11,7 @@ export class QuestionService {
 	private headers = new Headers({'Content-Type': 'application/json'});
 	constructor(private http: Http) { }
   
-	getNextQuestion(): Promise<Question> {
+	getQuestion(): Promise<Question> {
 		return this.http.get('api/next')
 			.toPromise()
 			.then(response => {				
@@ -27,21 +27,16 @@ export class QuestionService {
 			.catch(this.handleError);
 	}
 	
-	getCurrentQuestion(): Promise<Question> {
-		return this.http.get('api/next')
+	verifyAnswer(monQuestionId): Promise<String> {
+		return this.http.post('api/verifyAnswer', monQuestionId)
 			.toPromise()
 			.then(response => {				
-				var maq = new Question();
-				maq.id = response.json()._id;
-				maq.domaine = response.json().domaine;
-				maq.question = response.json().question;
-				maq.reponse1 = response.json().reponse1;
-				maq.reponse2 = response.json().reponse2;
-				maq.reponse3 = response.json().reponse3;
-				return maq;
+				return response.json();
 			})
 			.catch(this.handleError);
+	
 	}
+	
 
 	private handleError(error: any): Promise<any> {
 		console.error('An error occurred', error); // for demo purposes only
