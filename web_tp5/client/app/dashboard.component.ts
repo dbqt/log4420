@@ -7,7 +7,7 @@ import { StatsDetaillesComponent } from './stats-detailles.component';
 import { Progres } from './progres';
 import { ProgresService }			from './progres.service';
 
-import { Stat } from './stat'
+import { Stat, ExamenDetaille } from './stat'
 import { StatsService }			from './stats.service';
 
 @Component({
@@ -34,7 +34,7 @@ export class DashboardComponent implements OnInit{
 	questionFailCount = 0;
 	
 	@ViewChild(StatsDetaillesComponent)
-	public readonly modal: StatsDetaillesComponent;
+	public modal: StatsDetaillesComponent;
 
 	constructor(
 		private progresService: ProgresService,
@@ -146,6 +146,8 @@ export class DashboardComponent implements OnInit{
 			this.countCSSwrong = stats.examen.echoue.CSS;
 			this.questionSucceedCount = stats.testRapide.reussi;
 			this.questionFailCount = stats.testRapide.echoue;
+
+			this.modal.stat = stats.examensDetailles;
 		});
 		
     }

@@ -1,20 +1,21 @@
 import { Component, Input } from '@angular/core';
 
-import { Stat } from './stat'
+import { Stat, ExamenDetaille } from './stat'
 import { StatsService }			from './stats.service';
-
-const STATISTICS: Stat[] = [];
 
 @Component({
   selector: 'mes-stats-detailles',
   templateUrl: 'templates/stats-detailles'
 })
 export class StatsDetaillesComponent {
-  stats = STATISTICS;
+  public stat: ExamenDetaille[];
   
   constructor(
 		private statsService: StatsService,
-	) {this.hide();}
+	) {
+      this.hide();
+      
+  }
 	
 	  
   private isHidden = true;
