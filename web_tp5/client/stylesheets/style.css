@@ -199,6 +199,14 @@ h2, h3 {
  Boite modale
  ***********************/
 
+.modalVisible {
+    display: inline-block;
+}
+
+.modalInvisible {
+    display: none;
+}
+
 /* Dark background*/
 .modalBox {
     display: inline-block;

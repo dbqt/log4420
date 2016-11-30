@@ -14,21 +14,26 @@ export class StatsDetaillesComponent {
   
   constructor(
 		private statsService: StatsService,
-	) {}
+	) {this.hide();}
 	
 	  
-  public visible = false;
+  private isHidden = true;
   private visibleAnimate = false;
 
   public show(): void {
   console.log("showing");
-  console.log(this.statsService.getStats());
-    this.visible = true;
-    setTimeout(() => this.visibleAnimate = true);
+  //this.statsService.getStats();
+    this.isHidden = false;
+    //setTimeout(() => this.visibleAnimate = true);
   }
 
   public hide(): void {
-    this.visibleAnimate = false;
-    setTimeout(() => this.visible = false, 300);
+    this.isHidden = true;
+    //this.visibleAnimate = false;
+    //setTimeout(() => this.visible = false, 300);
+  }
+
+  public getVisibility() {
+      return this.isHidden ? "modalInVisible" : "modalVisible";
   }
 }
