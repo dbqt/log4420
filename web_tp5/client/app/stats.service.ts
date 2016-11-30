@@ -13,12 +13,14 @@ export class StatsService {
 
   constructor(private http: Http) { }
   
-  getStats(): Promise<Stat> {
+  	getStats(): Promise<Stat> {
 		return this.http.get(this.statsUrl)
 			.toPromise()
-			.then(response => {return response.json().data as Stat});
+			.then(response => {return response.json() as Stat})
 			//.catch(this.handleError);
 	}
+
+	
 
 }
 

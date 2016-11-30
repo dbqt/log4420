@@ -9,8 +9,8 @@ export class Stat {
 		numeroQuestionTestRapide:number;
 	};
 	examensDetailles: Array<ExamenDetaille>;
-	examen: Object;
-	testRapide:Object;
+	examen: Examen;
+	testRapide: TestRapide;
 }
 
 export class ExamenDetaille {
@@ -19,4 +19,22 @@ export class ExamenDetaille {
 	score:number;
 	nbQuestions:number;
 	id:string;
+}
+
+export class Examen {
+	echoue: {
+		CSS: number;
+		JavaScript: number;
+		HTML: number;
+	};
+	reussi: {
+		CSS: number;
+		JavaScript: number;
+		HTML: number;
+	};
+}
+
+export class TestRapide {
+	echoue: number;
+	reussi: number;
 }

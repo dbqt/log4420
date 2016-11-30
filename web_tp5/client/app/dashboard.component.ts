@@ -7,6 +7,9 @@ import { StatsDetaillesComponent } from './stats-detailles.component';
 import { Progres } from './progres';
 import { ProgresService }			from './progres.service';
 
+import { Stat } from './stat'
+import { StatsService }			from './stats.service';
+
 @Component({
   selector: 'dashboard-component',
   templateUrl: 'templates/dashboard'
@@ -18,7 +21,8 @@ export class DashboardComponent implements OnInit{
 	selectedDomaine = this.domaines[0];
 	examenEnCours = false;
 	
-	nombreQuestionsReussies = 0;
+	scoreTotal = 0;
+	nbQuestionsTotal = 0;
 	moyenneExamens = 0;
 	countHTMLgood = 0;
 	countHTMLwrong = 0;
@@ -34,9 +38,10 @@ export class DashboardComponent implements OnInit{
 
 	constructor(
 		private progresService: ProgresService,
+		private statsService: StatsService,
 		private location: Location,
 		private router: Router,
-	){ }
+	){ this.updateStats(); }
 	
 	goTestRapide(): void {
 		this.progresService
@@ -110,6 +115,7 @@ export class DashboardComponent implements OnInit{
 	// Stats
 	showModalStats() {
 		console.log("show stats");
+		//this.updateStats();
 		this.modal.show();
 	}
 	
@@ -118,6 +124,30 @@ export class DashboardComponent implements OnInit{
 	}
 	
 	updateStats() {
+		this.statsService.getStats().then((stats) => {
+			// exams stats
+			var scoreTotalTemp = 0;
+            var nbQuestionsTotaltemp = 0;
+			stats.examensDetailles.forEach(function(element) {
+				scoreTotalTemp += element.score;
+                nbQuestionsTotaltemp += element.nbQuestions;
+			})
+			var moyenne = ((nbQuestionsTotaltemp != 0) ? Math.floor((scoreTotalTemp / nbQuestionsTotaltemp) * 100) : 0);
+			this.scoreTotal = scoreTotalTemp;
+			this.nbQuestionsTotal = nbQuestionsTotaltemp;
+			this.moyenneExamens = moyenne;
+
+			// simple stats
+			this.countHTMLgood = stats.examen.reussi.HTML;
+			this.countHTMLwrong = stats.examen.echoue.HTML;
+			this.countJavaScriptgood = stats.examen.reussi.JavaScript;
+			this.countJavaScriptwrong = stats.examen.echoue.JavaScript;
+			this.countCSSgood = stats.examen.reussi.CSS;
+			this.countCSSwrong = stats.examen.echoue.CSS;
+			this.questionSucceedCount = stats.testRapide.reussi;
+			this.questionFailCount = stats.testRapide.echoue;
+		});
+		
     }
     
     checkExamenEnCours(): void {

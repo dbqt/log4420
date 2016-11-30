@@ -32,17 +32,17 @@ block content
 		//Statistiques
 		aside
 			h2 Statistiques
-			p Nombre de questions réussies: {{nombreQuestionsReussies}}
+			p Nombre de questions réussies: {{scoreTotal}}/{{nbQuestionsTotal}}
 			p Moyenne des examens: {{moyenneExamens}}
 			h3 Réussites et Échecs
-			p {{countHTMLgood}}
-			p {{countHTMLwrong}}
-			p {{countJavaScriptgood}}
-			p {{countJavaScriptwrong}}
-			p {{countCSSgood}}
-			p {{countCSSwrong}}
-			p {{questionSucceedCount}}
-			p {{questionFailCount}}
+			p Nombre d'examens réussis en HTML: {{countHTMLgood}}
+			p Nombre d'examens échoués en HTML: {{countHTMLwrong}}
+			p Nombre d'examens réussis en JavaScript: {{countJavaScriptgood}}
+			p Nombre d'examens échoués en JavaScript: {{countJavaScriptwrong}}
+			p Nombre d'examens réussis en CSS: {{countCSSgood}}
+			p Nombre d'examens échoués en CSS: {{countCSSwrong}}
+			p Nombre de questions rapides réussies: {{questionSucceedCount}}
+			p Nombre de questions rapides échouées: {{questionFailCount}}
 			button.flatButton((click)="showModalStats()") Statistiques Détaillées
 			button.flatButton((click)="resetStats()") Remise à zéro
 
