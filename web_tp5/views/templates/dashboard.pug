@@ -21,7 +21,7 @@ block content
 				option(*ngFor="let domaine of domaines", [ngValue]="domaine") {{domaine}}
 
 			label Nombre de questions: 
-			input#nombreQuestionsInput(name="choix_nombre" type="number" min="1" required [(ngModel)]="nbQuestions")
+			input#nombreQuestionsInput(name="choix_nombre" type="number" min="1" required [(ngModel)]="nbQuestions" max="{{getNbQuestionsMaxComputed()}}")
 
 			input#submitExamen.flatButton(type="submit" value="Débuter un nouvel examen", (click)="goNewExamen()")
 
