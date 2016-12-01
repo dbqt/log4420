@@ -1,4 +1,4 @@
-div([ngClass]="{'modalInvisible' : isHidden}")
+div.modalBox.modalInvisible(*ngIf="!isHidden", (click)="hide()")
     div.modalBox
         div.modalBoxMessage
             h2 Statistiques détaillées
@@ -8,6 +8,13 @@ div([ngClass]="{'modalInvisible' : isHidden}")
                         th Nom de l'examen
                         th Domaine
                         th Note obtenue
+                tbody
+                    tr(*ngFor="let row of stat")
+                        td {{row.nom}}
+                        td {{row.domaine}}
+                        td {{row.score}}/{{row.nbQuestions}}
+                        
+                    
 
 //-tr(*ngFor="let row of stat"){{row}})
 //-<div *ngFor="let stat of stats">
