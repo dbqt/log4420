@@ -38,6 +38,20 @@ export class QuestionService {
 	
 	}
 	
+	addQuestion(body) : Promise<any>  {
+		return this.http.post('api/question', body).toPromise().then(response => {
+			if(response.ok) {
+				alert("Question ajoutée avec succès!");
+			} else {
+				alert("Erreur: Question pas ajoutée");
+			}
+		}).catch(this.handleError);
+	}
+	
+	deleteQuestions(): Promise<any> {
+		return this.http.delete('api/question').toPromise();
+	}
+	
 
 	private handleError(error: any): Promise<any> {
 		console.error('An error occurred', error); // for demo purposes only

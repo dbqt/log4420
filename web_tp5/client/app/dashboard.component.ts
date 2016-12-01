@@ -36,8 +36,6 @@ export class DashboardComponent implements OnInit{
 	//nombreQuestionsMax = ["HTML": 0, "JavaScript": 0, "CSS": 0];
 	nombreQuestionsMax = [0, 0, 0];
 	
-	fuckinglel = 0;
-	
 	@ViewChild(StatsDetaillesComponent)
 	public modal: StatsDetaillesComponent;
 
@@ -126,6 +124,7 @@ export class DashboardComponent implements OnInit{
 	
 	resetStats() {
 		console.log("reset");
+		this.statsService.deleteStats().then(() => {this.updateStats();});
 	}
 	
 	updateStats() {
