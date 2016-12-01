@@ -17,7 +17,16 @@ export class QuestionComponent implements OnInit{
 	question: Question;
 	progres: Progres
 	questionId: String;
+	choixText: String;
+	reponseText: String;
 
+	idChoix: String;
+	
+	classChoixDisabled: boolean = false;;
+	classReponseStatus: number = -1; // -1 = unanswered, 0 = wrong, 1 = right
+	classReponseOver: boolean = false;
+	classSuivantDisabled: boolean = false;
+	
 	constructor(
 		private questionService: QuestionService,
 		private progresService: ProgresService,
@@ -98,5 +107,73 @@ export class QuestionComponent implements OnInit{
 	ngOnInit(): void {
 		this.initialize();
 	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	handleDragStart(e) : void {	
+		e.dataTransfer.effectAllowed = "move";
+		
+		this.choixText = e.target.innerHTML;
+		this.idChoix = e.target.id
+	}
 
+	handleDragEnter(e) : void {
+		this.classReponseOver = true;
+	}
+
+	handleDragOver(e) : boolean {
+		if (e.preventDefault) {
+			e.preventDefault(); // Necessary. Allows us to drop.
+		}
+		
+				console.log("haha!");
+
+
+		// On détermine le type de drag-and-drop ici.
+		e.dataTransfer.dropEffect = "move";
+
+		return false;
+	}
+
+	handleDragLeave(e) : void {
+		this.classReponseOver = false;
+	}
+
+	handleDrop(e) : boolean {
+		if (e.stopPropagation) {
+			e.stopPropagation(); // Stops some browsers from redirecting.
+		}
+
+		if (this.classReponseStatus == -1) {
+			this.reponseText = this.choixText;
+
+			var dataToSend = {questionId: this.question.id, reponseChoisie: this.idChoix};
+
+			this.questionService
+				.verifyAnswer(dataToSend)
+				.then(response => {
+					this.classReponseStatus = response;
+					this.classChoixDisabled = true;
+					this.classSuivantDisabled = true;
+					this.getCurrentProgres(false);
+				});	
+		}
+
+		return false;
+	}
+
+	handleDragEnd(e) : void {
+		this.classReponseOver = false;
+	}
 }

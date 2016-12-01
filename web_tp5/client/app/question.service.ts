@@ -27,10 +27,11 @@ export class QuestionService {
 			.catch(this.handleError);
 	}
 	
-	verifyAnswer(monQuestionId): Promise<String> {
+	verifyAnswer(monQuestionId): Promise<number> {
 		return this.http.post('api/verifyAnswer', monQuestionId)
 			.toPromise()
-			.then(response => {				
+			.then(response => {
+				console.log(response.json());
 				return response.json();
 			})
 			.catch(this.handleError);

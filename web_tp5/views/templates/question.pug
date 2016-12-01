@@ -12,16 +12,16 @@ block content
             h3#domaine(*ngIf="question") {{question.domaine}}
             h3#question(*ngIf="question") {{question.question}}
 
-            div#reponse1.choixDeReponse(draggable="true") {{question.reponse1}}
-            div#reponse2.choixDeReponse(draggable="true") {{question.reponse2}}
-            div#reponse3.choixDeReponse(draggable="true") {{question.reponse3}}
+            div#reponse1.choixDeReponse(draggable="true", (dragstart)="handleDragStart($event)", (dragenter)="handleDragEnter($event)", (dragover)="handleDragOver($event)", (dragleave)="handleDragLeave($event)", (drop)="handleDrop($event)", (dragend)="handleDragEnd($event)", [ngClass]="{'disabled': classChoixDisabled}") {{question.reponse1}}
+            //div#reponse2.choixDeReponse(draggable="true", (dragstart)="handleDragStart($event)", (dragend)="handleDragEnd($event)", [ngClass]="{'disabled': classChoixDisabled}") {{question.reponse2}}
+            //div#reponse3.choixDeReponse(draggable="true", (dragstart)="handleDragStart($event)", (dragend)="handleDragEnd($event)", [ngClass]="{'disabled': classChoixDisabled}") {{question.reponse3}}
                         
             h3 Glissez votre réponse ci-dessous
-            div#zoneReponse.choixDeReponse
+            div#zoneReponse.choixDeReponse((dragstart)="handleDragStart($event)", (dragenter)="handleDragEnter($event)", (dragover)="handleDragOver($event)", (dragleave)="handleDragLeave($event)", (drop)="handleDrop($event)", (dragend)="handleDragEnd($event)", [ngClass]="{'over': classReponseOver, 'vrai': (reponseStatus==0), 'faux': (reponseStatus==1)}") {{reponseText}}
 
             a.flatButton(routerLink='/dashboard') Retour au tableau de bord
             button#abandonner.flatButton((click)="giveUp()") Abandonner
-            button#suivant.flatButton(disabled) Suivant
+            button#suivant.flatButton([ngClass]="{'disabled': classSuivantDisabled }") Suivant
 
         // Statistiques
         aside
