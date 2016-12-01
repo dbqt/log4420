@@ -20,10 +20,8 @@ export class StatsService {
 			//.catch(this.handleError);
 	}
 	
-	deleteStats(): Promise<void> {
-		console.log("inside delete");
-		return this.http.delete(this.statsUrl).toPromise()
-    .then(() => {console.log("heyy");});
+	deleteStats(): Promise<any> {
+		return this.http.delete(this.statsUrl).toPromise();
 	}
 
 	

@@ -7,27 +7,27 @@ block content
         
         form#adminform(method="post")
             label Domaine: 
-            select(name="domaine" required)
+            select(name="domaine" required [(ngModel)]="domaine")
                 option(value="HTML") HTML
                 option(value="JavaScript") JavaScript
                 option(value="CSS") CSS
 
             label Question: 
-            input(name="question" required)
+            input(name="question" required [(ngModel)]="question")
             label Reponse 1: 
-            input(name="reponse1" required)
+            input(name="reponse1" required [(ngModel)]="reponse1" )
             label Reponse 2: 
-            input(name="reponse2" required)
+            input(name="reponse2" required [(ngModel)]="reponse2" )
             label Reponse 3: 
-            input(name="reponse3" required)
+            input(name="reponse3" required [(ngModel)]="reponse3" )
             label Bonne reponse:
-            select(name="answer" required)
-                option(value="reponse1") 1er
+            select(name="answer" required [(ngModel)]="answer")
+                option(selected="selected" value="reponse1") 1er
                 option(value="reponse2") 2e
                 option(value="reponse3") 3e
-
-        button#envoyer.flatButton Envoyer
-        button#toutdelete.flatButton Effacer tous les questions (!)
+                
+            button.flatButton((click)="sendQuestion()") Envoyer
+            button.flatButton((click)="deleteQuestions()") Effacer tous les questions (!)
+        
         
         script(src='/scripts/jquery.min.js')
-        script(src='/scripts/admin_logic.js')
