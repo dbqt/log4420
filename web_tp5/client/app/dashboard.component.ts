@@ -126,6 +126,7 @@ export class DashboardComponent implements OnInit{
 	
 	resetStats() {
 		console.log("reset");
+		this.statsService.deleteStats().then(() => {this.updateStats();});
 	}
 	
 	updateStats() {

@@ -19,6 +19,12 @@ export class StatsService {
 			.then(response => {return response.json() as Stat})
 			//.catch(this.handleError);
 	}
+	
+	deleteStats(): Promise<void> {
+		console.log("inside delete");
+		return this.http.delete(this.statsUrl).toPromise()
+    .then(() => {console.log("heyy");});
+	}
 
 	
 
