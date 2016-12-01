@@ -33,11 +33,13 @@ export class DashboardComponent implements OnInit{
 	questionSucceedCount = 0;
 	questionFailCount = 0;
 	
+	nombreQuestionsMax = [0, 0, 0];
+	
 	@ViewChild(StatsDetaillesComponent)
 	public modal: StatsDetaillesComponent;
 
 	constructor(
-		private progresService: ProgresService,
+		private progresService: questionService,
 		private statsService: StatsService,
 		private location: Location,
 		private router: Router,
@@ -158,6 +160,14 @@ export class DashboardComponent implements OnInit{
 			.then((progres) => {
 				this.examenEnCours = progres.examenEnCours;
 			});    
+    }
+    
+    checkNbQuestionsMax( ): void {
+    		this.progresService
+			.getNbQuestionsMax()
+			.then((progres) => {
+				this.examenEnCours = progres.examenEnCours;
+			});  
     }
 	
     ngOnInit(): void {
