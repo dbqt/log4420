@@ -92,9 +92,9 @@ export class ProgresService {
 				
 				var monAr = [0, 0, 0];
 				
-				monAr[0] = response.json().HTML;
-				monAr[1] = response.json().JavaScript;
-				monAr[2] = response.json().CSS;
+				if(response.json().HTML != undefined){ monAr[0] = response.json().HTML; };
+				if(response.json().JavaScript != undefined){ monAr[1] = response.json().JavaScript; };
+				if(response.json().CSS != undefined){ monAr[2] = response.json().CSS; };
 				
 				console.log(monAr);
 				
@@ -102,16 +102,6 @@ export class ProgresService {
 			})
 			.catch(this.handleError);
 	}
-
-
-
-
-
-
-
-
-
-
 
 	private handleError(error: any): Promise<any> {
 		console.error('An error occurred', error); // for demo purposes only

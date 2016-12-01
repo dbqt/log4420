@@ -31,7 +31,7 @@ export class QuestionService {
 		return this.http.post('api/verifyAnswer', monQuestionId)
 			.toPromise()
 			.then(response => {
-				console.log(response.json());
+				console.log("verifyAnswer: " + response.json());
 				return response.json();
 			})
 			.catch(this.handleError);

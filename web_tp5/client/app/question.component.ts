@@ -15,18 +15,27 @@ export class QuestionComponent implements OnInit{
 
 	mode: String;
 	question: Question;
-	progres: Progres
+	progres: Progres;
 	questionId: String;
-	choixText: String;
-	reponseText: String;
-
-	idChoix: String;
 	
-	classChoixDisabled: boolean = false;;
+	//idChoix: String;
+	//choixText: String;
+	reponseText: String = "";
+
+	
+	classChoixEnabled: boolean = true;
 	classReponseStatus: number = -1; // -1 = unanswered, 0 = wrong, 1 = right
 	classReponseOver: boolean = false;
-	classSuivantDisabled: boolean = false;
+	classSuivantEnabled: boolean = false;
 	
+	getClassReponseTrue(): boolean {
+		console.log("Should it be green? :" + this.classReponseStatus);
+		return (this.classReponseStatus == 1);
+	}
+	
+	classReponseTrue: boolean = false;
+	classReponseFalse: boolean = false;
+		
 	constructor(
 		private questionService: QuestionService,
 		private progresService: ProgresService,
@@ -66,7 +75,15 @@ export class QuestionComponent implements OnInit{
 				.getQuestion()
 				.then(question => {
 					this.question = question;
-					console.log(this.question);
+					
+					this.reponseText = "";
+					this.classChoixEnabled = true;
+					this.classSuivantEnabled = false;
+					this.classReponseStatus = -1;
+					this.classReponseTrue = false;
+					this.classReponseFalse = false;
+					
+					//console.log(this.question);
 					this.getCurrentProgres(false);
 				});
 		}
@@ -82,7 +99,15 @@ export class QuestionComponent implements OnInit{
 					.getQuestion()
 					.then(question => {
 						this.question = question;
-						console.log(this.question);
+						
+						this.reponseText = "";
+						this.classChoixEnabled = true;
+						this.classSuivantEnabled = false;
+						this.classReponseStatus = -1;
+						this.classReponseTrue = false;
+						this.classReponseFalse = false;
+						
+						//console.log(this.question);
 						this.getCurrentProgres(false);
 					});	
 			}
@@ -112,33 +137,78 @@ export class QuestionComponent implements OnInit{
 	
 	
 	
+	// NOUVELLE VERSION POUR TP5: APPELÉ AVEC CLICK
+	
+	chooseAnswer(e) : void {
+		if (this.classReponseStatus == -1) {
+					
+			switch(e.target.id)
+			{
+				case "reponse1":
+					this.reponseText = this.question.reponse1;
+					break;
+				case "reponse2":
+					this.reponseText = this.question.reponse2;
+					break;
+				case "reponse3":
+					this.reponseText = this.question.reponse3;
+					break;
+				default:
+					this.reponseText = "Erreur";
+					break;
+			}
+			
+			var dataToSend = {questionId: this.question.id, reponseChoisie: e.target.id};
+
+			this.questionService
+				.verifyAnswer(dataToSend)
+				.then(response => {
+					this.classReponseStatus = response;
+					this.classChoixEnabled = false;
+					this.classSuivantEnabled = true;
+					
+					if (response == 1){	this.classReponseTrue = true; }
+					else { this.classReponseFalse = true; }
+					
+					this.getCurrentProgres(false);
+				});	
+		}
+		
+	}
 	
 	
 	
 	
 	
-	
-	
-	
-	
+	// NON-ÉVALUÉ
+/**	
+	// Choix de reponse
 	handleDragStart(e) : void {	
+		console.log("1111111111 DRAG START");
 		e.dataTransfer.effectAllowed = "move";
 		
 		this.choixText = e.target.innerHTML;
-		this.idChoix = e.target.id
+		this.idChoix = e.target.id;
 	}
 
+	// Zone de reponse
+	handleDragEnter() : void {
+		console.log("222222222-1 DRAG ENTER");
+		this.classReponseOver = true;
+	}
+	
+	// Zone de reponse
 	handleDragEnter(e) : void {
+		console.log("222222222-2 DRAG ENTER");
 		this.classReponseOver = true;
 	}
 
+	// Zone de reponse
 	handleDragOver(e) : boolean {
+		console.log("3333333333 DRAG OVER");
 		if (e.preventDefault) {
 			e.preventDefault(); // Necessary. Allows us to drop.
 		}
-		
-				console.log("haha!");
-
 
 		// On détermine le type de drag-and-drop ici.
 		e.dataTransfer.dropEffect = "move";
@@ -146,11 +216,21 @@ export class QuestionComponent implements OnInit{
 		return false;
 	}
 
-	handleDragLeave(e) : void {
+	// Zone de reponse
+	handleDragLeave() : void {
+		console.log("4444444444-1 DRAG LEAVE");
 		this.classReponseOver = false;
 	}
 
+	// Zone de reponse
+	handleDragLeave(e) : void {
+		console.log("4444444444-2 DRAG LEAVE");
+		this.classReponseOver = false;
+	}
+
+	// Zone de reponse
 	handleDrop(e) : boolean {
+		console.log("5555555555 DROP");
 		if (e.stopPropagation) {
 			e.stopPropagation(); // Stops some browsers from redirecting.
 		}
@@ -164,8 +244,12 @@ export class QuestionComponent implements OnInit{
 				.verifyAnswer(dataToSend)
 				.then(response => {
 					this.classReponseStatus = response;
-					this.classChoixDisabled = true;
-					this.classSuivantDisabled = true;
+					this.classChoixEnabled = false;
+					this.classSuivantEnabled = true;
+					
+					if (response == 1){	this.classReponseTrue = true; }
+					else { this.classReponseFalse = true; }
+					
 					this.getCurrentProgres(false);
 				});	
 		}
@@ -173,7 +257,16 @@ export class QuestionComponent implements OnInit{
 		return false;
 	}
 
-	handleDragEnd(e) : void {
+	// Zone de reponse
+	handleDragEnd() : void {
+		console.log("6666666666-1 DRAG END");
 		this.classReponseOver = false;
 	}
+
+	// Zone de reponse
+	handleDragEnd(e) : void {
+		console.log("6666666666-2 DRAG END");
+		this.classReponseOver = false;
+	}
+*/
 }
