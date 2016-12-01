@@ -83,6 +83,26 @@ export class ProgresService {
 			.then(response => {})
 			.catch(this.handleError);
 	}
+	
+	getNbQuestionsMax(): Promise<number[]> {
+		return this.http.get('/api/nbQuestionsMax')
+			.toPromise()
+			.then(response => {
+				console.log(response);
+				
+				var monAr = [0, 0, 0];
+				
+				monAr[0] = response.json().HTML;
+				monAr[1] = response.json().JavaScript;
+				monAr[2] = response.json().CSS;
+				
+				console.log(monAr);
+				
+				return monAr;
+			})
+			.catch(this.handleError);
+	}
+
 
 
 

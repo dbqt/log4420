@@ -17,8 +17,8 @@ import { StatsService }			from './stats.service';
 
 export class DashboardComponent implements OnInit{
 	domaines = ["HTML", "CSS", "JavaScript"];
-	nbQuestions = 1000;
 	selectedDomaine = this.domaines[0];
+	nbQuestions = 1;
 	examenEnCours = false;
 	
 	scoreTotal = 0;
@@ -33,13 +33,16 @@ export class DashboardComponent implements OnInit{
 	questionSucceedCount = 0;
 	questionFailCount = 0;
 	
+	//nombreQuestionsMax = ["HTML": 0, "JavaScript": 0, "CSS": 0];
 	nombreQuestionsMax = [0, 0, 0];
+	
+	fuckinglel = 0;
 	
 	@ViewChild(StatsDetaillesComponent)
 	public modal: StatsDetaillesComponent;
 
 	constructor(
-		private progresService: questionService,
+		private progresService: ProgresService,
 		private statsService: StatsService,
 		private location: Location,
 		private router: Router,
@@ -165,13 +168,29 @@ export class DashboardComponent implements OnInit{
     checkNbQuestionsMax( ): void {
     		this.progresService
 			.getNbQuestionsMax()
-			.then((progres) => {
-				this.examenEnCours = progres.examenEnCours;
+			.then((monArray) => {
+				this.nombreQuestionsMax = monArray;
 			});  
+    }
+    
+    getNbQuestionsMaxComputed(): number {
+		switch(this.selectedDomaine)
+		{
+			case "HTML":
+				return this.nombreQuestionsMax[0];
+			case "JavaScript":
+				return this.nombreQuestionsMax[1];
+			case "CSS":
+				return this.nombreQuestionsMax[2];
+			default:
+				return 0;
+		}
+				
     }
 	
     ngOnInit(): void {
 		this.checkExamenEnCours();
+		this.checkNbQuestionsMax();
     }
 }
  
